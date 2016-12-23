@@ -10,8 +10,20 @@ title: "el7_blog"
 
 <hr>
 
+<form id="site_search">
+<div><h2>Search:</h2></div>
+<input class="search_box" id="search" type="text"/></form>
+<br>
+<div id="results"></div>
+<ul id="search_results"></ul>
+<script src="{{site.baseurl}}/public/js/elasticlunr.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="{{site.baseurl}}/public/js/search.js"></script>
+
+<hr>
+
 <div class="toc">
-  <h2>Sample texts</h2>
+  <h2>Topics...</h2>
   <ul class="post">
   {% for item in site.texts do %}
   
@@ -24,15 +36,3 @@ title: "el7_blog"
   </ul>  
 
 </div>
-
-<hr>
-
-<form id="site_search">
-<div><h2>Search:</h2></div>
-<input class="search_box" id="search" type="text"/></form>
-<br>
-<div id="results"></div>
-<ul id="search_results"></ul>
-<script src="{{site.baseurl}}/public/js/elasticlunr.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="{{site.baseurl}}/public/js/search.js"></script>
