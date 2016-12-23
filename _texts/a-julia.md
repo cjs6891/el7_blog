@@ -56,6 +56,7 @@ source: Ciudad Seva
 - Tú, clavada al estático dividendo ancestral,
 - y yo, un uno en la cifra del divisor
 - social somos el duelo a muerte que se acerca fatal.
+<code>/bin/cat /DEV/NULL</code>
 
 - Cuando las multitudes corran alborotadas
 - dejando atrás cenizas de injusticias quemadas,
