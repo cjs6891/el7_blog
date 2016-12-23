@@ -810,5 +810,11 @@ ol.bibliography {
 	text-indent: -1rem;
 }
 
-
-
+/*Added By CJS...*/
+.search_box {
+  height: 1.563em;
+  width: 98%;
+  padding: 0;
+  border-width: 0.063em;
+  border-radius: 0.313em;
+}
