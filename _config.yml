@@ -1,9 +1,9 @@
 # Built with Jekyll 3.2.0
 
 # Setup
-title:               Ed.
+title:               <img src="./img/cjs1986.png" alt="el7_blog" height="42" width="42">
 tagline:             'A Jekyll theme for minimal editions'
-description:         'Ed is a Jekyll theme designed for textual editors based on minimal computing principles, and focused on legibility and flexibility.'
+description:         ''
 url:                 'https://cjs6891.github.io'
 baseurl:             '/el7_blog'
 
