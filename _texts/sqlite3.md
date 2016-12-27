@@ -14,7 +14,7 @@ SQLite - CREATE Database<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482865400.png" alt="" style="">
 
 SQLite - CREATE Table<br>
-<pre><code>
+<code><pre>
 sqlite> CREATE TABLE tbl1(
    ...> Id INTEGER PRIMARY KEY,
    ...> WebSite TEXT UNIQUE NOT NULL,
