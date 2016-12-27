@@ -7,11 +7,17 @@ title: SQLite
 
 [SQLite Tutorial](https://www.tutorialspoint.com/sqlite/index.htm)
 
+## Reference
+
+SQLite Version
 <code>sqlite> SELECT sqlite_version () AS 'SQLite Version';</code>
 
-If you are a graphic or web designer and want to keep every version of an image or layout (which you would most certainly want to), a Version Control System (VCS) is a very wise thing to use. It allows you to revert files back to a previous state, revert the entire project back to a previous state, compare changes over time, see who last modified something that might be causing a problem, who introduced an issue and when, and more. Using a VCS also generally means that if you screw things up or lose files, you can easily recover. In addition, you get all this for very little overhead.
+SQLite - CREATE Database
+<code># sqlite3 dbName.db</code>
 
-## Reference
+Once a database is created, you can check it in the list of databases using SQLite <code>.databases</code>
+
+<code>sqlite>.databases</code>
 
 - [git config](https://git-scm.com/docs/git-config) Get and set repository or global options
 - [git init](https://git-scm.com/docs/git-init) Create an empty Git repository or reinitialize an existing one
