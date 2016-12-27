@@ -14,7 +14,7 @@ SQLite Version<br>
 SQLite - CREATE Database<br>
 <code># /usr/bin/sqlite3 SQLite_Database.db</code>
 
-<img src="./public/img/1482865400.png" alt="" style="">
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482865400.png" alt="" style="">
 
 - [git config](https://git-scm.com/docs/git-config) Get and set repository or global options
 - [git init](https://git-scm.com/docs/git-init) Create an empty Git repository or reinitialize an existing one
