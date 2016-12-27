@@ -14,15 +14,13 @@ SQLite - CREATE Database<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482865400.png" alt="" style="">
 
 SQLite - CREATE Table<br>
-<code>
-	<pre>
+<pre><code>
 sqlite> CREATE TABLE tbl1(
    ...> Id INTEGER PRIMARY KEY,
    ...> WebSite TEXT UNIQUE NOT NULL,
    ...> Username TEXT NOT NULL,
    ...> Notes TEXT);
-	</pre>
-</code>
+</code></pre>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482866621.png" alt="" style="">
 
