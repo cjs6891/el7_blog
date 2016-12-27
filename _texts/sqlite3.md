@@ -9,14 +9,13 @@ title: SQLite
 
 ## Reference
 SQLite - CREATE Database<br>
-Basic syntax of SQLitecommand is as follows:
+Basic syntax of SQLitecommand is as follows:<br>
 <code># /usr/bin/sqlite3 SQLite_Database.db</code>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482865400.png" alt="" style="">
 
 SQLite - CREATE Table<br>
 Basic syntax of CREATE TABLE statement is as follows:
-
 <pre><code>CREATE TABLE database_name.table_name(
    column1 datatype  PRIMARY KEY(one or more columns),
    column2 datatype,
