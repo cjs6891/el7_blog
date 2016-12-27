@@ -16,10 +16,10 @@ SQLite - CREATE Database<br>
 SQLite - CREATE Table<br>
 
 <pre><code>sqlite> CREATE TABLE tbl1(
-   ...> Id INTEGER PRIMARY KEY,
-   ...> WebSite TEXT UNIQUE NOT NULL,
-   ...> Username TEXT NOT NULL,
-   ...> Notes TEXT);</code></pre>
+Id INTEGER PRIMARY KEY,
+WebSite TEXT UNIQUE NOT NULL,
+Username TEXT NOT NULL,
+Notes TEXT);</code></pre>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482866621.png" alt="" style="">
 
