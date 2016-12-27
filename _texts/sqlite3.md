@@ -8,7 +8,7 @@ title: SQLite
 [SQLite Tutorial](https://www.tutorialspoint.com/sqlite/index.htm)
 
 ## Reference
-SQLite - CREATE Database<br>
+# SQLite - CREATE Database<br>
 - Basic syntax of SQLitecommand is as follows:<br>
 <code># /usr/bin/sqlite3 SQLite_Database.db</code>
 
@@ -21,6 +21,8 @@ Basic syntax of CREATE TABLE statement is as follows:
    column2 datatype,
    column3 datatype,
    .....
+    ...
+     .
    columnN datatype,
 );</code></pre>
 
