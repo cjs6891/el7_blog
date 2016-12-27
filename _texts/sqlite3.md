@@ -9,17 +9,21 @@ title: SQLite
 
 ## Reference
 SQLite - CREATE Database<br>
+Basic syntax of SQLitecommand is as follows:
 <code># /usr/bin/sqlite3 SQLite_Database.db</code>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482865400.png" alt="" style="">
 
 SQLite - CREATE Table<br>
+Basic syntax of CREATE TABLE statement is as follows:
 
-<pre><code>sqlite> CREATE TABLE tbl1(
-Id INTEGER PRIMARY KEY,
-WebSite TEXT UNIQUE NOT NULL,
-Username TEXT NOT NULL,
-Notes TEXT);</code></pre>
+<pre><code>CREATE TABLE database_name.table_name(
+   column1 datatype  PRIMARY KEY(one or more columns),
+   column2 datatype,
+   column3 datatype,
+   .....
+   columnN datatype,
+);</code></pre>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482866621.png" alt="" style="">
 
@@ -28,12 +32,17 @@ SQLite - DROP Table<br>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482872760.png" alt="" style="">
 
-SQLite - INSERT Query
+SQLite - INSERT Query<br>
 <pre><code>INSERT INTO tbl1 (ID,WebSite,Username,Notes)
 VALUES (NULL, 'https://www.google.com/', 'zero@google.com', 'Join Date: 1970.01.01');</code></pre>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482875405.png" alt="" style="">
 
+SQLite - SELECT Query<br>
+<code>SELECT * FROM tbl1;</code>
+
+
+ - - - - - 
 
 SQLite Version<br>
 <code>sqlite> SELECT sqlite_version () AS 'SQLite Version';</code>
