@@ -13,7 +13,7 @@ SQLite - CREATE Database<br>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482865400.png" alt="" style="">
 
-SQLite - CREATE Table
+SQLite - CREATE Table<br>
 <code>
 sqlite> CREATE TABLE tbl1(<br>
    ...> Id INTEGER PRIMARY KEY,<br>
