@@ -23,7 +23,10 @@ SQLite - CREATE Table<br>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482866621.png" alt="" style="">
 
-SQLite - DROP Table
+SQLite - DROP Table<br>
+<code>sqlite> DROP TABLE tbl1;</code>
+
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482872760.png" alt="" style="">
 
 SQLite Version<br>
 <code>sqlite> SELECT sqlite_version () AS 'SQLite Version';</code>
