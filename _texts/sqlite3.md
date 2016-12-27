@@ -28,6 +28,13 @@ SQLite - DROP Table<br>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482872760.png" alt="" style="">
 
+SQLite - INSERT Query
+<pre><code>INSERT INTO tbl1 (ID,WebSite,Username,Notes)
+VALUES (NULL, 'https://www.google.com/', 'zero@google.com', 'Join Date: 1970.01.01');</code></pre>
+
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482875405.png" alt="" style="">
+
+
 SQLite Version<br>
 <code>sqlite> SELECT sqlite_version () AS 'SQLite Version';</code>
 
