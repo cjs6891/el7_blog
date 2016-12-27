@@ -8,16 +8,18 @@ title: SQLite
 [SQLite Tutorial](https://www.tutorialspoint.com/sqlite/index.htm)
 
 ## Reference
-
-SQLite Version
+SQLite Version<br>
 <code>sqlite> SELECT sqlite_version () AS 'SQLite Version';</code>
 
-SQLite - CREATE Database
-<code># sqlite3 dbName.db</code>
+SQLite - CREATE Database<br>
+<code># /usr/bin/sqlite3 tmpDB.db</code>
 
-Once a database is created, you can check it in the list of databases using SQLite <code>.databases</code>
+Check The List of Databases:<br>
+<code> sqlite> .databases<br>
+seq  name             file<br>
+---  ---------------  ----------------------------------------------------------<br>
+0    main             /tmp/tmpDB.db<br></code>
 
-<code>sqlite>.databases</code>
 
 - [git config](https://git-scm.com/docs/git-config) Get and set repository or global options
 - [git init](https://git-scm.com/docs/git-init) Create an empty Git repository or reinitialize an existing one
