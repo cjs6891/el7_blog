@@ -59,6 +59,11 @@ The historical Linux Programmer’s Manual<br>
 When performing searches, <i>STRING</i> allows regular expression syntax.
 </p>
 
+<p>A keyword search of man pages is performed using <code># man -k <i>KEYWORD</i></code>, which displays a list of keyword-matching man page topics with section numbers.<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482960859.png" alt="" style="">
+The <code># man -K </code>option performs a full-text page search, not just titles and descriptions like the <code># man -k </code>option.
+</p>
+
 [SQLite](https://www.sqlite.org/index.html) is an in-process library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.
 
 [SQLite Tutorial](https://www.tutorialspoint.com/sqlite/index.htm)
