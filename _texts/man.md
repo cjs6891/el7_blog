@@ -51,10 +51,13 @@ The historical Linux Programmer’s Manual<br>
 
 <p>To distinguish identical topic names in different sections, man page references include the section number in parentheses after the topic. <code>passwd(1)</code> describes the command to change passwords, while <code>passwd(5)</code> explains the <code>/etc/passwd</code> file format for storing local user accounts. </p>
 
-<p><code>man passwd</code> displays <code>passwd(1)</code> by default.<br>
-<code>man 5 passwd</code> displays <code>passwd(5)</code>
+<p><code># man passwd</code> displays <code>passwd(1)</code> by default<br>
+<code># man 5 passwd</code> displays <code>passwd(5)</code>
 </p>
 
+<p><code><i>/STRING</i></code> Searches forward (down) for <i>STRING</i> in the man page<br>
+When performing searches, <i>STRING</i> allows regular expression syntax.
+</p>
 
 [SQLite](https://www.sqlite.org/index.html) is an in-process library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.
 
