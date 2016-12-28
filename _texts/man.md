@@ -4,6 +4,7 @@ title: /usr/bin/man
 ---
 
 The historical Linux Programmer’s Manual<br>
+<code># man man-pages</code><br>
 
 <table>
   <tr>
