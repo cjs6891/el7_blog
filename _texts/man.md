@@ -3,6 +3,8 @@ layout: page
 title: /usr/bin/man
 ---
 
+The historical Linux Programmer’s Manual<br>
+
 <table>
   <tr>
     <th>Section</th>
@@ -46,6 +48,13 @@ title: /usr/bin/man
     <td>Linux Kernel API</td>
   </tr>
 </table>
+
+<p>To distinguish identical topic names in different sections, man page references include the section number in parentheses after the topic. <code>passwd(1)</code> describes the command to change passwords, while <code>passwd(5)</code> explains the <code>/etc/passwd</code> file format for storing local user accounts. </p>
+
+<p><code>man passwd</code> displays <code>passwd(1)</code> by default.<br>
+<code>man 5 passwd</code> displays <code>passwd(5)</code>
+</p>
+
 
 [SQLite](https://www.sqlite.org/index.html) is an in-process library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.
 
