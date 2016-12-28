@@ -8,9 +8,9 @@ title: SQLite
 [SQLite Tutorial](https://www.tutorialspoint.com/sqlite/index.htm)
 
 ## Reference
-# SQLite - CREATE Database<br>
+SQLite - CREATE Database<br>
 - Basic syntax of SQLitecommand is as follows:<br>
-<code># /usr/bin/sqlite3 SQLite_Database.db</code>
+<code># /usr/bin/sqlite3 DatabaseName.db</code>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482865400.png" alt="" style="">
 
