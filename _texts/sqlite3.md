@@ -104,6 +104,7 @@ WHERE column LIKE '_XXXX_'</code></pre>
 
 You can combine N number of conditions using AND or OR operators. Here XXXX could be any numeric or string value.<br>
 
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482941528.png" alt="" style="">
 
  - - - - - 
 
