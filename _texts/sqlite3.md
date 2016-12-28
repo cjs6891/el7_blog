@@ -29,7 +29,7 @@ Basic syntax of CREATE TABLE statement is as follows:
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482866621.png" alt="" style="">
 
 SQLite - DROP Table<br>
-Basic syntax of DROP TABLE statement is as follows. You can optionally specify database name along with table name as follows:
+Basic syntax of DROP TABLE statement is as follows. You can optionally specify database name along with table name as follows:<br>
 <code>DROP TABLE database_name.table_name;</code>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482872760.png" alt="" style="">
@@ -41,7 +41,7 @@ VALUES (value1, value2, value3,...valueN);</code></pre>
 
 Here, column1, column2,...columnN are the names of the columns in the table into which you want to insert data.
 
-You may not need to specify the column(s) name in the SQLite query if you are adding values for all the columns of the table. But make sure the order of the values is in the same order as the columns in the table. The SQLite INSERT INTO syntax would be as follows:
+You may not need to specify the column(s) name in the SQLite query if you are adding values for all the columns of the table. But make sure the order of the values is in the same order as the columns in the table. The SQLite INSERT INTO syntax would be as follows:<br>
 <code>INSERT INTO TABLE_NAME VALUES (value1,value2,value3,...valueN);</code>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482875405.png" alt="" style="">
