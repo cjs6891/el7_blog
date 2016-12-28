@@ -77,6 +77,34 @@ WHERE [condition];</code></pre>
 If you want to DELETE all the records from a table, you do not need to use WHERE clause with DELETE query, which would be as follows:<br>
 <code>DELETE FROM table_name;</code>
 
+SQLite - LIKE Clause<br>
+The basic syntax of % and _ is as follows:<br>
+<pre><code>SELECT FROM table_name
+WHERE column LIKE 'XXXX%'
+
+or 
+
+SELECT FROM table_name
+WHERE column LIKE '%XXXX%'
+
+or
+
+SELECT FROM table_name
+WHERE column LIKE 'XXXX_'
+
+or
+
+SELECT FROM table_name
+WHERE column LIKE '_XXXX'
+
+or
+
+SELECT FROM table_name
+WHERE column LIKE '_XXXX_'</code></pre>
+
+You can combine N number of conditions using AND or OR operators. Here XXXX could be any numeric or string value.<br>
+
+
  - - - - - 
 
 SQLite Version<br>
