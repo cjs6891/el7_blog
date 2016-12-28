@@ -1,6 +1,6 @@
 ---
 layout: page
-title: SQLite
+title: SQLite - Transactional SQL Database Engine
 ---
 
 [SQLite](https://www.sqlite.org/index.html) is an in-process library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.
