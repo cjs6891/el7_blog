@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Using <code># man</code>
+title: /usr/bin/man
 ---
 
 <table>
