@@ -75,7 +75,7 @@ WHERE [condition];</code></pre>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482939558.png" alt="" style="">
 
 If you want to DELETE all the records from a table, you do not need to use WHERE clause with DELETE query, which would be as follows:<br>
-<code>DELETE FROM database_name;</code>
+<code>DELETE FROM table_name;</code>
 
  - - - - - 
 
