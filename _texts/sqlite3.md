@@ -54,6 +54,11 @@ Here, column1, column2...are the fields of a table, whose values you want to fet
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482936733.png" alt="" style="">
 
+You can list down complete information about a table (tbl1) as follows:<br>
+<code>SELECT sql FROM sqlite_master WHERE type = 'table' AND tbl_name = 'TableName';</code>
+
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482937384.png" alt="" style="">
+
  - - - - - 
 
 SQLite Version<br>
