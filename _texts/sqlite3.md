@@ -47,8 +47,12 @@ You may not need to specify the column(s) name in the SQLite query if you are ad
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482875405.png" alt="" style="">
 
 SQLite - SELECT Query<br>
-<code>SELECT * FROM tbl1;</code>
+The basic syntax of SQLite SELECT statement is as follows:<br>
+<code>SELECT column1, column2, columnN FROM table_name;</code><br>
+Here, column1, column2...are the fields of a table, whose values you want to fetch. If you want to fetch all the fields available in the field then you can use following syntax:<br>
+<code>SELECT * FROM table_name;</code>
 
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482936733.png" alt="" style="">
 
  - - - - - 
 
