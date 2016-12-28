@@ -54,10 +54,18 @@ Here, column1, column2...are the fields of a table, whose values you want to fet
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482936733.png" alt="" style="">
 
-You can list down complete information about a table (tbl1) as follows:<br>
+You can list down complete information about a table as follows:<br>
 <code>SELECT sql FROM sqlite_master WHERE type = 'table' AND tbl_name = 'TableName';</code>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482937384.png" alt="" style="">
+
+SQLite - UPDATE Query<br>
+The basic syntax of UPDATE query with WHERE clause is as follows:<br>
+<pre><code>UPDATE table_name
+SET column1 = value1, column2 = value2...., columnN = valueN
+WHERE [condition];</code></pre>
+
+<img src="https://cjs6891.github.io/el7_blog/public/img/1482939153.png" alt="" style="">
 
  - - - - - 
 
