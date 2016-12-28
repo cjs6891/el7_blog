@@ -5,35 +5,38 @@ title: "el7_blog"
 <div class="introduction">
   <h1>[root@el7_blog.local]#>_</h1>
 
-<p>A Blog Dedicated To Expanding Linux & Systems Administration Knowledge...</p>
-<p class="citation">This is a personal weblog... all data and information provided on this site is for informational purposes only. I make no representation as to the accuracy, completeness, currentness, suitability, or validity of any information on this site and will not be liable for any errors, omissions, or delays in this information or any losses, injuries, or damages arising from its display or use. All information is provided on an "as-is" basis.</p>
-</div>
+  <p>A Blog Dedicated To Expanding Linux & Systems Administration Knowledge...</p>
+  <div class="poetry">
+    <p class="citation">This is a personal weblog... all data and information provided on this site is for informational purposes only. I make no representation as to the accuracy, completeness, currentness, suitability, or validity of any information on this site and will
+      not be liable for any errors, omissions, or delays in this information or any losses, injuries, or damages arising from its display or use. All information is provided on an "as-is" basis.</p>
+    <div>
+    </div>
 
-<hr>
+    <hr>
 
-<form id="site_search">
-<div><h2>Search:</h2></div>
-<input class="search_box" id="search" type="text"/></form>
-<br>
-<div id="results"></div>
-<ul id="search_results"></ul>
-<script src="{{site.baseurl}}/public/js/elasticlunr.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="{{site.baseurl}}/public/js/search.js"></script>
+    <form id="site_search">
+      <div>
+        <h2>Search:</h2></div>
+      <input class="search_box" id="search" type="text" /></form>
+    <br>
+    <div id="results"></div>
+    <ul id="search_results"></ul>
+    <script src="{{site.baseurl}}/public/js/elasticlunr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{site.baseurl}}/public/js/search.js"></script>
 
-<hr>
+    <hr>
 
-<div class="toc">
-  <h2>Topics...</h2>
-  <ul class="post">
-  {% for item in site.texts do %}
-  
-    <li class="post-title">
-      <a href="{{ site.baseurl }}{{ item.url }}">
+    <div class="toc">
+      <h2>Topics...</h2>
+      <ul class="post">
+        {% for item in site.texts do %}
+
+        <li class="post-title">
+          <a href="{{ site.baseurl }}{{ item.url }}">
         {{ item.title }}
       </a>
-    </li>
-  {% endfor %}
-  </ul>  
-
-</div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
