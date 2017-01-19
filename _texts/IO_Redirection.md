@@ -13,21 +13,21 @@ There are always three default files open, <i>STDIN</i>, <i>STDOUT</i>, and <i>S
     <th>File Descriptor Number</th>
   </tr>
   <tr>
-    <td>STDIN</td>
-    <td>Keyboard</td>
-    <td>" < "</td>
-    <td>" 0 "</td>
+    <td align="center">STDIN</td>
+    <td align="center">Keyboard</td>
+    <td align="center"> < </td>
+    <td align="center"> 0 </td>
   </tr>
    <tr>
-    <td>STDOUT</td>
-    <td>Monitor</td>
-    <td>" > "</td>
-    <td>" 1 "</td>
+    <td align="center">STDOUT</td>
+    <td align="center">Monitor</td>
+    <td align="center"> > </td>
+    <td align="center"> 1 </td>
   </tr>
   <tr>
-    <td>STDERR</td>
-    <td>Monitor</td>
-    <td>" 2> "</td>
-    <td>" 2 "</td>
+    <td align="center">STDERR</td>
+    <td align="center">Monitor</td>
+    <td align="center"> 2> </td>
+    <td align="center"> 2 </td>
   </tr>
 </table>
