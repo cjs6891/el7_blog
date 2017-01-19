@@ -32,6 +32,7 @@ There are always three default files open, <i>STDIN</i>, <i>STDOUT</i>, and <i>S
   </tr>
 </table>
 
+Using I/O Redirection
 <table>
   <tr>
     <th>Redirector</th>
@@ -40,33 +41,45 @@ There are always three default files open, <i>STDIN</i>, <i>STDOUT</i>, and <i>S
   </tr>
   <tr>
     <td align="center"> 1> </td>
-    <td align="center">Redirect <i>STDOUT</i></td>
+    <td align="left">Redirect <i>STDOUT</i></td>
     <td align="center"> 1> stdout.txt </td>
   </tr>
    <tr>
     <td align="center"> 1>> </td>
-    <td align="center">Redirect and append <i>STDOUT</i></td>
+    <td align="left">Redirect and append <i>STDOUT</i></td>
     <td align="center"> 1>> stdout.txt </td>
   </tr>
   <tr>
     <td align="center"> 2> </td>
-    <td align="center">Redirect <i>STDERR</i></td>
+    <td align="left">Redirect <i>STDERR</i></td>
     <td align="center"> 2> stderr.txt </td>
   </tr>
    <tr>
     <td align="center"> 2>> </td>
-    <td align="center">Redirect and append <i>STDERR</i></td>
+    <td align="left">Redirect and append <i>STDERR</i></td>
     <td align="center"> 2>> stderr.txt </td>
   </tr>
-
    <tr>
     <td align="center"> &> </td>
-    <td align="center">Redirect both <i>STDOUT</i> and <i>STDERR</i></td>
+    <td align="left">Redirect both <i>STDOUT</i> and <i>STDERR</i></td>
     <td align="center"> &> stdout_err.txt </td>
   </tr>
    <tr>
     <td align="center"> &>> </td>
-    <td align="center">Redirect and append both <i>STDOUT</i> and <i>STDERR</i></td>
+    <td align="left">Redirect and append both <i>STDOUT</i> and <i>STDERR</i></td>
     <td align="center"> &>> stdout_err.txt </td>
   </tr>
 </table>
+
+Using Pipes
+A pipe <code> | </code> can be used to catch the output of one command and use that as input for a second command. A pipe <code> | </code> can be useful for chaining commands, scripts, files, and programs together.
+
+<pre>
+<code>
+ cat *.txt | sort | uniq > result-file
+ # Sorts the output of all the .txt files and deletes duplicate lines,
+ # finally saves results to "result-file".
+</code>
+</pre>
+
+[Advanced Bash-Scripting Guide: Chapter 20. I/O Redirection](http://www.tldp.org/LDP/abs/html/io-redirection.html)
