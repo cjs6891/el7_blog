@@ -42,36 +42,36 @@ Using I/O Redirection
   <tr>
     <td align="center"> 1> </td>
     <td align="left">Redirect <i>STDOUT</i></td>
-    <td align="center"> 1> stdout.txt </td>
+    <td align="left"> 1> stdout.txt </td>
   </tr>
    <tr>
     <td align="center"> 1>> </td>
     <td align="left">Redirect and append <i>STDOUT</i></td>
-    <td align="center"> 1>> stdout.txt </td>
+    <td align="left"> 1>> stdout.txt </td>
   </tr>
   <tr>
     <td align="center"> 2> </td>
     <td align="left">Redirect <i>STDERR</i></td>
-    <td align="center"> 2> stderr.txt </td>
+    <td align="left"> 2> stderr.txt </td>
   </tr>
    <tr>
     <td align="center"> 2>> </td>
     <td align="left">Redirect and append <i>STDERR</i></td>
-    <td align="center"> 2>> stderr.txt </td>
+    <td align="left"> 2>> stderr.txt </td>
   </tr>
    <tr>
     <td align="center"> &> </td>
     <td align="left">Redirect both <i>STDOUT</i> and <i>STDERR</i></td>
-    <td align="center"> &> stdout_err.txt </td>
+    <td align="left"> &> stdout_err.txt </td>
   </tr>
    <tr>
     <td align="center"> &>> </td>
     <td align="left">Redirect and append both <i>STDOUT</i> and <i>STDERR</i></td>
-    <td align="center"> &>> stdout_err.txt </td>
+    <td align="left"> &>> stdout_err.txt </td>
   </tr>
 </table>
 
-Using Pipes
+Using Pipes<br>
 A pipe <code> | </code> can be used to catch the output of one command and use that as input for a second command. A pipe <code> | </code> can be useful for chaining commands, scripts, files, and programs together.
 
 <pre>
