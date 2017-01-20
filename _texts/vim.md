@@ -7,7 +7,7 @@ The only text editor that is always available is <code>vi</code>. An important c
 
 <table>
   <tr>
-    <th><code>vi/vim</code> command</th>
+    <th>vi/vim command</th>
     <th>Explanation</th>
   </tr>
   <tr>
