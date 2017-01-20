@@ -4,7 +4,7 @@ title: /usr/bin/man
 ---
 
 The historical Linux Programmer’s Manual<br>
-<code># man man-pages</code><br>
+<code>man man-pages</code><br>
 
 <table>
   <tr>
@@ -52,8 +52,8 @@ The historical Linux Programmer’s Manual<br>
 
 <p>To distinguish identical topic names in different sections, man page references include the section number in parentheses after the topic. <code>passwd(1)</code> describes the command to change passwords, while <code>passwd(5)</code> explains the <code>/etc/passwd</code> file format for storing local user accounts. </p>
 
-<p><code># man passwd</code> displays <code>passwd(1)</code> by default<br>
-<code># man 5 passwd</code> displays <code>passwd(5)</code>
+<p><code>man passwd</code> displays <code>passwd(1)</code> by default<br>
+<code>man 5 passwd</code> displays <code>passwd(5)</code>
 </p>
 
 <p><code><i>/STRING</i></code> Searches forward (down) for <i>STRING</i> in the man page<br>
@@ -62,5 +62,5 @@ When performing searches, <i>STRING</i> allows regular expression syntax.
 
 <p>A keyword search of man pages is performed using <code># man -k <i>KEYWORD</i></code>, which displays a list of keyword-matching man page topics with section numbers.<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482960859.png" alt="" style="">
-The <code># man -K </code>option performs a full-text page search, not just titles and descriptions like the <code># man -k </code>option.
+The <code>man -K </code>option performs a full-text page search, not just titles and descriptions like the <code># man -k </code>option.
 </p>
