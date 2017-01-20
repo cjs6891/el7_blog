@@ -89,6 +89,6 @@ The only text editor that is always available is <code>vi</code>. An important c
   </tr>
   <tr>
     <td align="center"><code>:%s/old/new/g</code></td>
-    <td align="left">Replaces all occurrences of <i>old</i> with <i>new</i>.</td>
+    <td align="left">Replaces <i>ALL</i> occurrences of <i>old</i> with <i>new</i>.</td>
   </tr>
 </table>
