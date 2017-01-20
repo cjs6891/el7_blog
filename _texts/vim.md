@@ -85,7 +85,7 @@ The only text editor that is always available is <code>vi</code>. An important c
   </tr>
   <tr>
     <td align="center"><code>!ls</code></td>
-    <td align="left">Adds the output of <code>ls</code> (<i>or any other command</i>) in the current file'</td>
+    <td align="left">Adds the output of <code>ls</code> (<i>or any other command</i>) in the current file.</td>
   </tr>
   <tr>
     <td align="center"><code>:%s/old/new/g</code></td>
