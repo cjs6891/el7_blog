@@ -82,4 +82,6 @@ A pipe <code> | </code> can be used to catch the output of one command and use t
 </code>
 </pre>
 
+---
+
 [Advanced Bash-Scripting Guide: Chapter 20. I/O Redirection](http://www.tldp.org/LDP/abs/html/io-redirection.html)
