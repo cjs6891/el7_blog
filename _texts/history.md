@@ -15,4 +15,4 @@ Working W/History:
 </ul><br>
 <br>
 Note:<br>
-*<code>history -c</code> wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory. An alternative to deleting <code>.bash_history</code> is the command <code>history -w</code> after using <code>history -c</code>.
+*<code>history -c</code> wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory.<br>An alternative to deleting <code>.bash_history</code> is the command <code>history -w</code> after using <code>history -c</code>.
