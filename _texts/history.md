@@ -9,8 +9,8 @@ Bash is configured to keep the last 1,000 commands you have used. When a shell s
 Working W/History:
 <ul>
 <li>Type <code>history</code> to show a list of all commands in the bash history.</li>
-<li>Use <code>Ctrl+r</code> to open the prompt from which you can do a backward search in commands that you have previously used. Just type a part of the command you are looking for, and it will be displayed automatically. Use <code>Ctrl+r</code> to search further backward based on the same search criteria</li>
-<li>Type <code>!number</code> to execute a command with a specific number from history</li>
+<li>Use <code>Ctrl+r</code> to open the prompt from which you can do a backward search in commands that you have previously used. Just type a part of the command you are looking for, and it will be displayed automatically. Use <code>Ctrl+r</code> to search further backward based on the same search criteria.</li>
+<li>Type <code>!number</code> to execute a command with a specific number from history.</li>
 <li>Type <code>!sometext</code> to execute the last command that starts with sometext.<br>* Notice: The command that was found is executed immediately, it may be potentially dangerous.</li>
 </ul><br>
 <br>
