@@ -5,7 +5,6 @@ title: vi/vim
 
 The only text editor that is always available is <code>vi</code>. An important concept when working with <code>vi/vim</code> is that it uses different modes. These modes often cause confusion because in command mode you can just enter a command and you cannot change the contents of a text file. To change the contents of a text file, you need to get to input mode.<br>
 
-<table>
   <tr>
     <th>vi/vim command</th>
     <th>Explanation</th>
@@ -91,4 +90,3 @@ The only text editor that is always available is <code>vi</code>. An important c
     <td align="center"><code>:%s/old/new/g</code></td>
     <td align="left">Replaces <i>ALL</i> occurrences of <i>old</i> with <i>new</i>.</td>
   </tr>
-</table>
