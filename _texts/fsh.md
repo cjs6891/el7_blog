@@ -15,4 +15,8 @@ FSH Overview
     <td align="center">/</td>
     <td>The <code>root</code> directory. This is where the system tree starts.</td>
   </tr>
+  <tr>
+    <td align="center">/bin</td>
+    <td>Contains executable programs that are needed to repair a system in a minimal troubleshooting mode. This directory is essential during boot.</td>
+  </tr>
 </table>
