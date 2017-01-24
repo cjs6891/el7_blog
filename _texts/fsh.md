@@ -83,4 +83,13 @@ FSH Overview
     <td align="center"><code>/var</code></td>
     <td>Directory that contains files which may change in size dynamically, such as log files, mail boxes, and spool files.</td>
   </tr>
-</table>
+</table><br>
+Mounts<br>
+A linux file system is presented as one hierarchy, with the root directory <code>/</code> as it's starting point. This hierarchy may be distributed over different devices and even computer systems that are mounted into the root directory.<br>
+Mounting devices makes it possible to organize the linux file system in a flexible way. Some directories are commonly mounted on dedicated devices:
+<ul>
+<li><code>/boot</code>: This directory is often mounted on a separate device because it required essential information your computer needs to boot. As the root directory <code>/</code> is often on a logical volume manager (LVM) logical volume, from which linux cannot boot, the kernel and associated files need to be stored separately on a dedicated <code>/boot</code> device.</li>
+<li><code>/var</code>: This directory is often on a dedicated device because it grows in a dynamic and uncontrolled way. By putting it on a dedicated device, you can ensure that it will not fill up all storage on your server.</li>
+<li><code>/home</code>: This directory often is on a dedicated device for security reasons. By putting it in a dedicated device, it can be mounted with specific options to enhance the security of the server. When reinstalling the operating system, it is an advantage to have home directories in a separate file system. The home directories can then survive the system reinstall.</li>
+<li><code>/usr</code>: This directory contains operating system files only, to which normal users normally do not need any write access. Putting it on a dedicated device allows administrators to configure it as a read-only mount.</li>
+</ul><br>
