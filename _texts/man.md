@@ -3,7 +3,7 @@ layout: page
 title: /usr/bin/man
 ---
 
-Using <code>--help</code>
+Using <code>--help</code><br>
 The quickest way to get an overview of how to use a command is by running the command with the <code>--help</code> option.<br>
 <pre>
 <code>
