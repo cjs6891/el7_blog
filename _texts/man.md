@@ -114,4 +114,5 @@ passwd               (1)  - update user's authentication tokens
 passwd               (5)  - password file
 passwd [sslpasswd]   (1ssl)  - compute password hashes
 </code>
-</pre>
+</pre><br>
+Update the mandb database with the <code>mandb</code> command as root without any arguments.
