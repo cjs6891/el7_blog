@@ -19,4 +19,16 @@ FSH Overview
     <td align="center">/bin</td>
     <td>Contains executable programs that are needed to repair a system in a minimal troubleshooting mode. This directory is essential during boot.</td>
   </tr>
+  <tr>
+    <td align="center">/boot</td>
+    <td>Contains all files and directories that are needed to boot the linux kernel.</td>
+  </tr>
+  <tr>
+    <td align="center">/dev</td>
+    <td>Device files that are used for accessing physical devices. This directory is essential during boot.</td>
+  </tr>
+  <tr>
+    <td align="center">/etc</td>
+    <td>Contains configuration files that are used by programs and services that are used on your server. This directory is essential during boot.</td>
+  </tr>
 </table>
