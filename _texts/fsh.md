@@ -12,7 +12,7 @@ FSH Overview
     <th>Use</th>
   </tr>
   <tr>
-    <td>/</td>
+    <td align="center">/</td>
     <td>The <code>root</code> directory. This is where the system tree starts.</td>
   </tr>
 </table>
