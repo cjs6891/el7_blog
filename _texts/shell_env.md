@@ -52,7 +52,6 @@ re-load <code>~/.bash_profile</code> -or- <code>~/.bashrc</code> on the fly, i.e
 <table>
 <tr><td><code>source ~/.bash_profile</code></td></tr>
 <tr><td><code>source ~/.bashrc</code></td></tr>
-<tr><td>&nbsp;</td></tr>
 <tr><td><code>. ~/.bash_profile</code></td></tr>
 <tr><td><code>. ~/.bashrc</code></td></tr>
 </table>
