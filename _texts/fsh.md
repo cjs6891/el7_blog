@@ -93,3 +93,4 @@ Mounting devices makes it possible to organize the linux file system in a flexib
 <li><code>/home</code>: This directory often is on a dedicated device for security reasons. By putting it in a dedicated device, it can be mounted with specific options to enhance the security of the server. When reinstalling the operating system, it is an advantage to have home directories in a separate file system. The home directories can then survive the system reinstall.</li>
 <li><code>/usr</code>: This directory contains operating system files only, to which normal users normally do not need any write access. Putting it on a dedicated device allows administrators to configure it as a read-only mount.</li>
 </ul><br>
+The <code>mount</code> command gives an overview of all mounted devices. To get this information, the <code>/proc/mounts</code> file is read, where the kernel keeps information about all current mounts.<br>
