@@ -106,3 +106,12 @@ When performing searches, <i>STRING</i> allows regular expression syntax.
 <img src="https://cjs6891.github.io/el7_blog/public/img/1482960859.png" alt="" style="">
 The <code>man -K </code>option performs a full-text page search, not just titles and descriptions like the <code># man -k </code>option.
 </p>
+Another useful man option is <code>-f</code>. The command <code>man -f <command> </code> displays a short description of the item found in the man database.
+<pre>
+<code>
+[root@el7_blog.local]# man -f passwd
+passwd               (1)  - update user's authentication tokens
+passwd               (5)  - password file
+passwd [sslpasswd]   (1ssl)  - compute password hashes
+</code>
+</pre>
