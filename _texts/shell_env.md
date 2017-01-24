@@ -54,4 +54,7 @@ re-load <code>~/.bash_profile</code> -or- <code>~/.bashrc</code> on the fly, i.e
 <tr><td><code>source ~/.bashrc</code></td></tr>
 <tr><td><code>. ~/.bash_profile</code></td></tr>
 <tr><td><code>. ~/.bashrc</code></td></tr>
-</table>
+</table><br>
+
+<code>/etc/motd</code> and <code>/etc/issue</code><br>
+Bash offers an option to include messages in the <code>/etc/motd</code> and <code>/etc/issue</code> files. Messages in <code>/etc/motd</code> display after a user has successfully logged into a shell. Another way to send information to users is by using <code>/etc/issue</code>. The contents of this file display before the user logs in.
