@@ -1,6 +1,6 @@
 ---
 layout: page
-title: /usr/bin/man
+title: finding help, and using man
 ---
 
 Using <code>--help</code><br>
@@ -40,6 +40,13 @@ usage: man [-adfhktwW] [section] [-M path] [-P pager] [-S list]
 
 The historical Linux Programmer’s Manual<br>
 <code>man man-pages</code><br>
+<br>
+Man pages are categorized in different sections. The most relevant sections for system administrators are as follows:<br>
+<ul>
+<li>1: Executable programs or shell commands</li>
+<li>5: File formats and conventions</li>
+<li>8: System administration commands</li>
+</ul><br>
 
 <table>
   <tr>
