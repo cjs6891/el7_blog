@@ -8,7 +8,7 @@ The environment consists of variables that define the user environment, such as 
 <pre>
 <code>
 [root@el7_blog.local]# env
-HOSTNAME=WSH-1905.local
+HOSTNAME=el7_blog.local.local
 TERM=xterm
 SHELL=/bin/bash
 HISTSIZE=1000
@@ -38,7 +38,23 @@ _=/bin/env
 </code>
 </pre>
 
-To define a variable, the name of the variable is mentioned followed by an equals sign (<code>=</code>) and the value that is assigned to the specific variable.
+To define a variable, the name of the variable is mentioned followed by an equals sign (<code>=</code>) and the value that is assigned to the specific variable.<br>
+
+Environment Configuration Files<br>
+<ul>
+<li><code>/etc/profile</code>: This is the generic file that is processes by all users upon login.</li>
+<li><code>/etc/bashrc</code>: This file is processed when subshells are started.</li>
+<li><code>~/.bash_profile</code>: In this file, user-specific login shell variables can be defined.</li>
+<li><code>~/.bashrc</code>: In this user-specific file, subshell variables can be defined.</li>
+</ul><br>
+
+Reload <code>~/.bash_profile</code> -or- <code>~/.bashrc</code> on the fly, i.e.without having to log out...<br>
+<code>source ~/.bash_profile</code><br>
+<code>source ~/.bashrc</code><br>
+ -OR-
+<code>. ~/.bash_profile</code><br>
+<code>. ~/.bashrc</code><br>
+
 
 
 <table>
