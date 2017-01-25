@@ -1,7 +1,31 @@
 ---
 layout: page
-title: file system hierarchy
+title: managing files
 ---
+
+Working W/Wildcards<br>
+When working with files, using wildcards can make your work a lot easier. A wildcard is a shell feature that helps you referring to multiple files in an easy way.<br>
+
+
+Wildcard Overview<br>
+<table>
+  <tr>
+    <th>Wildcard</th>
+    <th>Use</th>
+  </tr>
+  <tr>
+    <td align="center"><code>*</code></td>
+    <td>Refers to an unlimited number of all characters</td>
+  </tr>
+  <tr>
+    <td align="center"><code>?</code></td>
+    <td>Used to refer to one specific character that can be any character. <code>ls c?t</code> would match cat as well as cut</td>
+  </tr>
+  <tr>
+    <td align="center"><code>[auo]</code></td>
+    <td>Refers to one character that may be selected from the range that is specified between square brackets. <code>ls c[auo]t</code> would match cat, cut, and cot.</td>
+  </tr>
+</table>
 
 The file system on most linux systems is organized in a similar way. The layout of the linux file system is defined in the [Filesystem Hierarchy Standard](http://www.pathname.com/fhs/), and this file system hierarchy is described in <code>man 7 hier</code>.<br>
 
