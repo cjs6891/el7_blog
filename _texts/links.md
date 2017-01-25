@@ -26,8 +26,8 @@ Creating Links<br>
 Use the <code>ln</code> command to create links. It uses the same order as <code>cp</code> and <code>mv</code>; first you mention the source name, followed by the destination name. If you want to create a symbolic link, you use the option <code>-s</code>, and then you specify the source and target file or directory. One important restriction applies, however; to be able to create hard links, you must be the owner of the item that you want to link to. This is a new security restriction that has been introduced in EL7.
 
 <table>
-  <col width="30%">
-  <col width="70%">
+  <col width="35%">
+  <col width="65%">
   <tr>
     <th>Command</th>
     <th>Explanation</th>
@@ -44,4 +44,22 @@ Use the <code>ln</code> command to create links. It uses the same order as <code
     <td align="center"><code>ln -s /home /tmp</code></td>
     <td>Creates a symbolic link to the directory <code>/home</code> in the directory <code>/tmp</code></td>
   </tr>
-</table>
+</table><br>
+
+The <code>ls</code> command will reveal whether a file is a link:
+<ul>
+<li>In the output of the <code>ls -l</code> command, the first character is an <code>l</code> if the file is a symbolic link.</li>
+<li>If a file is a symbolic link, the output of <code>ls -l</code> shows the name of the item it links to after the filename</li>
+<li>If a file is a hard link, <code>ls -l</code> shows the hard link counter</li>
+</ul>
+<pre>
+<code>
+[root@el7_blog.local]# pwd
+/tmp
+[root@el7_blog.local]# ls -l
+-rw-r--r--.  2 root root     0 Apr 18  2016 HTTPD_ERRORS
+lrwxrwxrwx.  1 jobs users    5 Jan 25 16:03 home -> /home
+drwxrwxrwt.  7 root root  4.0K Jan 25 16:05 .
+</code>
+</pre>
+Removing Links<br>
