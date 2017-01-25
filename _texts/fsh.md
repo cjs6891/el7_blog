@@ -94,3 +94,5 @@ Mounting devices makes it possible to organize the linux file system in a flexib
 <li><code>/usr</code>: This directory contains operating system files only, to which normal users normally do not need any write access. Putting it on a dedicated device allows administrators to configure it as a read-only mount.</li>
 </ul><br>
 The <code>mount</code> command gives an overview of all mounted devices. To get this information, the <code>/proc/mounts</code> file is read, where the kernel keeps information about all current mounts.<br>
+<br>
+The <code>df -Th</code> command was designed to show available disk space on mounted devices; it includes most of the system mounts.
