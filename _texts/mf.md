@@ -76,7 +76,7 @@ Moving Files<br>
 To move files, you use the <code>mv</code> command. This command removes the file from its current location and puts it in the new location. You can also use <code>mv</code> to rename a file.<br>
 <br>
 <ul>
-<li><code>my file1 /tmp</code> Moves file1 from the current directory to <code>/tmp</code></li>
+<li><code>mv file1 /tmp</code> Moves file1 from the current directory to <code>/tmp</code></li>
 <li><code>mkdir directory1; mv directory1 /tmp</code> Creates directory1 and moves it to <code>/tmp</code></li>
 <li><code>my file1 file1-NEW</code> Renames file1 to file1-NEW</li>
 </ul><br>
