@@ -26,7 +26,6 @@ Wildcard Overview<br>
     <td>Refers to one character that may be selected from the range that is specified between square brackets. <code>ls c[auo]t</code> would match cat, cut, and cot.</td>
   </tr>
 </table><br>
-<br>
 Working W/Absolute and Relative Pathnames<br>
 An absolute filename, or absolute path, is a complete path reference to the file or directory you want to work with. This pathname starts with the root directory, followed by all subdirectories up to the actual filename. No matter what your current directory is, absolute filenames will always work. <code>/var/log/httpd/error_log</code><br>
 <br>
@@ -59,7 +58,6 @@ Listing Files and Directories<br>
     <td>Shows the names of directories, not the contents of all directories that match the wildcards that have been used with the <code>ls</code> command.</td>
   </tr>
 </table><br>
-<br>
 Copying Files<br>
 Copy files using the <code>cp</code> command. Just use <code>cp /path/to/file /path/to/destination</code>. To copy the file <code>/etc/hosts</code> to the <code>/tmp</code> directory for instance, use <code>cp /etc/hosts /tmp</code>.<br>
 <br>
@@ -71,7 +69,6 @@ A special case when working with <code>cp</code> are hidden files. By default, h
 <li><code>cp -a /directory/ .</code> This copies the entire directory <code>/directory</code>, including its contents, to the current directory.</li>
 <li><code>cp -a /directory/. .</code> This copies all files, regular and hidden, to the current directory.</li>
 </ul><br>
-<br>
 Moving Files<br>
 To move files, you use the <code>mv</code> command. This command removes the file from its current location and puts it in the new location. You can also use <code>mv</code> to rename a file.
 <ul>
@@ -79,6 +76,5 @@ To move files, you use the <code>mv</code> command. This command removes the fil
 <li><code>mkdir directory1; mv directory1 /tmp</code> Creates directory1 and moves it to <code>/tmp</code></li>
 <li><code>mv file1 file1-NEW</code> Renames file1 to file1-NEW</li>
 </ul><br>
-<br>
 Deleting Files<br>
 To delete files and directories, you use the <code>rm</code> command. When used on a single file, the single file is removed. You can also use it on directories that contain files, use the <code>-R</code> option, which stands for recursive.
