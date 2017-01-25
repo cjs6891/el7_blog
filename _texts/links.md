@@ -26,6 +26,8 @@ Creating Links<br>
 Use the <code>ln</code> command to create links. It uses the same order as <code>cp</code> and <code>mv</code>; first you mention the source name, followed by the destination name. If you want to create a symbolic link, you use the option <code>-s</code>, and then you specify the source and target file or directory. One important restriction applies, however; to be able to create hard links, you must be the owner of the item that you want to link to. This is a new security restriction that has been introduced in EL7.
 
 <table>
+  <col width="50%">
+  <col width="50%">
   <tr>
     <th>Command</th>
     <th>Explanation</th>
