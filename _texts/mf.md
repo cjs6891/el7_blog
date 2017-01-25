@@ -63,4 +63,13 @@ Listing Files and Directories<br>
 Copying Files<br>
 Copy files using the <code>cp</code> command. Just use <code>cp /path/to/file /path/to/destination</code>. To copy the file <code>/etc/hosts</code> to the <code>/tmp</code> directory for instance, use <code>cp /etc/hosts /tmp</code>.<br>
 <br>
-With the <code>cp</code> command, you can also copy an entire subdirectory, with its contents and everything within it. Use the <code>-R</code> option, which stands for recursive. To copy the directory <code>/etc</code> and everything in it to <code>/tmp</code>, you would, for instance, use the command <code>cp -R /etc /tmp</code>.
+With the <code>cp</code> command, you can also copy an entire subdirectory, with its contents and everything within it. Use the <code>-R</code> option, which stands for recursive. To copy the directory <code>/etc</code> and everything in it to <code>/tmp</code>, you would, for instance, use the command <code>cp -R /etc /tmp</code>. If you want to make sure that you keep the current permissions, use the <code>-a</code> option, which has cp work in archive mode.<br>
+<br>
+A special case when working with <code>cp</code> are hidden files. By default, hidden files are not copied over. There are three solutions to work with hidden files:
+<ul>
+<li><code>cp /directory/.* /tmp</code> This copies all files that have a name string with a dot<code>.</code> to <code>/tmp</code></li>
+<li><code>cp -a /directory/ .</code> This copies the entire directory <code>/directory</code>, including its contents, to the current directory.</li>
+<li><code>cp -a /directory/. .</code> This copies all files, regular and hidden, to the current directory.</li>
+</ul><br>
+<br>
+Moving Files<br>
