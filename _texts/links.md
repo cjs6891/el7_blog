@@ -20,3 +20,7 @@ When you create a file, you give it a name. Basically, this name is a hard link.
 <li>The number of aliases the original file has. When the last name is removed, the contents are also removed.</li>
 </ul>
 Understanding Symbolic Links<br>
+A symbolic link does not link directly to the inode but to the name of the file. This makes symbolic links much more flexible, but it also has some disadvantages. The advantages of symbolic links is that they can link to files on other devices, as well as on directories. The major disadvantage is that when the original file is removed, the symbolic link becomes invalid and does not work any longer.<br>
+<br>
+Creating Links
+
