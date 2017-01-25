@@ -63,3 +63,4 @@ Listing Files and Directories<br>
 Copying Files<br>
 Copy files using the <code>cp</code> command. Just use <code>cp /path/to/file /path/to/destination</code>. To copy the file <code>/etc/hosts</code> to the <code>/tmp</code> directory for instance, use <code>cp /etc/hosts /tmp</code>.<br>
 <br>
+With the <code>cp</code> command, you can also copy an entire subdirectory, with its contents and everything within it. Use the <code>-R</code> option, which stands for recursive. To copy the directory <code>/etc</code> and everything in it to <code>/tmp</code>, you would, for instance, use the command <code>cp -R /etc /tmp</code>.
