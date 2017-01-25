@@ -63,3 +63,4 @@ drwxrwxrwt.  7 root root  4.0K Jan 25 16:05 .
 </code>
 </pre>
 Removing Links<br>
+Removing links can be dangerous. DO NOT USE <code>-r</code> or <code>-f</code> to remove links, even if they are subdirectories.<br>
