@@ -24,6 +24,7 @@ Monitoring and Extracting tar Files<br>
 Before extracting a file, it's good to know what might be expected. The <code>-t</code> option can be used to find out. Type for instance <code>tar -tvf etc_directory.tar | less</code> to see the contents of the <code>etc_directory.tar</code> archive.<br>
 
 To extract the contents of an archive, use <code>tar -xvf ArchiveName.tar</code>. The archive will be extracted into the current working directory.<br>
+<br>
 Note:<br>
 *This might not be what you want to accomplish, two solutions exist to extract the contents where you want:
 <ul>
