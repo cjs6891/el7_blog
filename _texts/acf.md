@@ -47,3 +47,57 @@ Note:<br>
 *This might not be what you want to accomplish... To extract <code>etc/hosts</code> from <code>etc_directory.tar</code> to <code>/tmp</code> use:<br>
 <code>tar -xvf etc_directory.tar -C /tmp etc/hosts</code>
 <br>
+Using Compression<br>
+Originally, after creating an archive, it had to be compressed with a separate compression utility, such as <code>gzip</code> or <code>bzip2</code>. After creating <code>etc_directory.tar</code>, you can compress it with <code>gzip etc_directory.tar</code> replacing <code>etc_directory.tar</code> with <code>etc_directory.tar.gz</code> consuming significantly less space. As an alternative to using <code>gzip</code>, you can use the <code>bzip2</code> utility.<br>
+<br>
+To decompress files that have been compressed with <code>gzip</code> or <code>bzip2</code>, you can use the <code>gunzip</code> and <code>bunzip2</code> utilities.<br>
+<br>
+An alternative to using these utilities after <code>tar</code> would be to include the <code>-z</code>, gzip or <code>-j</code> bzip2 options when creating the tar archive. There is no reason to use these options when extracting. The <code>tar</code> utility will recognize the compression automatically and decompress it for you.<br>
+<br>
+Overview of <code>tar</code> Options
+<table>
+  <tr>
+    <th>Option</th>
+    <th>Use</th>
+  </tr>
+  <tr>
+    <td align="center"><code>c</code></td>
+    <td>Creates an archive.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>v</code></td>
+    <td>Shows verbose output while <code>tar</code> is working</td>
+  </tr>
+  <tr>
+    <td align="center"><code>f</code></td>
+    <td>Used to specify the name of the tar archive that is to be used.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>t</code></td>
+    <td>Shows the contents of an archive.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>z</code></td>
+    <td>Compresses the archive using <code>gzip</code>.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>j</code></td>
+    <td>Compresses the archive using <code>bzip2</code>.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>x</code></td>
+    <td>Extracts an archive.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>u</code></td>
+    <td>Updates an archive, only newer files will be written to the archive.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>C</code></td>
+    <td>Changes the working directory before performing the command.</td>
+  </tr>
+  <tr>
+    <td align="center"><code>r</code></td>
+    <td>Appends files to an archive.</td>
+  </tr>
+</table>
