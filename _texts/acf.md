@@ -44,6 +44,6 @@ tar -xvf ../etc_directory.tar
 Apart from extracting an entire archive, it is also possible to extract one file out of the archive. Use <code>tar -xvf etc_directory.tar etc/hosts</code>.<br>
 <br>
 Note:<br>
-*This might not be what you want to accomplish... To extract "etc/hosts" from <code>etc_directory.tar</code> to <code>/tmp</code> use:<br>
+*This might not be what you want to accomplish... To extract <code>etc/hosts</code> from <code>etc_directory.tar</code> to <code>/tmp</code> use:<br>
 <code>tar -xvf etc_directory.tar -C /tmp etc/hosts</code>
 <br>
