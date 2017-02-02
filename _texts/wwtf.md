@@ -62,7 +62,7 @@ The <code>sort</code> command sorts in alphabetic order by default. Obviously in
 You can also use the <code>sort</code> command and specify which column you want to sort. Use <code>sort -n -k3 -t : /etc/passwd</code>, for instance, which uses the field separator : to numericlly sort the third column of the <i>/etc/passwd</i> file.<br>
 <br>
 Counting Lines, Words, and Characters W/<code>wc</code><br>
-The <code>wc</code> command gives three different results: the number of lines, the number of words, and the number of characters. To get the specific line count use <code>wc -l</code>.
+The <code>wc</code> command gives three different results: the number of lines, the number of words, and the number of characters. To get the specific line count of a file use <code>wc -l</code>.
 <pre>
 <code>
 # wc /etc/passwd
