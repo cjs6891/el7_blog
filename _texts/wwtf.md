@@ -59,7 +59,7 @@ Sorting File Contents and/or Output W/<code>sort</code><br>
 <br>
 The <code>sort</code> command sorts in alphabetic order by default. Obviously in some cases, that isn't convenient. The <code>sort</code> command offers different options to help sorting these specific types of data. For instance, <code>cut -d : -f 3 /etc/passwd | sort -n</code> to sort the third field of <i>/etc/passwd</i> in numeric order. It can also be useful to sort in reverse order <code>cut -d : -f 3 /etc/passwd | sort -rn</code>.<br>
 <br>
-You can also use the <code>sort</code> command and specify which column you want to sort. Use <code>sort -n -k3 -t : /etc/passwd</code>, for instance, which uses the field separator : to numericly sort the third column of the <i>/etc/passwd</i> file.<br>
+You can also use the <code>sort</code> command and specify which column you want to sort. Use <code>sort -n -k3 -t : /etc/passwd</code>, for instance, which uses the field separator : to numericlly sort the third column of the <i>/etc/passwd</i> file.<br>
 <br>
 Counting Lines, Words, and Characters W/<code>wc</code><br>
 The <code>wc</code> command gives three different results: the number of lines, the number of words, and the number of characters. To get the specific line count use <code>wc -l</code>.
