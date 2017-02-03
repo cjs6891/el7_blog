@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Documentation
+title: Ed. Documentation
 author: Alex Gil
 ---
 
