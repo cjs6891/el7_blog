@@ -14,4 +14,34 @@ Trigger a Kernel Crash
 https://www.kernel.org/doc/Documentation/sysrq.txt
 
 # /usr/bin/echo c > /proc/sysrq-trigger
+
+ - - - - - - - - - - 
+
+drop_caches
+
+Writing to this will cause the kernel to drop clean caches, as well as
+reclaimable slab objects like dentries and inodes.  Once dropped, their
+memory becomes free.
+
+To free pagecache:
+	echo 1 > /proc/sys/vm/drop_caches
+
+To free reclaimable slab objects (includes dentries and inodes):
+	echo 2 > /proc/sys/vm/drop_caches
+
+To free slab objects and pagecache:
+	echo 3 > /proc/sys/vm/drop_caches
+
+This is a non-destructive operation and will not free any dirty objects.
+To increase the number of objects freed by this operation, the user may run
+`sync' prior to writing to /proc/sys/vm/drop_caches.  This will minimize the
+number of dirty objects on the system and create more candidates to be
+dropped.
+
+# /usr/bin/sync && /usr/bin/echo 1 > /proc/sys/vm/drop_caches
+# /usr/bin/sync && /usr/bin/echo 2 > /proc/sys/vm/drop_caches
+# /usr/bin/sync && /usr/bin/echo 3 > /proc/sys/vm/drop_caches
+
+ - - - - - - - - - - 
+
 </pre>
