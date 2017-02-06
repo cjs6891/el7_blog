@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "Protected Area"
-AuthUserFile https://cjs6891.github.io/el7_blog/public/.htpasswd
-Require valid-user
