@@ -28,11 +28,11 @@ Most useful <code>grep</code> commands
     <td>Search for line matching more than one regular expression.</td>
   </tr>
   <tr>
-    <td align="center"><code>-A <i>NUMBER</i></code></td>
-    <td>Show <i>NUMBER</i> of lines after the matching regular expression.</td>
+    <td align="center"><code>-A <i>2</i></code></td>
+    <td>Show <i>2</i> lines after the matching regular expression.</td>
   </tr>
   <tr>
-    <td align="center"><code>-B <i>NUMBER</i></code></td>
-    <td>Show <i>NUMBER</i> of lines before the matching regular expression.</td>
+    <td align="center"><code>-B <i>2</i></code></td>
+    <td>Show <i>2</i> lines before the matching regular expression.</td>
   </tr>
 </table>
