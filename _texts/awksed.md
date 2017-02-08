@@ -50,7 +50,7 @@ root:x:0:0:root:/root:/bin/bash
 
  - - - 
 
-,# /bin/awk -F ':' '{print $1", "$6", "$7}' /etc/passwd
+# /bin/awk -F ':' '{print $1", "$6", "$7}' /etc/passwd
 root, /root, /bin/bash
 
  -or-
@@ -79,4 +79,4 @@ The default sed behavior is to write to STDOUT, use the <code>-i</code> option t
 
 The previous sed command <code>sed 's/text/replace/' file</code> will replace the first occurrence of the pattern in each line. In order to replace every or all occurrences, add the <code>g</code> parameter at the end <code>sed 's/pattern/replace_string/g' file</code>.
 
-[USEFUL ONE-LINE SCRIPTS FOR SED](http://www.pement.org/sed/sed1line.txt){:target="_blank"}
+[sed useful one-liners](http://www.pement.org/sed/sed1line.txt){:target="_blank"}
