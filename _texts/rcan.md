@@ -26,9 +26,9 @@ halt, poweroff, reboot - Halt, power-off or reboot the machine
 To Force a Machine Restart:
 # /bin/echo b > /proc/sysrq-trigger
 
-# ssh USERNAME@HOST
+# ssh USERNAME@REMOTE_HOST
  - or -
-# ssh HOST -l USERNAME
+# ssh REMOTE_HOST -l USERNAME
 
 SSH Public Fingerprint:
 ~/.ssh/known_hosts
@@ -36,7 +36,54 @@ SSH Public Fingerprint:
 Common SSH Options
 -v     Verbose, shows in detail what is happening while establishing the connection
 -X     Enables support for graphical applications
--p <PORT>     Used to connect to an SSH service not listing on the default port 22
+-p PORT     Used to connect to an SSH service not listing on the default port 22
 
+X Forwarding, SSH:
+/etc/ssh/ssh_config
+  ForwardX11 yes
+
+scp — secure copy (remote file copy program)
+
+Copy To Host
+/usr/bin/scp /tmp/output.txt USERNAME@REMOTE_HOST:/tmp/output.txt
+
+Copy From Host
+/usr/bin/scp USERNAME@REMOTE_HOST:/tmp/output.txt /tmp/output.txt
+
+scp can copy an entire subdirectory structure using the -r option
+Copy To Host
+/usr/bin/scp -r /tmp/output_dir USERNAME@REMOTE_HOST:/tmp/output_dir
+
+Copy From Host
+/usr/bin/scp -r USERNAME@REMOTE_HOST:/tmp/output_dir /tmp/output_dir
+
+
+rsync - a fast, versatile, remote (and local) file-copying tool
+
+SSH Key-Based Authentication
+1. ssh-keygen — authentication key generation, management and conversion
+2. ssh-copy-id — use locally available keys to authorize logins on a 
+remote machine
+
+# ssh-keygen
+# ssh-copy-id USERNAME@REMOTE_HOST
+
+Private Key:
+~/.ssh/id_rsa
+
+Public Key:
+~/.ssh/id_rsa.pub
+
+screen - screen manager with VT100/ANSI terminal emulation
+
+screen allows you to run multiple terminal sessions attaching and detaching as necessary. 
+
+List detached screen session(s)
+# screen -list
+There is a screen on:
+        2877.pts-0.el7_blog    (Detached)
+
+Attach to screen session(s)
+# screen -r 2877
 
 </pre>
