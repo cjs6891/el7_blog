@@ -86,4 +86,8 @@ There is a screen on:
 Attach to screen session(s)
 # screen -r 2877
 
+whoami - print effective userid
+
+id - print real and effective user and group IDs
+
 </pre>
