@@ -44,7 +44,7 @@ Run Tasks W/Elevated Permissions
 sudo<br>
 Instead of using the root user account, unprivileged users can be configured for using administrator permissions on specific tasks by using sudo. This is more secure because you will only be able to act as if you have administrator permissions while running this specific command.<br>
 1. Add <i>USER</i> account to the wheel group, <code>usermod -aG wheel <i>USER</i></code><br>
-2. Use <code>visudo</code> to verify <pre>%wheel  ALL=(ALL)       ALL</pre> is included<br>
+2. Use <code>visudo</code> to verify<pre> %wheel  ALL=(ALL)       ALL</pre> is included<br>
 <pre>
 ## Same thing without a password
 # %wheel        ALL=(ALL)       NOPASSWD: ALL
