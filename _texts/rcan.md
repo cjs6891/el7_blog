@@ -90,4 +90,16 @@ whoami - print effective userid
 
 id - print real and effective user and group IDs
 
+useradd - create a new user or update default new user information
+  -m, --create-home
+      Create the user's home directory if it does not exist
+  -M, --no-create-home
+      Do not create the user's home directory, even if the system wide setting from /etc/login.defs (CREATE_HOME) is set to yes.
+  -g, --gid GROUP
+      The group name or number of the user's initial login group
+  -G, --groups GROUP1[,GROUP2,...[,GROUPN]]]
+       A list of supplementary groups which the user is also a member of. Each group is separated from the next by a comma, with no intervening whitespace
+  -u, --uid UID
+      The numerical value of the user's ID
+
 </pre>
