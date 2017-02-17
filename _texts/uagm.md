@@ -95,16 +95,16 @@ Fields of <code>/etc/shadow</code>:
 <ul>
 <li><b>Login Name</b>: Notice <code>/etc/shadow</code> does not contain any UIDs, but user names only.</li>
 <li><b>Encrypted Password</b>: Self explanatory.</li>
-<li><b>Days since January 1, 1970, that the password was last changed</b>: <i>epoch</i> - Days since January 1, 1970; Considered the beginning of days on Linux</li>
+<li><b>Days since January 1, 1970, that the password was last changed</b>: aka <i>epoch</i>, considered the beginning of days on Linux</li>
 <li><b>Days before a password may be changed</b>: Allows for a more strict password policy, where it's not possible to change back to the original password immediately.</li>
-<li><b>Days after which a password must be changed</b>: Notice default is 99,999</li>
+<li><b>Days after which a password must be changed</b>: Contains the maximum validity period of passwords. Notice default is 99,999</li>
 <li><b>Days before password is to expire that user is warned</b>: Used to warn a user when a forced password change is upcoming, default is 7.</li>
-<li><b>Days after password expires that account is disabled</b>: Used to enforce a password change.</li>
+<li><b>Days after password expires that account is disabled</b>: Used to enforce a password change. After password expiry, users can't log in.</li>
 <li><b>Days since January 1, 1970, that account is disabled</b>: Can set this field to disable an account.</li>
 <li><b>Reserved field</b>: Self explanatory.</li>
 </ul>
 <br>
-* Most of the password properties can be managed with <code>passwd</code> or <code>chage</code>.<br>
+*** Most of the password properties can be managed with <code>passwd</code> or <code>chage</code>.<br>
 <br>
 Creating Users<br>
 You can edit <code>/etc/passwd</code> and <code>/etc/shadow</code> files directly or use <code>useradd</code>. To remove users, you can use <code>userdel</code>. Use <code>userdel -r</code> to remove a user, including the complete user environment.<br>
@@ -117,13 +117,17 @@ The <code>useradd</code> utility is probably the most common tool on Linux for m
 <pre>
 useradd - create a new user or update default new user information
   -m, --create-home
-      Create the user's home directory if it does not exist
+    Create the user's home directory if it does not exist
   -M, --no-create-home
-      Do not create the user's home directory, even if the system wide setting from /etc/login.defs (CREATE_HOME) is set to yes.
+    Do not create the user's home directory, even if the system wide setting from /etc/login.defs (CREATE_HOME) is set to yes.
   -g, --gid GROUP
-      The group name or number of the user's initial login group
+    The group name or number of the user's initial login group
   -G, --groups GROUP1[,GROUP2,...[,GROUPN]]]
-       A list of supplementary groups which the user is also a member of. Each group is separated from the next by a comma, with no intervening whitespace
+    A list of supplementary groups which the user is also a member of. Each group is separated from the next by a comma, with no intervening whitespace
   -u, --uid UID
-      The numerical value of the user's ID
+    The numerical value of the user's ID
+
+userdel - delete a user account and related files
+  -r, --remove
+    Files in the user's home directory will be removed along with the home directory itself and the user's mail spool.
 </pre>
