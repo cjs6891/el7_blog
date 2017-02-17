@@ -82,7 +82,7 @@ ntp:x:38:38::/etc/ntp:/sbin/nologin
 </pre>
 Fields of <code>/etc/passwd</code>
 <ul>
-<li><b>username</b>: Unique name for the user. User names are important to match a user to his password, which is stored separately in <code>/etc/shadow</code>. On Linux, there can be no spaces in the username.</li>
+<li><b>USERNAME</b>: Unique name for the user. User names are important to match a user to his password, which is stored separately in <code>/etc/shadow</code>. On Linux, there can be no spaces in the username.</li>
 <li><b>Password</b>: In the old days, the second field of <code>/etc/passwd</code> was used to store the hashes password of the user. <code>/etc/passwd</code> is readable by all users, and poses a security risk. Current Linux systems store the hashes password in <code>/etc/shadow</code></li>
 <li><b>UID</b>: Each user has a unique user ID (UID). It is the UID that really determines what a user can do. UID 0 is reserved for root. The lowerd UIDs (typically up to 999) are used for system accounts, and the higher UIDs (from 1,000 on by default), are reserved for people that need to connect directly to the server. The range of UIDs that are used to create regular user accounts is set in <code>/etc/login.defs</code>.</li>
 <li><b>GID</b>: Each user is a member of at least one group, referred to as the <i>primary group</i>.</li>
