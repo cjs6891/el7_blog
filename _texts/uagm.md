@@ -132,11 +132,11 @@ userdel - delete a user account and related files
     Files in the user's home directory will be removed along with the home directory itself and the user's mail spool.
 </pre>
 <br>
-usermod
+usermod<br>
 The ultimate command-line utility for modifying user properties is <code>usermod</code>. It can be used to set all properties of users as stored in <code>/etc/passwd</code> and <code>/etc/shadow</code>, plus some additional tasks, such as managing group membership.<br>
 <br>
 User Management Default Configuration Files<br>
-Configuration Files: <code>/etc/login.defs</code> and <code>/etc/default/useradd</code>.<br>
+<code>/etc/login.defs</code> and <code>/etc/default/useradd</code>.<br>
 <br>
 <code>/etc/default/useradd</code> contains some default values that are applied when using useradd.<br>
 <br>
@@ -147,5 +147,5 @@ Configuration Files: <code>/etc/login.defs</code> and <code>/etc/default/useradd
 <li><code>PASS_MAX_DAYS, PASS_MIN_DAYS</code> and <code>PASS_WARN_AGE</code>: Define the default password expiration properties when creating new users.</li>
 <li><code>UID_MIN</code>: The first UID to use when creating new users.</li>
 <li><code>CREATE_HOME</code>: Indicates whether or not to create a home directory for new users.</li>
-<li><code>USERGROUPS_ENAB</code>: Set to yes to create a private group for all new users. That means a new user has a group with the same name as the user as its default group. If set to no, all users are made </li>
+<li><code>USERGROUPS_ENAB</code>: Set to yes to create a private group for all new users. That means a new user has a group with the same name as the user as its default group. If set to no, all users are made a member of the group users.</li>
 </ul>
