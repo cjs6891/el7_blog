@@ -149,3 +149,19 @@ User Management Default Configuration Files<br>
 <li><code>CREATE_HOME</code>: Indicates whether or not to create a home directory for new users.</li>
 <li><code>USERGROUPS_ENAB</code>: Set to yes to create a private group for all new users. That means a new user has a group with the same name as the user as its default group. If set to no, all users are made a member of the group users.</li>
 </ul>
+<br>
+passwd - update user's authentication tokens
+chage - change user password expiry information
+<br>
+Managing Password Properties<br>
+Password properties are set in <code>/etc/shadow</code>. You can use <code>chage</code> and <code>passwd</code> to change these properties. To see current password settings use <code>chage -l <i>USERNAME</i></code>. 
+<br>
+Creating a User Environment<br>
+When a user logs in, an environment is created. To construct the user environment, a few files play a role:
+<ul>
+<li><code>/etc/profile</code>: Used for default settings for all users when starting a login shell</li>
+<li><code>/etc/bashrc</code>: Used to define defaults for all users when starting a subshell</li>
+<li><code>~/.bash_profile</code>: Specific settings for one user applied when starting a login shell</li>
+<li><code>~/.bashrc</code>: Specific settings for one user applied when starting a subshell</li>
+</ul>
+When logging in, the files are read in this order, and variables and other settings that are defined in these files are applied. If a variable or setting occurs in more than one file, the last one wins.
