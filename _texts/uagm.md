@@ -154,7 +154,7 @@ User Management Default Configuration Files<br>
 <code>chage</code> - change user password expiry information<br>
 <br>
 Managing Password Properties<br>
-Password properties are set in <code>/etc/shadow</code>. You can use <code>chage</code> and <code>passwd</code> to change these properties. To see current password settings use <code>chage -l <i>USERNAME</i></code>. 
+Password properties are set in <code>/etc/shadow</code>. You can use <code>chage</code> and <code>passwd</code> to change these properties. To see current password settings use <code>chage -l <i>USERNAME</i></code>.<br> 
 <br>
 Creating a User Environment<br>
 When a user logs in, an environment is created. To construct the user environment, a few files play a role:
