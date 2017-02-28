@@ -164,4 +164,19 @@ When a user logs in, an environment is created. To construct the user environmen
 <li><code>~/.bash_profile</code>: Specific settings for one user applied when starting a login shell</li>
 <li><code>~/.bashrc</code>: Specific settings for one user applied when starting a subshell</li>
 </ul>
-When logging in, the files are read in this order, and variables and other settings that are defined in these files are applied. If a variable or setting occurs in more than one file, the last one wins.
+When logging in, the files are read in this order, and variables and other settings that are defined in these files are applied. If a variable or setting occurs in more than one file, the last one wins.<br>
+<br>
+Linux Groups<br>
+Every Linux users has to be a member of at least one group, the primary group. When creating files, the primary group becomes group owner of these files. The user can access all files their primary group has access to. The users primary group membership is defined in <code>/etc/passwd</code>; the group itself is stored in the <code>/etc/group</code> configuration file.<br>
+<br>
+Users can also be members of secondary groups as well. Secondary groups are important to get access to files. If the group a user is a member or has access to specific files, the user will get access.<br>
+<br>
+Fields of <code>/etc/group</code>:<br>
+<ul>
+<li>Group Name: Self explanatory</li>
+<li>Group Password: A group password can be used by users that want to join the group on a temporary basis, so that access to files the group has access to is allowed.</li>
+<li>Group ID: A unique numeric group identification number.</li>
+<li>Members: Names of users that are a member of this group as a secondary group.<br>
+*** Note: It doesn't show users that are a member of this group as their primary group.
+</li>
+</ul>
