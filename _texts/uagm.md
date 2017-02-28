@@ -179,4 +179,10 @@ Fields of <code>/etc/group</code>:<br>
 <li>Members: Names of users that are a member of this group as a secondary group.<br>
 *** Note: It doesn't show users that are a member of this group as their primary group.
 </li>
-</ul>
+</ul><br>
+<br>
+groupadd<br>
+To create a new group use <code>groupadd</code>. Just use <code>groupadd</code> followed by the name of the group you want to add. Use <code>groupadd -g</code> to specify the Group ID when creating the group.<br>
+<br>
+groupmod<br>
+Use <code>groupmod</code> to manage group properties. You can use <code>groupmod</code> to change the name or Group ID of the group, but it doesn't allow you to add group members. To add users to a group use <code>usermod</code>. <code>usermod -aG</code> will add users to new groups that will be used as their secondary group.
