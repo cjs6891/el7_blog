@@ -150,8 +150,8 @@ User Management Default Configuration Files<br>
 <li><code>USERGROUPS_ENAB</code>: Set to yes to create a private group for all new users. That means a new user has a group with the same name as the user as its default group. If set to no, all users are made a member of the group users.</li>
 </ul>
 <br>
-passwd - update user's authentication tokens
-chage - change user password expiry information
+<code>passwd</code> - update user's authentication tokens<br>
+<code>chage</code> - change user password expiry information<br>
 <br>
 Managing Password Properties<br>
 Password properties are set in <code>/etc/shadow</code>. You can use <code>chage</code> and <code>passwd</code> to change these properties. To see current password settings use <code>chage -l <i>USERNAME</i></code>. 
