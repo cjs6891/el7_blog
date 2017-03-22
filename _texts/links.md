@@ -66,4 +66,4 @@ Removing Links<br>
 Removing links can be dangerous. DO NOT USE <code>-r</code> or <code>-f</code> to remove links, even if they are subdirectories.<br>
 <br>
 Change Ownership of Links<br>
-<code>chown -h<i>symbolic link</i></code> -h, --no-dereference, affect each symbolic link instead of any referenced file (useful only on systems that can change the ownership of a symlink)<br>
+<code>chown -h<i> symbolic link</i></code> -h, --no-dereference, affect each symbolic link instead of any referenced file (useful only on systems that can change the ownership of a symlink)<br>
