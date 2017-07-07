@@ -14,8 +14,7 @@ The purpose of the Linux shell is that it provides an environment in which comma
 </ul>
 <br>
 An alias is a command that a user can define as needed. Type the <code>alias</code> command to get an overview.
-<pre><code>
-[root@el7_blog.local ~]# alias
+<pre><code>[root@el7_blog.local ~]# alias
 alias cp='cp -i'
 alias l.='ls -d .* --color=auto'
 alias ll='ls -l --color=auto'
@@ -24,6 +23,20 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 </code></pre>
+To define an alias, use <code>alias NEW-COMMAND='OLD-COMMAND'</code>, as in <code>alias ll='ls -l --color=auto'</code><br>
+An internal command is a command that is a part of the shell itself. It is available when the shell is loaded and can be executed from memory without any lookup from disk.<br>
+An external command is a command that exists an an executable file on disk. Because is has to be read from disk, it's a bit slower.<br>
+To find out whether a command is a bash internal, or an executable file on disk, use they <code>type</code> command.
+<pre><code>[root@el7_blog.local ~]# type time
+time is a shell keyword
+
+[root@el7_blog.local ~]# which time
+/usr/bin/time
+
+[root@el7_blog.local ~]# type /usr/bin/time
+/usr/bin/time is /usr/bin/time
+</code></pre>
+
 
 * It's good practice to create archive files with an extension such as <code>.tar</code> or <code>.tgz</code> for easy recognition. Not everyone does this... If you think a file is a tar archive, use the <code>file</code> command.<br>
 <pre>
