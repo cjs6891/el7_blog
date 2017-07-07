@@ -125,7 +125,7 @@ The history feature makes it easy to repeat complex commands. There are several 
 <li>Type <code>history</code> to show a list of all commands in the bash history</li>
 <li>Use <code>Ctrl+r</code> to open the prompt from which you can do backward searches in the commands that you have previously used. Use <code>Ctrl+r</code> again to search further backward based on the same search criteria.</li>
 <li>Type <code>!<i>number</i></code> to execute a command with a specific number from history.</li>
-<li>Type <code>!<i>sometext</i></code> to execute the last command that starts with <i>sometext</i>. <b><i>Notice:</b>that this is a potentially dangerous command because the command that was found is executed immediately!</i></li>
+<li>Type <code>!<i>sometext</i></code> to execute the last command that starts with <i>sometext</i>. <i><b>Notice:</b>that this is a potentially dangerous command because the command that was found is executed immediately!</i></li>
 </ul>
 <b><i>Note:</i></b> The <code>history -c</code> command wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory.<br>
 <br>
