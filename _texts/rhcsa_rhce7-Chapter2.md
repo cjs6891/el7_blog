@@ -127,7 +127,7 @@ The history feature makes it easy to repeat complex commands. There are several 
 <li>Type <code>!<i>number</i></code> to execute a command with a specific number from history.</li>
 <li>Type <code>!<i>sometext</i></code> to execute the last command that starts with <i>sometext</i>. <b><i>Notice:</b>that this is a potentially dangerous command because the command that was found is executed immediately!</i></li>
 </ul>
-<b><i>Note:</b></i> The <code>history -c</code> command wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory.<br>
+<b><i>Note:</i></b> The <code>history -c</code> command wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory.<br>
 <br>
 <b><i>*</b></i> The <code>history -w</code> command writes the current history to the history file, overwriting the history file's contents<br>
 <br>
