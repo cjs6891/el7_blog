@@ -3,7 +3,7 @@ layout: page
 title: using essential tools
 ---
 
-Basic Shell Skills<br>
+<b>Basic Shell Skills</b><br>
 
 Executing Commands<br>
 The purpose of the Linux shell is that it provides an environment in which commands can be executed. The shell takes care of interpreting the commands that a user has entered. The shell make a difference between three kinds of commands:<br>
