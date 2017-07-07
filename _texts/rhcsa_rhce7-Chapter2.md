@@ -1,6 +1,6 @@
 ---
 layout: page
-title: using essential tools
+title: RHCSA - Using Essential Tools
 ---
 
 <b>Basic Shell Skills</b><br>
@@ -12,7 +12,6 @@ The purpose of the Linux shell is that it provides an environment in which comma
 <li>Internal Commands</li>
 <li>External Commands</li>
 </ul>
-<br>
 An alias is a command that a user can define as needed. Type the <code>alias</code> command to get an overview.
 <pre><code>[root@el7_blog.local ~]# alias
 alias cp='cp -i'
@@ -69,7 +68,7 @@ There are always three default files open, <i>STDIN</i>, <i>STDOUT</i>, and <i>S
     <td align="center"> 2 </td>
   </tr>
 </table>
-In I/O redirection, files can be used to replace the default STDIN, STDOUT, and STDERR. You can also redirect to <i>device files</i>. A device file on Linux is file that is used to access specific hardware. The hard disk for instance can be referred to as <i>/dev/sda</i>, the console as <i>/dev/console</i> or <i>/dev/tty</i>, and if you want to discard a commands output, you can redirect to <i>/dev/null</i>.<br>
+In I/O redirection, files can be used to replace the default STDIN, STDOUT, and STDERR. You can also redirect to <i>device files</i>. A device file on Linux is a file that is used to access specific hardware. The hard disk for instance can be referred to as <i>/dev/sda</i>, the console as <i>/dev/console</i> or <i>/dev/tty</i>, and if you want to discard a commands output, you can redirect to <i>/dev/null</i>.<br>
 <table>
   <tr>
     <th>Redirector</th>
@@ -107,96 +106,29 @@ In I/O redirection, files can be used to replace the default STDIN, STDOUT, and 
     <td align="left"> &>> stdout_err.txt </td>
   </tr>
 </table>
-
-* It's good practice to create archive files with an extension such as <code>.tar</code> or <code>.tgz</code> for easy recognition. Not everyone does this... If you think a file is a tar archive, use the <code>file</code> command.<br>
-<pre>
-<code>
-# file etc_directory.tar
-etc_directory.tar: POSIX tar archive (GNU)
-</code>
-</pre><br>
-While managing archives with tar, it is also possible to add a file to an existing archive, or to update an archive. To add files to an archive, you use the <code>-r</code> option. Use for instance <code>tar -rvf etc_directory.tar /root/System_Administration/</code> to add <code>/root/System_Administration/</code> to <code>etc_directory.tar</code>.<br>
-
-To update a currently existing archive file, use the <code>-u</code> option. So <code>tar -uvf etc_directory.tar /root/System_Administration/</code> to write newer versions of all files in <code>/root/System_Administration/</code> to <code>etc_directory.tar</code>.<br>
-
-Monitoring and Extracting tar Files<br>
-Before extracting a file, it's good to know what might be expected. The <code>-t</code> option can be used to find out. Type for instance <code>tar -tvf etc_directory.tar | less</code> to see the contents of the <code>etc_directory.tar</code> archive.<br>
-
-To extract the contents of an archive, use <code>tar -xvf ArchiveName.tar</code>. The archive will be extracted into the current working directory.<br>
 <br>
-Note:<br>
-*This might not be what you want to accomplish, two solutions exist to extract the contents where you want:
-<ul>
+Using Pipes<br>
+A pipe <code> | </code> can be used to catch the output of one command and use that as input for a second command. A pipe <code> | </code> can be useful for chaining commands, scripts, files, and programs together.
 
-<li><code>cd</code> to the directory where you want to extract the archive</li>
 <pre>
 <code>
-mkdir extraction_directory
-cd extraction_directory/
-tar -xvf ../etc_directory.tar
+ cat *.txt | sort | uniq > result-file
+ # Sorts the output of all the .txt files and deletes duplicate lines, saving results to "result-file".
 </code>
 </pre>
-<li>Use the <code>-C extraction_directory</code> option to specify the target directory, in our case <code>extraction_directory</code></li>
-<code>tar -xvf etc_directory.tar -C /tmp/extraction_directory/</code>
+<br>
+History<br>
+Bash is configured to keep the last 1,000 commands you have used. When a shell session is closed, the history of that session is updated to the history file <code>.bash_history</code>. The <code>.bash_history</code> file is created in the home directory of the user who started a specific shell session. The history file is closed only when the shell session is closed; until that moment, all commands in the history are kept in memory.<br>
+<br>
+The history feature makes it easy to repeat complex commands. There are several ways of working history:<br>
+<ul>
+<li>Type <code>history</code> to show a list of all commands in the bash history</li>
+<li>Use <code>Ctrl+r</code> to open the prompt from which you can do backward searches in the commands that you have previously used. Use <code>Ctrl+r</code> again to search further backward based on the same search criteria.</li>
+<li>Type <code>!<i>number</i></code> to execute a command with a specific number from history.</li>
+<li>Type <code>!<i>sometext</i></code> to execute the last command that starts with <i>sometext</i>. <b><i>Notice:</b>that this is a potentially dangerous command because the command that was found is executed immediately!</i></li>
 </ul>
+<b><i>Note:</b></i> The <code>history -c</code> command wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory.<br>
 <br>
-Apart from extracting an entire archive, it is also possible to extract one file out of the archive. Use <code>tar -xvf etc_directory.tar etc/hosts</code>.<br>
+<b><i>*</b></i> The <code>history -w</code> command writes the current history to the history file, overwriting the history file's contents<br>
 <br>
-Note:<br>
-*This might not be what you want to accomplish... To extract <code>etc/hosts</code> from <code>etc_directory.tar</code> to <code>/tmp</code> use:<br>
-<code>tar -xvf etc_directory.tar -C /tmp etc/hosts</code>
-<br>
-Using Compression<br>
-Originally, after creating an archive, it had to be compressed with a separate compression utility, such as <code>gzip</code> or <code>bzip2</code>. After creating <code>etc_directory.tar</code>, you can compress it with <code>gzip etc_directory.tar</code> replacing <code>etc_directory.tar</code> with <code>etc_directory.tar.gz</code> consuming significantly less space. As an alternative to using <code>gzip</code>, you can use the <code>bzip2</code> utility.<br>
-<br>
-To decompress files that have been compressed with <code>gzip</code> or <code>bzip2</code>, you can use the <code>gunzip</code> and <code>bunzip2</code> utilities.<br>
-<br>
-An alternative to using these utilities after <code>tar</code> would be to include the <code>-z</code>, gzip or <code>-j</code> bzip2 options when creating the tar archive. There is no reason to use these options when extracting. The <code>tar</code> utility will recognize the compression automatically and decompress it for you.<br>
-<br>
-Overview of <code>tar</code> Options
-<table>
-  <tr>
-    <th>Option</th>
-    <th>Use</th>
-  </tr>
-  <tr>
-    <td align="center"><code>c</code></td>
-    <td>Creates an archive.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>v</code></td>
-    <td>Shows verbose output while <code>tar</code> is working</td>
-  </tr>
-  <tr>
-    <td align="center"><code>f</code></td>
-    <td>Used to specify the name of the tar archive that is to be used.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>t</code></td>
-    <td>Shows the contents of an archive.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>z</code></td>
-    <td>Compresses the archive using <code>gzip</code>.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>j</code></td>
-    <td>Compresses the archive using <code>bzip2</code>.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>x</code></td>
-    <td>Extracts an archive.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>u</code></td>
-    <td>Updates an archive, only newer files will be written to the archive.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>C</code></td>
-    <td>Changes the working directory before performing the command.</td>
-  </tr>
-  <tr>
-    <td align="center"><code>r</code></td>
-    <td>Appends files to an archive.</td>
-  </tr>
-</table>
+<b><i>*</b></i>Use <code>rm -fr ~/.bash_history</code> to delete the history file. As an alternative to deleting the history file, you can use <code>history -w</code> after using <code>history -c</code>, i.e.<code>history -c && history -w</code>.
