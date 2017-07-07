@@ -69,7 +69,44 @@ There are always three default files open, <i>STDIN</i>, <i>STDOUT</i>, and <i>S
     <td align="center"> 2 </td>
   </tr>
 </table>
-
+In I/O redirection, files can be used to replace the default STDIN, STDOUT, and STDERR. You can also redirect to <i>device files</i>. A device file on Linux is file that is used to access specific hardware. The hard disk for instance can be referred to as <i>/dev/sda</i>, the console as <i>/dev/console</i> or <i>/dev/tty</i>, and if you want to discard a commands output, you can redirect to <i>/dev/null</i>.<br>
+<table>
+  <tr>
+    <th>Redirector</th>
+    <th>Explanation</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td align="center"> > -or- 1> </td>
+    <td align="left">Redirect <i>STDOUT</i></td>
+    <td align="left"> > stdout.txt </td>
+  </tr>
+   <tr>
+    <td align="center"> >> -or- 1>> </td>
+    <td align="left">Redirect and append <i>STDOUT</i></td>
+    <td align="left"> >> stdout.txt </td>
+  </tr>
+  <tr>
+    <td align="center"> 2> </td>
+    <td align="left">Redirect <i>STDERR</i></td>
+    <td align="left"> 2> stderr.txt </td>
+  </tr>
+   <tr>
+    <td align="center"> 2>> </td>
+    <td align="left">Redirect and append <i>STDERR</i></td>
+    <td align="left"> 2>> stderr.txt </td>
+  </tr>
+   <tr>
+    <td align="center"> &> </td>
+    <td align="left">Redirect both <i>STDOUT</i> and <i>STDERR</i></td>
+    <td align="left"> &> stdout_err.txt </td>
+  </tr>
+   <tr>
+    <td align="center"> &>> </td>
+    <td align="left">Redirect and append both <i>STDOUT</i> and <i>STDERR</i></td>
+    <td align="left"> &>> stdout_err.txt </td>
+  </tr>
+</table>
 
 * It's good practice to create archive files with an extension such as <code>.tar</code> or <code>.tgz</code> for easy recognition. Not everyone does this... If you think a file is a tar archive, use the <code>file</code> command.<br>
 <pre>
