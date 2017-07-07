@@ -14,6 +14,17 @@ The purpose of the Linux shell is that it provides an environment in which comma
 </ul>
 <br>
 An alias is a command that a user can define as needed. Type the <code>alias</code> command to get an overview.
+<pre><code>
+[root@el7_blog.local ~]# alias
+alias cp='cp -i'
+alias l.='ls -d .* --color=auto'
+alias ll='ls -l --color=auto'
+alias ls='ls --color=auto'
+alias mv='mv -i'
+alias rm='rm -i'
+alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+</code></pre>
+
 * It's good practice to create archive files with an extension such as <code>.tar</code> or <code>.tgz</code> for easy recognition. Not everyone does this... If you think a file is a tar archive, use the <code>file</code> command.<br>
 <pre>
 <code>
