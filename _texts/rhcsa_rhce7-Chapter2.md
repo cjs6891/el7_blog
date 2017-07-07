@@ -3,12 +3,17 @@ layout: page
 title: using essential tools
 ---
 
-The Tape ARchiver <code>tar</code> utility is used to archive files. <br>
+Basic Shell Skills<br>
 
-Creating Archives W/<code>tar</code><br>
-To create an archive, you use the <code>tar -cf ArchiveName.tar /FilesToBeArchived</code> command. To see what's happening, verbose output use the <code>-v</code> option; <code>tar -cvf etc_directory.tar /etc</code>.<br>
+Executing Commands<br>
+The purpose of the Linux shell is that it provides an environment in which commands can be executed. The shell takes care of interpreting the commands that a user has entered. The shell make a difference between three kinds of commands:<br>
+<ul>
+<li>Aliases</li>
+<li>Internal Commands</li>
+<li>External Commands</li>
+</ul>
 <br>
-Note:<br>
+An alias is a command that a user can define as needed. Type the <code>alias</code> command to get an overview.
 * It's good practice to create archive files with an extension such as <code>.tar</code> or <code>.tgz</code> for easy recognition. Not everyone does this... If you think a file is a tar archive, use the <code>file</code> command.<br>
 <pre>
 <code>
