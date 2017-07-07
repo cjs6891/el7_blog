@@ -27,7 +27,7 @@ To define an alias, use <code>alias <i>NEWCOMMAND</i>='<i>OLDCOMMAND</i>'</code>
 <br>
 An internal command is a command that is a part of the shell itself. It is available when the shell is loaded and can be executed from memory without any lookup from disk.<br>
 <br>
-An external command is a command that exists an an executable file on disk. Because is has to be read from disk, it's a bit slower.<br>
+An external command is a command that exists as an executable file on disk; because is has to be read from disk, it's a bit slower.<br>
 <br>
 To find out whether a command is a bash internal, or an executable file on disk, use the <code>type</code> command.
 <pre><code>[root@el7_blog.local ~]# type time
@@ -39,7 +39,7 @@ time is a shell keyword
 [root@el7_blog.local ~]# type /usr/bin/time
 /usr/bin/time is /usr/bin/time
 </code></pre>
-
+To look up external commands, the <code>$PATH</code> variable is used. This variable defines a list of directories that is searched for a matching filename when a users enters a command. You can use the <code>which</code> command to find the exact command the shell will be using. For security reasons the current directory is not in the <code>$PATH</code> variable, and Linux does not look in the current directory to see whether a specific command is available from that directory. That is why you need to start a command that is in the current directory but nowhere in the <code>$PATH</code> by including a <b><i>./</i></b> in front of it. The dot stands for the current directory, and by running it as <b><i>./</i></b>, you'll tell bash to look for the command in the current directory.
 
 * It's good practice to create archive files with an extension such as <code>.tar</code> or <code>.tgz</code> for easy recognition. Not everyone does this... If you think a file is a tar archive, use the <code>file</code> command.<br>
 <pre>
