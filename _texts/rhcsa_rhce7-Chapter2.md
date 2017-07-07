@@ -125,10 +125,10 @@ The history feature makes it easy to repeat complex commands. There are several 
 <li>Type <code>history</code> to show a list of all commands in the bash history</li>
 <li>Use <code>Ctrl+r</code> to open the prompt from which you can do backward searches in the commands that you have previously used. Use <code>Ctrl+r</code> again to search further backward based on the same search criteria.</li>
 <li>Type <code>!<i>number</i></code> to execute a command with a specific number from history.</li>
-<li>Type <code>!<i>sometext</i></code> to execute the last command that starts with <i>sometext</i>. <i><b>Notice:</b>that this is a potentially dangerous command because the command that was found is executed immediately!</i></li>
+<li>Type <code>!<i>sometext</i></code> to execute the last command that starts with <i>sometext</i>. <i><b>Notice: </b><code>!<i>sometext</i></code> is potentially dangerous because the command that was found is executed immediately!</i></li>
 </ul>
 <b><i>Note:</i></b> The <code>history -c</code> command wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory.<br>
 <br>
-<b><i>*</b></i> The <code>history -w</code> command writes the current history to the history file, overwriting the history file's contents<br>
+<b><i>*</i></b> The <code>history -w</code> command writes the current history to the history file, overwriting the history file's contents<br>
 <br>
-<b><i>*</b></i>Use <code>rm -fr ~/.bash_history</code> to delete the history file. As an alternative to deleting the history file, you can use <code>history -w</code> after using <code>history -c</code>, i.e.<code>history -c && history -w</code>.
+<b><i>*</i></b>Use <code>rm -fr ~/.bash_history</code> to delete the history file. As an alternative to deleting the history file, you can use <code>history -w</code> after using <code>history -c</code>, i.e.<code>history -c && history -w</code>.
