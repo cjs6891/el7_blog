@@ -23,10 +23,13 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 </code></pre>
-To define an alias, use <code>alias NEW-COMMAND='OLD-COMMAND'</code>, as in <code>alias ll='ls -l --color=auto'</code><br>
+To define an alias, use <code>alias <i>NEWCOMMAND</i>='<i>OLDCOMMAND</i>'</code>, as in <code>alias ll='ls -l --color=auto'</code><br>
+<br>
 An internal command is a command that is a part of the shell itself. It is available when the shell is loaded and can be executed from memory without any lookup from disk.<br>
+<br>
 An external command is a command that exists an an executable file on disk. Because is has to be read from disk, it's a bit slower.<br>
-To find out whether a command is a bash internal, or an executable file on disk, use they <code>type</code> command.
+<br>
+To find out whether a command is a bash internal, or an executable file on disk, use the <code>type</code> command.
 <pre><code>[root@el7_blog.local ~]# type time
 time is a shell keyword
 
