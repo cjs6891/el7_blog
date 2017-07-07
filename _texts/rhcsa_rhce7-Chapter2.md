@@ -41,9 +41,8 @@ time is a shell keyword
 </code></pre>
 To look up external commands, the <code>$PATH</code> variable is used. This variable defines a list of directories that is searched for a matching filename when a users enters a command. You can use the <code>which</code> command to find the exact command the shell will be using. For security reasons the current directory is not in the <code>$PATH</code> variable, and Linux does not look in the current directory to see whether a specific command is available from that directory. That is why you need to start a command that is in the current directory but nowhere in the <code>$PATH</code> by including a <b><i>./</i></b> in front of it. The dot stands for the current directory, and by running it as <b><i>./</i></b>, you'll tell bash to look for the command in the current directory.<br>
 <br>
-<b>I/O Redirection</b><br>
+I/O Redirection<br>
 There are always three default files open, <i>STDIN</i>, <i>STDOUT</i>, and <i>STDERR</i>. These, and any other open files, can be redirected. Redirection simply means capturing output from a file, command, program, script, or even code block within a script and sending it as input to another file, command, program, or script.<br>
-<br>
 <table>
   <tr>
     <th>Name</th>
