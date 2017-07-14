@@ -264,4 +264,8 @@ When a user logs in, an environment is created for that user automatically. This
 </ul>
 In these files a difference is made between a login shell and a subshell. A login shell is the first shell that is opened for a user after the user has logged in. From the login shell, a user may run scripts, which will start a subshell of that login shell. Bash allows for the creation of a different environment in the login shell and in the subshell but to make sure the same settings are used in all shells, it's a good idea to include subshell settings in the login shell as well.<br>
 <br>
-Using <code>/etc/motd</code><code>/etc/issue</code>
+Using <code>/etc/motd</code> and <code>/etc/issue</code><br>
+Bash offers an option to include messages in the <code>/etc/motd</code> and the <code>/etc/issue</code> files. Messages in the <code>/etc/motd</code> display after a user has sucessfully logged in to a shell. Another way to send information to users is by using <code>/etc/issue</code>. The contents of this file display before the user logs in.<br>
+<br>
+<b>Finding Help</b><br>
+Using <code>--help</code><br>
