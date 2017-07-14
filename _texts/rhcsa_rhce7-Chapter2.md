@@ -251,3 +251,19 @@ The only text editor that is always available is <code>vi</code>. An important c
     <td align="left">Goes to line number 9.</td>
   </tr>
 </table>
+<b>Understanding the Shell Environment</b><br>
+<br>
+Understanding Variables<br>
+Variables are fixed names that can be assigned dynamic values. The advantage for scripts and programs of working with variables is that the program only has to use the name of the variable without taking interest in the specified value that is assigned the the variable. Because the needs for different users are different, the variables that are set in a user environment will differ. The <code>env</code> command will give you an overview of the current variables defined in your shell.<br>
+<br>
+Environment Configuration Files<br>
+When a user logs in, an environment is created for that user automatically. This happens on four different files where some script code can be specified and where variables can be defined for use by one specific user:
+<ul>
+<li><code>/etc/profile</code> This is the generic file that is processed by all users upon login.</li>
+<li><code>/etc/bashrc</code> This file is processed when subshells are started.</li>
+<li><code>~/.bash_profile</code> In this file, user-specific login shell variables can be defined.</li>
+<li><code>~/.bashrc</code> In this file, subshell variables can be defined.</li>
+</ul>
+In these files a difference is made between a login shell and a subshell. A login shell is the first shell that is opened for a user after the user has logged in. From the login shell, a user may run scripts, which will start a subshell of that login shell. Bash allows for the creation of a different environment in the login shell and in the subshell but to make sure the same settings are used in all shells, it's a good idea to include subshell settings in the login shell as well.<br>
+<br>
+Using <code>/etc/motd</code><code>/etc/issue</code>
