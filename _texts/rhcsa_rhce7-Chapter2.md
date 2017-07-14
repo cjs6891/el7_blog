@@ -4,7 +4,6 @@ title: RHCSA - Using Essential Tools
 ---
 
 <b>Basic Shell Skills</b><br>
-
 Executing Commands<br>
 The purpose of the Linux shell is that it provides an environment in which commands can be executed. The shell takes care of interpreting the commands that a user has entered. The shell make a difference between three kinds of commands:<br>
 <ul>
@@ -251,8 +250,8 @@ The only text editor that is always available is <code>vi</code>. An important c
     <td align="left">Goes to line number 9.</td>
   </tr>
 </table>
-<b>Understanding the Shell Environment</b><br>
 <br>
+<b>Understanding the Shell Environment</b><br>
 Understanding Variables<br>
 Variables are fixed names that can be assigned dynamic values. The advantage for scripts and programs of working with variables is that the program only has to use the name of the variable without taking interest in the specified value that is assigned the the variable. Because the needs for different users are different, the variables that are set in a user environment will differ. The <code>env</code> command will give you an overview of the current variables defined in your shell.<br>
 <br>
