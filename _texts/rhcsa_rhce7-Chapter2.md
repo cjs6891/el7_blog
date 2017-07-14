@@ -136,7 +136,6 @@ Another useful feature of the bash shell is automatic completion. This feature h
 Just type the beginning of a command and press the <code>Tab</code> key on you keyboard. If there is only one option for completion, bash will complete the command automatically for you. If there are several options, you need to press the <code>Tab</code> key once more to get an overview of all available options.<br>
 
 <b>Editing Files w/vi and/or vim</b><br>
-
 The only text editor that is always available is <code>vi</code>. An important concept when working with <code>vi/vim</code> is that it uses different modes. Two of them are particularly important: command mode and input mode. These modes often cause confusion because in command mode you can just enter a command and you cannot change the contents of a text file. To change the contents of a text file, you need to get to input mode.<br>
 
 <table>
