@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Cisco CCNA Cyber Ops - SECOPS
+title: Cisco CCNA Cyber Ops SECOPS 210-255
 ---
 
 <b>Basic Shell Skills</b><br>
