@@ -1,6 +1,6 @@
 ---
 layout: page
-title: CCNA Cyber Ops - SECFND
+title: Cisco CCNA Cyber Ops - SECFND
 ---
 
 <b>Basic Shell Skills</b><br>
