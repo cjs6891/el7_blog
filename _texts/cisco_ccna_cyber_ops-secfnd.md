@@ -105,3 +105,6 @@ Your web browser is an application that operates at the application layer. After
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514083207.png" alt="" style="">
 At the destination, the process is reversed. As information in each header is read, the header is stripped and the remaining data is sent up to the next layer.<br>
 <br>
+<b>Introduction to the Internet Protocol</b>
+The IP layer in TCP/IP determines where packets of data are to be routed based on their destination IP addresses. IP uses packets to carry information through the network. A packet is a self-contained, independent entity that contains data and sufficient information to be routed from the source to the destination without reliance on previous packets.<br>
+<br>
