@@ -81,6 +81,7 @@ Development of the OSI model began in the late 1970s, and the model was publishe
 </ul>
 <br>
 TCP/IP includes not only TCP and IP, but also specifications for other protocols, such as UDP, ICMP, and so on. It also includes common applications such as electronic mail, terminal emulation, and file transfer. TCP/IP embodies every aspect of modern network communications that use IP at the network layer. TCP operates at the transport layer of the OSI and TCP/IP models and is responsible for making sure that the data that the source device sends arrives at its destination. IP operates at the network layer of the OSI model (Internet layer of the TCP/IP model) and is responsible for the transmission of data. It does not do any error correction itself. The figure below provides a comparison of the OSI and TCP/IP models.<br>
+<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514082772.png" alt="" style="">
 In the late 1970s through the 1980s, no networking protocol was dominant. There were many, including IBM SNA, DEC DECnet, Apple AppleTalk, Banyan Vines, and Novell IPX. Due to many historical circumstances and compared to all the competitors, TCP/IP has gained momentum, and has become the de facto standard in the industry.<br>
 <br>
@@ -100,6 +101,7 @@ Variants of both the TCP/IP model and IP itself have been developed. IPv4 was th
 The example in the figure below illustrates encapsulation and de-encapsulation in light of the TCP/IP model. It shows what happens when you use a web browser to go to a site on the Internet.<br>
 <br>
 Your web browser is an application that operates at the application layer. After you enter an address in the address bar, the browser passes data (an HTTP “GET” request) to the application layer. When the application layer passes the data to the transport layer, the transport layer may split the data into segments (if the amount of data is deemed large enough). The transport layer adds a TCP header to the segment, encapsulating it in TCP. If there are multiple segments, TCP sequences them so the data stream can be reassembled when it reaches its destination. The segment is then passed to the Internet layer, where it receives an IP header to encapsulate it as an IP packet. The IP header contains source and destination IP addresses, which will enable the data to be properly routed to the destination. The Internet layer may also break a large packet into smaller fragments, then the fragments are reassembled at the Internet layer at the destination system. When the IP packet reaches the link layer, it is encapsulated in an Ethernet frame, which contains source and destination hardware, or MAC, addresses. The frame is then transmitted in the form of bits onto the physical network.<br>
+<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514083207.png" alt="" style="">
 At the destination, the process is reversed. As information in each header is read, the header is stripped and the remaining data is sent up to the next layer.<br>
 <br>
