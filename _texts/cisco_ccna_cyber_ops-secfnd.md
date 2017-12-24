@@ -4,7 +4,6 @@ title: Cisco CCNA Cyber Ops SECFND 210-250
 ---
 
 <b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
-
 The OSI reference model separates network functions into seven categories, or layers, and defines the network functions that occur at each layer. Each layer provides services to the layer above it, uses services from the layer below it, and has an abstract connection to the same layer on the peer system. This modularization of function simplifies the implementation of complex network functions. And by defining these functions, the OSI model helps users understand how data from an application program travels through a network medium to an application program that is located in another computer.<br>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514079693.png" alt="" style="">
@@ -30,8 +29,8 @@ The transport layer shields the upper layers from transport implementation detai
 <br>
 <li><b>Layer 7, Application:</b> The application layer is the OSI layer that is closest to the user. This layer provides network services to the applications of the user, such as email, file transfer, and terminal emulation. The application layer differs from the other layers in that it does not provide services to any other OSI layer, but only to applications outside the OSI model. The application layer establishes the availability of intended communication partners and synchronizes and establishes agreement on procedures for error recovery and control of data integrity</li>
 </ul>
-<b>Data Encapsulation and De-Encapsulation</b><br>
 <br>
+<b>Data Encapsulation and De-Encapsulation</b><br>
 Information that is to be transmitted over a network must undergo a process of conversion at both the sending end and the receiving end of the communication. That conversion process is known as encapsulation and de-encapsulation.<br>
 <br>
 The information that is sent on a network is referred to as data or data packets. If one computer wants to send data to another computer, the data must first be packaged by a process called encapsulation. Encapsulation works very similarly to sending a package through a postal service. The first step is to put the contents of the package into a container. Next, you write the address of the location to which you want to send the package on the outside of the container. Then you put the addressed package into the postal service collection bin, and the package begins its route toward its destination.<br>
@@ -56,269 +55,51 @@ The following steps occur to encapsulate data:
 <br>
 <li>The physical layer then transmits the bits onto the network media.</li>
 </ol>
-
-Executing Commands<br>
-The purpose of the Linux shell is that it provides an environment in which commands can be executed. The shell takes care of interpreting the commands that a user has entered. The shell make a difference between three kinds of commands:<br>
-<ul>
-<li>Aliases</li>
-<li>Internal Commands</li>
-<li>External Commands</li>
-</ul>
-An alias is a command that a user can define as needed. Type the <code>alias</code> command to get an overview.
-<pre><code>[root@el7_blog.local ~]# alias
-alias cp='cp -i'
-alias l.='ls -d .* --color=auto'
-alias ll='ls -l --color=auto'
-alias ls='ls --color=auto'
-alias mv='mv -i'
-alias rm='rm -i'
-alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+<pre><code>
+Note:
+The format of the data at each layer is generically known as the PDU. There is also terminology that is used for the PDU (Protocol Data Unit) at certain layers. For example, the Layer 2 (data link layer) PDU is called a "frame." The Layer 3 (network layer) PDU is called a "packet." The Layer 4 (transport layer) PDU is called a "segment" for TCP or a "datagram" for UDP.
 </code></pre>
-To define an alias, use <code>alias <i>NEWCOMMAND</i>='<i>OLDCOMMAND</i>'</code>, as in <code>alias ll='ls -l --color=auto'</code><br>
-<br>
-An internal command is a command that is a part of the shell itself. It is available when the shell is loaded and can be executed from memory without any lookup from disk.<br>
-<br>
-An external command is a command that exists as an executable file on disk; because is has to be read from disk, it's a bit slower.<br>
-<br>
-To find out whether a command is a bash internal, or an executable file on disk, use the <code>type</code> command.
-<pre><code>[root@el7_blog.local ~]# type time
-time is a shell keyword
-
-[root@el7_blog.local ~]# which time
-/usr/bin/time
-
-[root@el7_blog.local ~]# type /usr/bin/time
-/usr/bin/time is /usr/bin/time
+When the remote device receives a sequence of bits, the physical layer at the remote device passes the bits to the data link layer for manipulation, beginning the de-encapsulation process. The de-encapsulation process is similar to that of reading the address on a package to see if it is for you, and then removing the contents of the package if it is addressed to you.
+<pre><code>
+Note:
+The term "decapsulation" is sometimes used in place of the term "de-encapsulation." Both terms are acceptable.
 </code></pre>
-To look up external commands, the <code>$PATH</code> variable is used. This variable defines a list of directories that is searched for a matching filename when a users enters a command. You can use the <code>which</code> command to find the exact command the shell will be using. For security reasons the current directory is not in the <code>$PATH</code> variable, and Linux does not look in the current directory to see whether a specific command is available from that directory. That is why you need to start a command that is in the current directory but nowhere in the <code>$PATH</code> by including a <b><i>./</i></b> in front of it. The dot stands for the current directory, and by running it as <b><i>./</i></b>, you'll tell bash to look for the command in the current directory.<br>
+When the data link layer receives the data, it checks the data-link trailer (the FCS) to see if the binary data has been corrupted in transit. While some data-link technologies can request retransmission for corrupt data, most modern data-links, including Ethernet, will simply discard the corrupted frame. In such environments, if reliability is required, it must be provided by upper layers in the stack. If the data is not in error, the data link layer reads and interprets the control information in the data-link header. The data link layer strips the data-link header and trailer, and then passes the remaining data up to the network layer based on the control information in the data-link header. Each subsequent layer performs a similar de-encapsulation process eventually presenting the original user data from the source to the program running on the peer system.<br>
 <br>
-I/O Redirection<br>
-There are always three default files open, <i>STDIN</i>, <i>STDOUT</i>, and <i>STDERR</i>. These, and any other open files, can be redirected. Redirection simply means capturing output from a file, command, program, script, or even code block within a script and sending it as input to another file, command, program, or script.<br>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Default Destination</th>
-    <th>Redirection Use</th>
-    <th>File Descriptor Number</th>
-  </tr>
-  <tr>
-    <td align="left">STDIN</td>
-    <td align="center">Keyboard</td>
-    <td align="center"> < </td>
-    <td align="center"> 0 </td>
-  </tr>
-   <tr>
-    <td align="left">STDOUT</td>
-    <td align="center">Monitor</td>
-    <td align="center"> > </td>
-    <td align="center"> 1 </td>
-  </tr>
-  <tr>
-    <td align="left">STDERR</td>
-    <td align="center">Monitor</td>
-    <td align="center"> 2> </td>
-    <td align="center"> 2 </td>
-  </tr>
-</table>
-In I/O redirection, files can be used to replace the default STDIN, STDOUT, and STDERR. You can also redirect to <i>device files</i>. A device file on Linux is a file that is used to access specific hardware. The hard disk for instance can be referred to as <i>/dev/sda</i>, the console as <i>/dev/console</i> or <i>/dev/tty</i>, and if you want to discard a commands output, you can redirect to <i>/dev/null</i>.<br>
-<table>
-  <tr>
-    <th>Redirector</th>
-    <th>Explanation</th>
-    <th>Example</th>
-  </tr>
-  <tr>
-    <td align="center"> > -or- 1> </td>
-    <td align="left">Redirect <i>STDOUT</i></td>
-    <td align="left"> > stdout.txt </td>
-  </tr>
-   <tr>
-    <td align="center"> >> -or- 1>> </td>
-    <td align="left">Redirect and append <i>STDOUT</i></td>
-    <td align="left"> >> stdout.txt </td>
-  </tr>
-  <tr>
-    <td align="center"> 2> </td>
-    <td align="left">Redirect <i>STDERR</i></td>
-    <td align="left"> 2> stderr.txt </td>
-  </tr>
-   <tr>
-    <td align="center"> 2>> </td>
-    <td align="left">Redirect and append <i>STDERR</i></td>
-    <td align="left"> 2>> stderr.txt </td>
-  </tr>
-   <tr>
-    <td align="center"> &> </td>
-    <td align="left">Redirect both <i>STDOUT</i> and <i>STDERR</i></td>
-    <td align="left"> &> stdout_err.txt </td>
-  </tr>
-   <tr>
-    <td align="center"> &>> </td>
-    <td align="left">Redirect and append both <i>STDOUT</i> and <i>STDERR</i></td>
-    <td align="left"> &>> stdout_err.txt </td>
-  </tr>
-</table>
+<b>TCP/IP Model</b><br>
+Development of the 4-layer TCP/IP model started before work began on the 7-layer OSI model. As it turned out, TCP/IP had too much momentum to be overtaken by the OSI model or any of the other competing network models. The TCP/IP model is now the dominant protocol suite that is used on today's Internet. The TCP/IP model is also referred to as the TCP/IP protocol suite, the Internet protocol suite, the TCP/IP stack, and the DoD model.<br>
 <br>
-Using Pipes<br>
-A pipe <code> | </code> can be used to catch the output of one command and use that as input for a second command. A pipe <code> | </code> can be useful for chaining commands, scripts, files, and programs together.
-
-<pre>
-<code>
- cat *.txt | sort | uniq > result-file
- # Sorts the output of all the .txt files and deletes duplicate lines, saving results to "result-file".
-</code>
-</pre>
-<br>
-History<br>
-Bash is configured to keep the last 1,000 commands you have used. When a shell session is closed, the history of that session is updated to the history file <code>.bash_history</code>. The <code>.bash_history</code> file is created in the home directory of the user who started a specific shell session. The history file is closed only when the shell session is closed; until that moment, all commands in the history are kept in memory.<br>
-<br>
-The history feature makes it easy to repeat complex commands. There are several ways of working history:<br>
+Development of the OSI model began in the late 1970s, and the model was published in 1984. Although the OSI model was never actually implemented, the theory that it embodies has influenced the continual development and maturation of TCP/IP. TCP/IP was developed in a rather ad hoc fashion. The timeline includes the following:
 <ul>
-<li>Type <code>history</code> to show a list of all commands in the bash history</li>
-<li>Use <code>Ctrl+r</code> to open the prompt from which you can do backward searches in the commands that you have previously used. Use <code>Ctrl+r</code> again to search further backward based on the same search criteria.</li>
-<li>Type <code>!<i>number</i></code> to execute a command with a specific number from history.</li>
-<li>Type <code>!<i>sometext</i></code> to execute the last command that starts with <i>sometext</i>. <i><b>Notice: </b><code>!<i>sometext</i></code> is potentially dangerous because the command that was found is executed immediately!</i></li>
+<li>ARPANET, the precursor to the Internet, was developed in the late 1960s.</li>
+<br>
+<li>In May of 1974, Kahn and Cerf published a paper titled “A Protocol for Packet Network Intercommunication,” which described the early ideas of what would become the TCP/IP model.</li>
+<br>
+<li>In March of 1982, the US Department of Defense declared TCP/IP as the standard for all military computer networking.</li>
+<br>
+<li>On January 1, 1983 (known as "Flag Day"), the ARPANET switched from the old networking protocol, NCP, to TCP/IP.</li>
 </ul>
-<b><i>Note:</i></b> The <code>history -c</code> command wipes all history that is currently in memory, but it doesn't remove the <code>.bash_history</code> file from the home directory.<br>
-<b><i>&nbsp;*&nbsp;</i></b> The <code>history -w</code> command writes the current history to the history file, overwriting the history file's contents.<br>
-<b><i>&nbsp;*&nbsp;</i></b>Use <code>rm -fr ~/.bash_history</code> to delete the history file. As an alternative to deleting the history file, you can use <code>history -w</code> after using <code>history -c</code>, i.e.<code>history -c && history -w</code>.<br>
 <br>
-Bash Completion<br>
-Another useful feature of the bash shell is automatic completion. This feature helps you in finding the commands you need, and it also works on variables and filenames.<br>
+TCP/IP includes not only TCP and IP, but also specifications for other protocols, such as UDP, ICMP, and so on. It also includes common applications such as electronic mail, terminal emulation, and file transfer. TCP/IP embodies every aspect of modern network communications that use IP at the network layer. TCP operates at the transport layer of the OSI and TCP/IP models and is responsible for making sure that the data that the source device sends arrives at its destination. IP operates at the network layer of the OSI model (Internet layer of the TCP/IP model) and is responsible for the transmission of data. It does not do any error correction itself. The figure below provides a comparison of the OSI and TCP/IP models.<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514082772.png" alt="" style="">
+In the late 1970s through the 1980s, no networking protocol was dominant. There were many, including IBM SNA, DEC DECnet, Apple AppleTalk, Banyan Vines, and Novell IPX. Due to many historical circumstances and compared to all the competitors, TCP/IP has gained momentum, and has become the de facto standard in the industry.<br>
 <br>
-Just type the beginning of a command and press the <code>Tab</code> key on you keyboard. If there is only one option for completion, bash will complete the command automatically for you. If there are several options, you need to press the <code>Tab</code> key once more to get an overview of all available options.<br>
-
-<b>Editing Files w/vi and/or vim</b><br>
-The only text editor that is always available is <code>vi</code>. An important concept when working with <code>vi/vim</code> is that it uses different modes. Two of them are particularly important: command mode and input mode. These modes often cause confusion because in command mode you can just enter a command and you cannot change the contents of a text file. To change the contents of a text file, you need to get to input mode.<br>
-
-<table>
-  <tr>
-    <th>vi/vim command</th>
-    <th>Explanation</th>
-  </tr>
-
-  <tr>
-    <td align="center"><code>Esc</code></td>
-    <td align="left">Switches from input mode to command mode. Use this before typing any command.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>i, a</code></td>
-    <td align="left">Switches from command mode to input mode at (<code>i</code>) or after (<code>a</code>) the current cursor position</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>o</code></td>
-    <td align="left">Opens a new line below the current cursor position and goes to input mode.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>:wq</code></td>
-    <td align="left">Writes the current file and quits.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>:q!</code></td>
-    <td align="left">Quits the file without applying any changes. The <code>!</code> forces the command to do its work.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>:w <i>filename</i></code></td>
-    <td align="left">Writes the current file with a new <i>filename</i></td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>dd</code></td>
-    <td align="left">Deletes the current line.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>yy</code></td>
-    <td align="left">Copies the current line.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>P</code></td>
-    <td align="left">Pastes the current selection.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>v</code></td>
-    <td align="left">Enters visual mode, allowing you to select a block of text using the arrow keys. Use <code>d</code> to cut, or <code>y</code> to copy the selection.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>u</code></td>
-    <td align="left">Undoes the last command, repeat as needed.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>Ctrl+r</code></td>
-    <td align="left">Redoes the last undo.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>gg</code></td>
-    <td align="left">Goes to the first line in the document.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>G</code></td>
-    <td align="left">Goes to the last line in the document.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>/<i>string</i></code></td>
-    <td align="left">Searches for <i>string</i> from the current cursor position forward.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>?<i>string</i></code></td>
-    <td align="left">Searches for <i>string</i> from the current cursor position backward.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>^</code></td>
-    <td align="left">Goes to the first position in the current line.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>$</code></td>
-    <td align="left">Goes to the last position in the current line.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>!ls</code></td>
-    <td align="left">Adds the output of <code>ls</code> (<i>or any other command</i>) in the current file.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>:%s/old/new/g</code></td>
-    <td align="left">Replaces <i>ALL</i> occurrences of <i>old</i> with <i>new</i>.</td>
-  </tr>
-
-  <tr>
-    <td align="center"><code>:9</code></td>
-    <td align="left">Goes to line number 9.</td>
-  </tr>
-</table>
+Take a closer look at the four layers of the TCP/IP model:<br>
 <br>
-<b>Understanding the Shell Environment</b><br>
-Understanding Variables<br>
-Variables are fixed names that can be assigned dynamic values. The advantage for scripts and programs of working with variables is that the program only has to use the name of the variable without taking interest in the specified value that is assigned the the variable. Because the needs for different users are different, the variables that are set in a user environment will differ. The <code>env</code> command will give you an overview of the current variables defined in your shell.<br>
-<br>
-Environment Configuration Files<br>
-When a user logs in, an environment is created for that user automatically. This happens on four different files where some script code can be specified and where variables can be defined for use by one specific user:
 <ul>
-<li><code>/etc/profile</code> This is the generic file that is processed by all users upon login.</li>
-<li><code>/etc/bashrc</code> This file is processed when subshells are started.</li>
-<li><code>~/.bash_profile</code> In this file, user-specific login shell variables can be defined.</li>
-<li><code>~/.bashrc</code> In this file, subshell variables can be defined.</li>
+<li><b>Link layer:</b> This layer is also known as the network access layer and is the equivalent of both the physical and data link layers of the OSI model. It deals with components such as cables, connectors, and network cards, like OSI Layer 1. Like Layer 2 of the OSI model, the link layer of the TCP/IP model is concerned with hardware addresses.</li>
+<br>
+<li><b>Internet layer:</b> This layer aligns directly with Layer 3 of the OSI model. You may also know this layer as the network layer. It routes data from the source to the destination by defining the packet and the addressing scheme, moving data between the link and transport layers, routing packets of data to remote hosts, and performing fragmentation and reassembly of data packets. The Internet layer is where IP operates.</li>
+<br>
+<li><b>Transport layer:</b> This layer is directly aligned with Layer 4 of the OSI model: It is the core of the TCP/IP architecture. It is the layer where TCP and UDP operate. This layer provides communication services directly to the application processes that are running on network hosts.</li>
+<br>
+<li><b>Application layer:</b> This layer corresponds to Layers 5, 6, and 7 of the OSI model. It provides applications for file transfer, network troubleshooting, and Internet activities. It also supports network APIs, which allow programs that have been created for a particular operating system to access the network.</li>
 </ul>
-In these files a difference is made between a login shell and a subshell. A login shell is the first shell that is opened for a user after the user has logged in. From the login shell, a user may run scripts, which will start a subshell of that login shell. Bash allows for the creation of a different environment in the login shell and in the subshell but to make sure the same settings are used in all shells, it's a good idea to include subshell settings in the login shell as well.<br>
+Variants of both the TCP/IP model and IP itself have been developed. IPv4 was the basis of the DoD standard in 1982. Later IPv6 was developed to deal with many of the shortcomings of IPv4. The industry is currently working through a long transition period between IPv4 and IPv6.<br>
 <br>
-Using <code>/etc/motd</code> and <code>/etc/issue</code><br>
-Bash offers an option to include messages in the <code>/etc/motd</code> and the <code>/etc/issue</code> files. Messages in the <code>/etc/motd</code> display after a user has sucessfully logged in to a shell. Another way to send information to users is by using <code>/etc/issue</code>. The contents of this file display before the user logs in.<br>
+The example in the figure below illustrates encapsulation and de-encapsulation in light of the TCP/IP model. It shows what happens when you use a web browser to go to a site on the Internet.<br>
 <br>
-<b>Finding Help</b><br>
-Using <code>--help</code><br>
+Your web browser is an application that operates at the application layer. After you enter an address in the address bar, the browser passes data (an HTTP “GET” request) to the application layer. When the application layer passes the data to the transport layer, the transport layer may split the data into segments (if the amount of data is deemed large enough). The transport layer adds a TCP header to the segment, encapsulating it in TCP. If there are multiple segments, TCP sequences them so the data stream can be reassembled when it reaches its destination. The segment is then passed to the Internet layer, where it receives an IP header to encapsulate it as an IP packet. The IP header contains source and destination IP addresses, which will enable the data to be properly routed to the destination. The Internet layer may also break a large packet into smaller fragments, then the fragments are reassembled at the Internet layer at the destination system. When the IP packet reaches the link layer, it is encapsulated in an Ethernet frame, which contains source and destination hardware, or MAC, addresses. The frame is then transmitted in the form of bits onto the physical network.<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514083207.png" alt="" style="">
+At the destination, the process is reversed. As information in each header is read, the header is stripped and the remaining data is sent up to the next layer.<br>
+<br>
