@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP Protocol Suite
+title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP Protocol Suite"
 ---
 
 <b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
@@ -121,7 +121,7 @@ IP has these characteristics:<br>
 </ul>
 IP does not provide any special features that recover corrupted packets. If these services are required, they must be provided by higher layers in the protocol stack.<br>
 <br>
-<img src="https://cjs6891.github.io/el7_blog/public/img/1514083207.png" alt="" style="">
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514300452.png" alt="" style="">
 Attackers may manipulate the fields in the IP header to carry out their attacks, so it is important for an analyst to understand the different fields of the IP headers. The IPv4 header fields are:<br>
 <ul>
 <li><b>Version:</b> A 4-bit field that identifies the IP version being used. Version is 4 referred to as IPv4.</li>
