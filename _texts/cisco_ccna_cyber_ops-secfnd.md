@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Cisco CCNA Cyber Ops SECFND 210-250
+title: Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP Protocol Suite
 ---
 
 <b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
@@ -108,3 +108,41 @@ At the destination, the process is reversed. As information in each header is re
 <b>Introduction to the Internet Protocol</b><br>
 The IP layer in TCP/IP determines where packets of data are to be routed based on their destination IP addresses. IP uses packets to carry information through the network. A packet is a self-contained, independent entity that contains data and sufficient information to be routed from the source to the destination without reliance on previous packets.<br>
 <br>
+IP has these characteristics:<br>
+<br>
+<ul>
+<li>IP operates at Layer 3 of the OSI model (network layer), and Layer 2 of the TCP/IP stack (Internet layer).</li>
+<br>
+<li>IP is a connectionless protocol in which a one-way datagram is sent to the destination without advance notification to the destination device. The destination device receives the data and does not return any status information to the sending device.</li>
+<br>
+<li>IP uses hierarchical addressing in which the network ID resembles a street and the host ID resembles a house or office building on that street.</li>
+<br>
+<li>IP provides service on a best-effort basis and does not guarantee packet delivery. A packet can be misdirected, duplicated, or lost on the way to its destination.</li>
+</ul>
+IP does not provide any special features that recover corrupted packets. If these services are required, they must be provided by higher layers in the protocol stack.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514083207.png" alt="" style="">
+Attackers may manipulate the fields in the IP header to carry out their attacks, so it is important for an analyst to understand the different fields of the IP headers. The IPv4 header fields are:<br>
+<ul>
+<li><b>Version:</b> A 4-bit field that identifies the IP version being used. Version is 4 referred to as IPv4.</li>
+<br>
+<li><b>IP Header length:</b> A 4-bit field containing the length of the IP header. The minimum length of an IP header is 20 bytes</li>
+<br>
+<li><b>Type of service:</b> The 8-bit ToS field traditionally uses 3 bits for IP Precedence. The newer redefinition of the ToS field uses a 6-bit DSCP (Differentiated Services Code point) field and a 2-bit ECN (Explicit Congestion Notification) field to identify the level of service a packet receives in the network.</li>
+<br>
+<li><b>Total length:</b> Specifies the length of the IP packet that includes the IP header and the user data. The length field is 2 bytes, so the maximum size of an IP packet is 65,535 bytes.</li>
+<br>
+<li><b>Identifier, flags, and fragment offset:</b> As an IP packet moves through the Internet, it might need to cross a route that cannot handle the size of the packet. The packet will be divided, or fragmented, into smaller packets and reassembled later. These fields are used to fragment and reassemble packets.</li>
+<br>
+<li><b>Time to live:</b> It is possible for an IP packet to roam aimlessly around the Internet. If there is a routing problem or a routing loop, then you don't want packets to be forwarded forever. A routing loop is when a packet is continually routed through the same routers over and over. The TTL field is initially set to a number and decremented by every router that is passed through. When TTL reaches 0, the packet is discarded.</li>
+<br>
+<li><b>Protocol:</b> In the layered protocol model, the layer that determines which application the data is from or which application the data is for is indicated using the Protocol field. This field does not identify the application, but identifies a protocol that sits above the IP layer that is used for application identification. For example, protocol number 1 = ICMP, 6 = TCP, 17 = UDP.</li>
+<br>
+<li><b>Header checksum:</b> A value that is calculated based on the contents of the IP header. Used to determine if any errors have been introduced during transmission.</li>
+<br>
+<li><b>Source IP address:</b> 32-bit IP address of the sender.</li>
+<br>
+<li><b>Destination IP address:</b> 32-bit IP address of the intended recipient.</li>
+<br>
+<li><b>Options and padding:</b> A field that varies in length from 0 to a multiple of 32 bits. If the option values are not a multiple of 32 bits, 0s are added or padded to ensure that this field contains a multiple of 32 bits.</li>
+</ul>
