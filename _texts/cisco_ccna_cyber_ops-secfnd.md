@@ -148,15 +148,16 @@ Attackers may manipulate the fields in the IP header to carry out their attacks,
 </ul>
 <br>
 <b>IP Addressing</b><br>
-<br>
 Consider how physical street addresses are necessary to locate specific homes and businesses, so that mail can reach those real-world locations efficiently. In a similar way, logical IP addresses are used to identify the location of specific devices on an IP network so that data can reach those network locations efficiently. Every host, computer, networking device, or peripheral connected to the Internet must have an IP address. Without a structure for allocating all those IP addresses, it would be impossible to route packets efficiently.<br>
 <br>
 The IPv4 address is the most common type of address that is currently used on the Internet. An IPv4 addresses is a 32-bit number that describes the location of a network device.<br>
+<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514302668.png" alt="" style="">
 <br>
 In the decimal representation of an IP address, the value of each octet can range from 0 to 255. The octets are separated by a period, or dot. This scheme is known as dotted decimal notation. The IP address that is shown in the table can be written as 172.16.128.17 and spoken as "172 dot 16 dot 128 dot 17."<br>
 <br>
 An IP address is a hierarchical address and consists of two parts, the network ID and the host ID. The network ID (network address portion) identifies the network of which an IP address is a part. It starts from the leftmost bits and extends to the right. The host ID (the host address portion) uniquely identifies a host, or endpoint, on a network. These endpoints are the servers, computers, and other devices that are connected to the network. The host ID starts from the right-most bits and extends to the left. Many computers can share the same network ID, but combining the network ID with a host ID in an IP address uniquely identifies a device on the network. For example, in the figure below, hosts 192.168.1.2, 192.168.1.3, and 192.168.1.4 share the network ID 192.168.1.0, but they have their own unique host IDs, .2, .3, and .4, respectively.<br>
+<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514302817.png" alt="" style="">
 <br>
 Hosts that share the same network ID are said to be on the same network. Most hosts on a network can directly communicate only with devices on the same network. If the hosts need to communicate with devices that have interfaces that are assigned with other network IDs, there needs to be a network device that can route data between the networks. Routers can route data between networks because they maintain information about routes to the various networks. A network ID enables a router to put a packet onto the appropriate network.<br>
@@ -164,14 +165,13 @@ Hosts that share the same network ID are said to be on the same network. Most ho
 Networks have their own IP addresses. These addresses have binary 0s in all host bit positions. In the figure, a router sits between two different networks, the 192.168.1.0 network and the 192.168.2.0 network. Hosts on the 192.168.1.0 network can communicate directly with each other, but any packets they send to hosts on the 192.168.2.0 network must be sent through the router. Also notice that host 192.168.1.2 and host 192.168.2.2 have the same host ID. Although it is possible for two devices on different networks to have the same host ID, each host on the same network must have a unique host ID.<br>
 <br>
 <b>IP Address Masks</b><br>
-<br>
 For IPv4, a subnet mask is a 32-bit combination that identifies which part of the address is the network portion and which part is the host portion. It performs this function by using 1s and 0s. A subnet mask is created by placing a binary 1 in each bit position that represents the network portion and placing a binary 0 in each bit position that represents the host portion. For example, a subnet mask of 255.255.255.0 (11111111.11111111.11111111.00000000) applied to the IP address 192.168.7.5 specifies that the binary digits of the first three octets are the network portion of the address and every bit of the last octet specifies the host address. Hence, 192.168.7.0 is the network address and .5 is the host address. A subnet mask helps routers determine the network path for packets. The figure below provides another example.<br>
+<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514303149.png" alt="" style="">
 <br>
 When you express an IP address, you accompany it with a subnet mask in dotted decimal format, or you append a prefix length. A prefix length performs the same function as a subnet mask by providing the number of bits in the address that are used for the network portion. For example, in 172.16.55.87/20, /20 is the prefix length. It tells you that the first 20 bits are the network address. The remaining 12 bits make up the host portion. A /20 prefix is the equivalent of the subnet mask 255.255.240.0 (11111111.11111111.11110000.00000000).<br>
 <br>
 <b>IP Address Classes</b><br>
-<br>
 To accommodate different sizes of networks and to aid in classifying them, IP addresses are divided into categories that are called classes. Assigning IP addresses to classes is known as classful addressing. The classes were determined by the IANA (Internet Assigned Numbers Authority).<br>
 <br>
 As mentioned before, each IP address consists of a network ID and a host ID. Each address class uses a fixed number of octets (that is, a fixed set of bits) to indicate the network ID. The remaining octets of the 32-bit IP address are used for host addresses. A bit or bit sequence at the start of a classful IP address determines the class of the address. This starting bit or bit sequence is known as the MSB (Most Significant Bit).<br>
@@ -197,19 +197,17 @@ Each address class has a default mask, but each default mask can be extended to 
 </ul>
 <br>
 <b>Reserved IP Addresses</b><br>
-<br>
 The following IP addresses are reserved and cannot be assigned to individual devices on a network:<br>
 <br>
 <ul>
 <li><b>Network address:</b> An IP address that has binary 0s in all host bit positions is reserved for the network address. The network address is used to identify the network itself. For example, 172.16.0.0 is an example of a Class B network address. In this address, the first two octets are reserved for the network address; that address is never used as an address for any device that is attached to it. The last two octets contain 0s because those 16 bits are for host numbers and are used for devices that are attached to the network. An example of an IP address for a device on the 172.16.0.0 network would be 172.16.16.1. Routers use network addresses when they search their IP route tables for destination network locations.</li><br>
 <li><b>Directed broadcast address:</b> To send data to all the devices on a network, a broadcast address is used. Broadcast IP addresses end with binary 1s in the entire host part of the address (the host field). Consider the network in the example 172.16.0.0, in which the last 16 bits make up the host field (or host part of the address). The broadcast that would be sent out to all devices on that network would include a destination address of 172.16.255.255. The directed broadcast is capable of being routed. However, for some versions of Cisco IOS Software, routing directed broadcasts is not the default behavior.</li><br>
 <li><b>Local broadcast address:</b> If an IP device wants to communicate with all devices on the local network, it sets the destination address to all 1s (255.255.255.255) and transmits the packet. For example, hosts that do not know their network number and are asking some server for the number can use this address. The local broadcast is never routed.</li><br>
-<li><b>Local loopback address:<b> A local loopback address is used to let the system send a message to itself for testing. A typical local loopback IP address is 127.0.0.1.</li><br>
+<li><b>Local loopback address:</b> A local loopback address is used to let the system send a message to itself for testing. A typical local loopback IP address is 127.0.0.1.</li><br>
 <li><b>Autoconfiguration IP addresses:</b> Sometimes, neither a statically nor a dynamically configured IP address is found on startup. In such instances, hosts supporting IPv4 link-local addresses (RFC 3927) generate an address in the 169.254/16 prefix range. This address can be used only for local network connectivity and operates with many caveats, one of which is that it will not be routed. You will mostly see this address as a failure condition when a PC fails to obtain an address via DHCP.</li>
 </ul>
 <br>
 <b>Public and Private IP Addresses</b><br>
-<br>
 Internet stability depends directly on the uniqueness of publicly used network addresses. Therefore, some mechanism is needed to ensure that addresses are, in fact, unique. Originally, it was the responsibility of an organization that is known as the InterNIC. IANA succeeded the InterNIC. IANA carefully manages the remaining supply of IP addresses to ensure that duplication of publicly used addresses does not occur. Such duplication would cause instability in the Internet and would compromise its capability to deliver datagrams to networks using the duplicated addresses.<br>
 <br>
 To obtain a public (globally unique) IP address or a block of public IP addresses, you must contact an ISP. The ISP then contacts the upstream registry or the appropriate regional registry at one of these organizations:<br>
