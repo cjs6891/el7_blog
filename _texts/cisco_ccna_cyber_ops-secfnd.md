@@ -222,6 +222,7 @@ To obtain a public (globally unique) IP address or a block of public IP addresse
 While Internet hosts require a globally unique IP address, private hosts that are not connected to the Internet can use any valid address. However, these addresses must be unique within the private network. But because many private networks exist alongside public networks, grabbing "just any address" is strongly discouraged. RFC 1918 specifies a set of IP addresses that is reserved for private networks.<br>
 <br>
 These addresses are not routed on the Internet backbone. When a network using private addresses must connect to the Internet, it is necessary to translate the private addresses to public addresses. This translation process is known as NAT. A router is often the network device that performs NAT. The tables below show the private and public IP address ranges.<br>
+<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514307539.png" alt="" style="">
 <br>
 <b>IPv6 Addresses</b>
