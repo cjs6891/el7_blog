@@ -301,18 +301,18 @@ TCP segments are sent using IP packets. The TCP header follows the IP header, su
 <br>
 <ul>
 <li><b>Source port:</b> Number of the calling port (16 bits)</li><br>
-<li></b>Destination port:</b> Number of the called port (16 bits)</li><br>
+<li><b>Destination port:</b> Number of the called port (16 bits)</li><br>
 <li><b>Sequence number:</b> The sequence number of the first data octet in this segment, used to ensure correct sequencing of the arriving data (32 bits)</li><br>
 <li><b>Acknowledgment number:</b> Next expected TCP octet (32 bits). A TCP connection is a reliable connection. The sending and receiving computers use acknowledgment to ensure that the data is sent and received as specified and that it arrives without errors and in the right order.</li><br>
 <li><b>Header length:</b> Number of 32-bit words in the header (4 bits)</li><br>
 <li><b>Reserved:</b> Set to 0 (6 bits, but some experimental specifications defined in RFCs are making use of some of those bits)</li><br>
-<li>Control bits: Contains nine 1-bit field which is often referred to as a flag. Six of the flags are:<br>
- - URG: Indicates that the Urgent pointer field is significant.<br>
- - ACK: Indicates that the Acknowledgment field is significant. All packets, after the initial SYN packet, that are sent by the client should have this flag set.<br>
- - PSH: Push function. Asks to push the buffered data to the receiving application.<br>
- - RST: Reset the connection.<br>
- - SYN: Initiates a connection. Only the first packet that is sent from each end should have this flag set.<br>
- - FIN: No more data from sender.
+<li><b>Control bits:</b> Contains nine 1-bit field which is often referred to as a flag. Six of the flags are:<br>
+ - <b>URG:</b> Indicates that the Urgent pointer field is significant.<br>
+ - <b>ACK:</b> Indicates that the Acknowledgment field is significant. All packets, after the initial SYN packet, that are sent by the client should have this flag set.<br>
+ - <b>PSH:</b> Push function. Asks to push the buffered data to the receiving application.<br>
+ - <b>RST:</b> Reset the connection.<br>
+ - <b>SYN:</b> Initiates a connection. Only the first packet that is sent from each end should have this flag set.<br>
+ - <b>FIN:</b> No more data from sender.
 </li><br>
 <li><b>Window:</b> Number of octets that the device is willing to accept (16 bits). Windowing allows the sending computer to send out several packets without waiting to receive acknowledgment of those packets, which helps maintain the speed and reliability of the connection.</li><br>
 <li><b>Checksum:</b> Calculated checksum of the header and data fields (16 bits)</li><br>
@@ -333,3 +333,17 @@ TCP delivers these applications, among others:<br>
 </ul>
 <br>
 <b>TCP Three-Way Handshake</b><br>
+TCP requires a connection to be established between two end systems before data transfer can begin. TCP establishes the connection using a process that is called the three-way handshake. This process involves setting the SYN bit and ACK bit in the segments between the two devices. An important function that is performed during connection establishment is that the devices exchange their initial sequence numbers (ISNs). This number is used to track data bytes on this connection. The table below includes a simplified explanation of the three-way handshake process, which is illustrated in the figure.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514408411.png" alt="" style="">
+<br>
+A TCP connection is normally and gracefully terminated when each side of the connection closes its side of the connection independently. The following example provides a simplified description of the process:<br>
+<br>
+<ul>
+<li>Host A sends a FIN (a TCP segment with the FIN bit set) to Host B to indicate that it wants to terminate the session.</li><br>
+<li>Host B sends an ACK (a segment with the ACK bit set) back to Host A, acknowledging that it received the FIN.</li><br>
+<li>Host B sends a FIN to Host A.</li><br>
+<li>Host A sends an ACK to Host B.</li>
+</ul>
+<br>
+
