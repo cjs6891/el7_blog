@@ -240,3 +240,36 @@ The figure below compares the fields of an IPv6 header to the fields of an IPv4 
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514337004.png" alt="" style="">
 <br>
+The IPv6 header fields are the following:<br>
+<br>
+<ul>
+<li><b>Version (4-bit):</b> Contains the value 6 rather than the value 4 contained in an IPv4 packet</li><br>
+<li><b>Traffic class (8 bits):</b> This field and its functions are similar to the ToS field in IPv4.</li><br>
+<li><b>Flow label (20 bits):</b> Used to tag a flow for IPv6 packets, which is new in the IPv6 protocol. The current IETF standard does not specify the details about how to manage and process the flow label.</li><br>
+<li><b>Payload length (16 bits):</b> The size of the payload in octets, including any extension headers.</li><br>
+<li><b>Next header (8 bits):</b> Specifies the type of the next header. This field usually specifies the transport layer protocol that is used by a packet's payload. When extension headers are present in the packet, this field indicates which extension header follows. IPv6 extension headers are optional headers that may follow the basic IPv6 header. Several types of extension headers are defined in the RFC 2460, Internet Protocol, Version 6 (IPv6) Specification.</li><br>
+<li><b>Hop limit (8 bits):</b> Replaces the time to live field of IPv4. This value is decremented by one at each intermediate node visited by the packet. When the counter reaches 0, the packet is discarded.</li><br>
+<li><b>Source address (128 bits):</b> The IPv6 address of the sending node.</li><br>
+<li><b>Destination address (128 bits):</b> The IPv6 address of the destination node or nodes.</li>
+</ul>
+<br>
+Extension headers, if any, follow these eight fields. The number of extension headers is not fixed, so the total length of the extension header chain is variable.<br>
+<br>
+An IPv6 address is a 128-bit binary value, which can be displayed as 32 hexadecimal characters. IPv6 offers a virtually unlimited supply of IP addresses, due to its generous 128-bit address space. With IPv6, there are enough addresses to allocate more than the entire IPv4 Internet address space to everyone on the planet.<br>
+<br>
+IPv6 address format:<br>
+<br>
+<ul>
+<li>x:x:x:x:x:x:x:x, where x is a 16-bit hexadecimal field (case-insensitive for hexadecimal A, B, C, D, E, and F)</li><br>
+<li>Leading zeros in a field are optional</li><br>
+<li>Successive fields of zeros can be represented as :: only once per address</li><br>
+</ul>
+IPv6 address examples:<br>
+<br>
+<ul>
+<li>Unicast: 2001:0000:130F:0000:0000:09C0:876A:130B or 2001:0:130f::9c0:876a:130b</li><br>
+<li>Multicast: FF01:0:0:0:0:0:0:1 or FF01::1</li><br>
+<li>Loopback: 0:0:0:0:0:0:0:1 or ::1</li><br>
+<li>Unspecified: 0:0:0:0:0:0:0:0 or ::</li><br>
+</ul>
+<br>
