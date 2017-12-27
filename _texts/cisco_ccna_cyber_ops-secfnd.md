@@ -306,7 +306,7 @@ TCP segments are sent using IP packets. The TCP header follows the IP header, su
 <li><b>Acknowledgment number:</b> Next expected TCP octet (32 bits). A TCP connection is a reliable connection. The sending and receiving computers use acknowledgment to ensure that the data is sent and received as specified and that it arrives without errors and in the right order.</li><br>
 <li><b>Header length:</b> Number of 32-bit words in the header (4 bits)</li><br>
 <li><b>Reserved:</b> Set to 0 (6 bits, but some experimental specifications defined in RFCs are making use of some of those bits)</li><br>
-<li><b>Control bits:</b> Contains nine 1-bit field which is often referred to as a flag. Six of the flags are:<br>
+<li><b>Control bits:</b> Contains nine 1-bit fields which is often referred to as a flag. Six of the flags are:<br>
  - <b>URG:</b> Indicates that the Urgent pointer field is significant.<br>
  - <b>ACK:</b> Indicates that the Acknowledgment field is significant. All packets, after the initial SYN packet, that are sent by the client should have this flag set.<br>
  - <b>PSH:</b> Push function. Asks to push the buffered data to the receiving application.<br>
@@ -346,4 +346,59 @@ A TCP connection is normally and gracefully terminated when each side of the con
 <li>Host A sends an ACK to Host B.</li>
 </ul>
 <br>
-
+<b>Introduction to the User Datagram Protocol</b><br>
+UDP is another widely used transport layer protocol. There are many UDP-based attacks, so a security analyst should have a good understanding of how UDP is intended to function and what a normal UDP datagram looks like. The security analyst must know what a normal UDP datagram looks like in order to recognize an abnormal UDP datagram that might contain hidden threats.<br>
+<br>
+The security analyst should also understand the differences between TCP and UDP and hence recognize when one protocol or the other is appropriate when analyzing network communications.<br>
+<br>
+UDP has the following characteristics:<br>
+<br>
+<ul>
+<li>UDP operates at Layer 4 (the transport layer) of the OSI reference model.</li><br>
+<li>UDP = IP protocol number 17.</li><br>
+<li>UDP provides applications with efficient access to the network layer without the overhead of reliability mechanisms.</li><br>
+<li>Like IP, UDP is a connectionless protocol in which a one-way datagram is sent to a destination without advance notification to the destination device.</li><br>
+<li>UDP is capable of performing a very limited form of error checking. The UDP datagram includes an optional checksum value, which the receiving device can use to test the integrity of the data. In addition, the UDP datagram includes a pseudoheader. This pseudoheader includes the destination address. If the receiving device sees that the datagram is directed to an inactive port, it returns a message that the port is unreachable.</li><br>
+<li>UDP provides service on a best-effort basis and does not guarantee data delivery, because packets can be misdirected, duplicated, corrupted, or lost on the way to their destination.</li><br>
+<li>UDP does not provide any special features that recover lost or corrupted packets. These services, if they are required, are provided by the application layer process that uses UDP.</li>
+</ul>
+<br>
+Using the UDP protocol services is analogous to using a postal service to send non-certified mail because it is not important if the mail is lost in transit or if a neighbor acknowledges receipt of the mail.<br>
+<br>
+UDP delivers these applications, among others:<br>
+<br>
+<ul>
+<li><b>TFTP:</b> TFTP is a simple file transfer protocol. Most commonly, it is used to copy and install the operating system of a computer from the files that are located on a TFTP server. TFTP is a smaller application than FTP, and is typically used on networks for simple file transfer. TFTP contains its own error checking and sequencing number and, therefore, does not need reliability in the transport layer.</li><br>
+<li><b>SNMP:</b> SNMP monitors and manages networks, the devices that are connected to them, and network performance information. SNMP sends PDU messages that allow network management software to monitor and control devices on the network.</li><br>
+<li><b>DNS:</b> DNS translates, or "resolves" human-readable names of IP end systems into machine-readable IP addresses, which are necessary for routing. DNS can use either UDP or TCP. For name resolution, it usually uses UDP, which can be faster than TCP because there is no need to establish a connection. For messages whose sizes exceed the DNS protocol's limit and for operations to which reliable delivery is essential, DNS uses TCP.</li><br>
+<li><b>NTP:</b> NTP is used to synchronize a computer to Internet time servers or other sources, such as a radio or satellite receivers or telephone modem services.</li>
+</ul>
+<br>
+As illustrated in the figure, the length of a UDP header is always 64 bits.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514409962.png" alt="" style="">
+<br>
+A UDP header consists of these fields:<br>
+<br>
+<ul>
+<li><b>Source port:</b> Number of the calling port (16 bits)</li><br>
+<li></b>Destination port:</b> Number of the called port (16 bits)</li><br>
+<li><b>Length:</b> Length of UDP header and UDP data (16 bits)</li><br>
+<li><b>Checksum:</b> Calculated checksum of the header and data fields (16 bits)</li>
+</ul>
+<br>
+<b>TCP and UDP Ports</b><br>
+TCP and UDP use internal software ports to support multiple conversations between different network devices. The figure shows the range of port numbers available for each protocol and some of the corresponding applications.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514410892.png" alt="" style="">
+<br>
+The IANA controls port numbers. Some frequently used applications have assigned port numbers, referred to as "well-known" port numbers. For example, Telnet normally uses port 23. If an analyst finds that a system is using the Telnet protocol on a non-standard port, it may warrant further investigation to determine why. The usage may be benign and justified, or it may be mischievous.<br>
+<br>
+Well-known ports are assigned by the IANA and are numbered 1023 and below. These numbers are assigned to applications that are fundamental to the Internet and are defined in [RFC1700](http://www.rfc-editor.org/rfc/rfc1700.txt){:target="_blank"}. Registered ports are listed by IANA and are numbered from 1024 to 49151. These ports are used for proprietary applications, such as Lotus Notes Mail. Ephemeral ports are assigned numbers between 49152 and 65535. These ports are assigned dynamically during a specific session.<br>
+<br>
+Generally, a server has an application, often called a daemon, which listens on a well-known port. Client applications are dynamically assigned an ephemeral port to use by the client's operating system. The client then uses this port to connect to the server which is listening on the well-known port.<br>
+<br>
+As shown in the figure below, a single host can have multiple sessions running at the same time, which are connected to one or more other computers. Each session must be distinguished from other sessions, which is done with a combination of IP addresses and port numbers. Take the example that is presented in the figure below. Server 1 is currently sustaining 3 sessions to three different hosts simultaneously. The server is a web server, listening on Port 80. The three sessions are distinguished by a 5-tuple: Local IP address, local port, protocol, remote IP address, remote port. Note that the remote ports that are used by Client A and Client C are identical, which can happen by coincidence, but the 5-tuple is unique for each session.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514411224.png" alt="" style="">
+<br>
