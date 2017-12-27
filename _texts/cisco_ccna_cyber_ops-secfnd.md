@@ -225,7 +225,7 @@ These addresses are not routed on the Internet backbone. When a network using pr
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514307539.png" alt="" style="">
 <br>
-<b>IPv6 Addresses</b>
+<b>IPv6 Addresses</b><br>
 The IPv4 address space provides approximately 4.3 billion addresses. Of that address space, approximately 3.7 billion addresses are actually assignable; the other addresses are reserved for special purposes, such as multicasting, private address space, loopback testing, and research.<br>
 <br>
 The IPv4 public address space has now been exhausted. Many enterprises have sufficient address space (public or private) to manage their intranet needs for the next few years. However, the length of time that is needed to transition to IPv6 demands that administrators and managers consider the issue well in advance. The largest enterprises may need to act sooner rather than later to ensure sufficient enterprise connectivity.<br>
