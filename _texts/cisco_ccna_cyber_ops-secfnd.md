@@ -273,3 +273,62 @@ IPv6 address examples:<br>
 <li>Unspecified: 0:0:0:0:0:0:0:0 or ::</li><br>
 </ul>
 <br>
+<b>Introduction to the Transmission Control Protocol</b><br>
+TCP is a transport layer protocol that is used for sending data over an IP network. TCP provides a communication service at an intermediate level between an application program and the Internet Protocol. It is a connection-oriented protocol that provides data reliability between hosts, and it is the most widely used transport layer protocol. Each time that you browse to a site such as http://www.cisco.com, an HTTP request is encapsulated into IP packets using TCP as the transport, which are sent to the http://www.cisco.com web server to request the web page.<br>
+<br>
+Since there are many TCP-based attacks, a security analyst must have a good understanding on how TCP is intended to function. For example, a common TCP attack is the SYN flood attack. In order for an analyst to understand if a server is under a SYN flood attack, the analyst needs to understand the various flags in a TCP header and how a TCP connection is established.<br>
+<br>
+Using the TCP protocol services is analogous to sending certified mail through a postal service. Suppose that you live in San Francisco and you want to send a book-sized document to New York. You print the document and discover that all the pages will not fit into one envelope, so you separate the pages into groups and put each group in a separate envelope. You then tag each envelope with a sequence number so the receiver will know how to reassemble the book. You address the envelopes and send the first one as certified mail. The postal service delivers the first envelope by any truck and any route. Because it is certified, upon delivery the carrier must get a signature from the recipient and return that certificate of delivery to you. If you don't receive that confirmation within an acceptable amount of time, you can reprint and resend those pages.<br>
+<br>
+Sending each group separately is tedious, so you send several envelopes together. The postal service again delivers each envelope by any truck and any route. The recipient signs a separate receipt for each envelope in the batch as the envelopes are received. If one envelope is lost in transit, you do not receive a certificate of delivery for that numbered envelope, and you can resend all the pages of the group. Likewise, if one of the envelopes is damaged by water, the recipient can let you know the sequence number and you can reprint and resend the pages that were in the damaged envelope. After receiving all the envelopes, the recipient reassembles the pages in the correct order.<br>
+<br>
+TCP has many unique characteristics that are related to how it accomplishes data transmission. The following are some characteristics of TCP:<br>
+<br>
+<ul>
+<li>TCP operates at Layer 4 (the transport layer) of the OSI model.</li><br>
+<li>TCP = IP protocol number 6.</li><br>
+<li>TCP provides a service to the applications: access to the network layer.</li><br>
+<li>TCP is a connection-oriented protocol in which two network devices set up a connection to exchange data. The end systems synchronize with each other to manage packet flows, adapt to congestion in the network, and provide reliable transmission of data.</li><br>
+<li>A TCP connection is a pair of virtual circuits, one in each direction, so it operates in full-duplex mode.</li><br>
+<li>TCP provides error checking by including a checksum in the segment to verify that the TCP header information is not corrupt.</li><br>
+<li>TCP segments are numbered and sequenced so that the destination can reorder segments and determine whether data is missing.</li><br>
+<li>Upon receipt of one or more TCP segments, the receiver returns an acknowledgment to the sender indicating that it received the segment. If segments are not acknowledged, the sender can retransmit the segment, or it can terminate the connection if it determines that the receiver is no longer on the connection.</li><br>
+<li>TCP provides recovery services in which the receiver can request retransmission of a segment. If a segment receipt is not acknowledged, the sender resends the segment.</li>
+</ul>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514406669.png" alt="" style="">
+<br>
+TCP segments are sent using IP packets. The TCP header follows the IP header, supplying information specific to the TCP protocol. This division of the headers allows host-level protocols other than TCP to exist. The fields of the TCP segment (illustrated in the figure) include the following:<br>
+<br>
+<ul>
+<li><b>Source port:</b> Number of the calling port (16 bits)</li><br>
+<li></b>Destination port:</b> Number of the called port (16 bits)</li><br>
+<li><b>Sequence number:</b> The sequence number of the first data octet in this segment, used to ensure correct sequencing of the arriving data (32 bits)</li><br>
+<li><b>Acknowledgment number:</b> Next expected TCP octet (32 bits). A TCP connection is a reliable connection. The sending and receiving computers use acknowledgment to ensure that the data is sent and received as specified and that it arrives without errors and in the right order.</li><br>
+<li><b>Header length:</b> Number of 32-bit words in the header (4 bits)</li><br>
+<li><b>Reserved:</b> Set to 0 (6 bits, but some experimental specifications defined in RFCs are making use of some of those bits)</li><br>
+<li>Control bits: Contains nine 1-bit field which is often referred to as a flag. Six of the flags are:<br>
+ - URG: Indicates that the Urgent pointer field is significant.<br>
+ - ACK: Indicates that the Acknowledgment field is significant. All packets, after the initial SYN packet, that are sent by the client should have this flag set.<br>
+ - PSH: Push function. Asks to push the buffered data to the receiving application.<br>
+ - RST: Reset the connection.<br>
+ - SYN: Initiates a connection. Only the first packet that is sent from each end should have this flag set.<br>
+ - FIN: No more data from sender.
+</li><br>
+<li><b>Window:</b> Number of octets that the device is willing to accept (16 bits). Windowing allows the sending computer to send out several packets without waiting to receive acknowledgment of those packets, which helps maintain the speed and reliability of the connection.</li><br>
+<li><b>Checksum:</b> Calculated checksum of the header and data fields (16 bits)</li><br>
+<li><b>Urgent:</b> Indicates the end of the urgent data (16 bits)</li><br>
+<li><b>Options:</b> One currently defined maximum TCP segment size (0 or 32 bits, if any)</li><br>
+<li><b>Data:</b> Upper-layer protocol data (varies in size)</li>
+</ul>
+<br>
+TCP delivers these applications, among others:<br>
+<br>
+<ul>
+<li><b>HTTP:</b> HTTP is used by browsers to request web pages and by web servers to transmit the requested web page and web page components.</li><br>
+<li><b>HTTPS:</b> HTTPS is a variant of HTTP that uses SSL or TLS to add a layer of security to data in transit.</li><br>
+<li><b>FTP:</b> FTP is a full-featured application that is used for copying files by running a client application on one computer to contact the FTP server application on a remote computer. Files can be uploaded or downloaded using this application.</li><br>
+<li><b>Telnet:</b> Telnet allows for an emulated terminal session to a remote device, often a UNIX host, router, or other network device. With an emulated terminal session, you can manage a network device as if you had a directly connected serial terminal. Telnet is useful only with systems that use character mode command syntax. Telnet is also a concern when in a secure environment as it sends its message in unencrypted cleartext, instead most organizations now use SSH for remote communications.</li><br>
+<li><b>SSH:</b> SSH provides a secure way to access a remote computer. It provides secure encrypted data communications and strong authentication. SSH is widely used for managing systems and applications remotely.</li><br>
+<li><b>SMTP:</b> SMTP is used by e-mail servers to exchange e-mail messages and by e-mail clients to send messages to an e-mail server. It works with POP3 and IMAP4 to enable e-mail clients to retrieve and store e-mail messages.</li>
+</ul>
+<br>
