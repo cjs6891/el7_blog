@@ -219,7 +219,10 @@ To obtain a public (globally unique) IP address or a block of public IP addresse
 <li>RIPE NCC (Réseaux IP Européens Network Coordination Centre)</li>
 </ul>
 <br>
-While Internet hosts require a globally unique IP address, private hosts that are not connected to the Internet can use any valid address. However, these addresses must be unique within the private network. But because many private networks exist alongside public networks, grabbing "just any address" is strongly discouraged. RFC 1918 specifies a set of IP addresses that is reserved for private networks.<br>
+While Internet hosts require a globally unique IP address, private hosts that are not connected to the Internet can use any valid address. However, these addresses must be unique within the private network. But because many private networks exist alongside public networks, grabbing "just any address" is strongly discouraged. [RFC 1918](http://www.rfc-editor.org/rfc/rfc1918.txt){:target="_blank"} specifies a set of IP addresses that is reserved for private networks.<br>
+
+[RFC1700](http://www.rfc-editor.org/rfc/rfc1700.txt){:target="_blank"}.
+
 <br>
 These addresses are not routed on the Internet backbone. When a network using private addresses must connect to the Internet, it is necessary to translate the private addresses to public addresses. This translation process is known as NAT. A router is often the network device that performs NAT. The tables below show the private and public IP address ranges.<br>
 <br>
@@ -382,7 +385,7 @@ A UDP header consists of these fields:<br>
 <br>
 <ul>
 <li><b>Source port:</b> Number of the calling port (16 bits)</li><br>
-<li></b>Destination port:</b> Number of the called port (16 bits)</li><br>
+<li><b>Destination port:</b> Number of the called port (16 bits)</li><br>
 <li><b>Length:</b> Length of UDP header and UDP data (16 bits)</li><br>
 <li><b>Checksum:</b> Calculated checksum of the header and data fields (16 bits)</li>
 </ul>
@@ -394,7 +397,7 @@ TCP and UDP use internal software ports to support multiple conversations betwee
 <br>
 The IANA controls port numbers. Some frequently used applications have assigned port numbers, referred to as "well-known" port numbers. For example, Telnet normally uses port 23. If an analyst finds that a system is using the Telnet protocol on a non-standard port, it may warrant further investigation to determine why. The usage may be benign and justified, or it may be mischievous.<br>
 <br>
-Well-known ports are assigned by the IANA and are numbered 1023 and below. These numbers are assigned to applications that are fundamental to the Internet and are defined in [RFC1700](http://www.rfc-editor.org/rfc/rfc1700.txt){:target="_blank"}. Registered ports are listed by IANA and are numbered from 1024 to 49151. These ports are used for proprietary applications, such as Lotus Notes Mail. Ephemeral ports are assigned numbers between 49152 and 65535. These ports are assigned dynamically during a specific session.<br>
+Well-known ports are assigned by the IANA and are numbered 1023 and below. These numbers are assigned to applications that are fundamental to the Internet and are defined in [RFC 1700](http://www.rfc-editor.org/rfc/rfc1700.txt){:target="_blank"}. Registered ports are listed by IANA and are numbered from 1024 to 49151. These ports are used for proprietary applications, such as Lotus Notes Mail. Ephemeral ports are assigned numbers between 49152 and 65535. These ports are assigned dynamically during a specific session.<br>
 <br>
 Generally, a server has an application, often called a daemon, which listens on a well-known port. Client applications are dynamically assigned an ephemeral port to use by the client's operating system. The client then uses this port to connect to the server which is listening on the well-known port.<br>
 <br>
