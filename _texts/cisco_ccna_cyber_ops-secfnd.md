@@ -332,3 +332,4 @@ TCP delivers these applications, among others:<br>
 <li><b>SMTP:</b> SMTP is used by e-mail servers to exchange e-mail messages and by e-mail clients to send messages to an e-mail server. It works with POP3 and IMAP4 to enable e-mail clients to retrieve and store e-mail messages.</li>
 </ul>
 <br>
+<b>TCP Three-Way Handshake</b><br>
