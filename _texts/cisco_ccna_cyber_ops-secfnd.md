@@ -226,3 +226,17 @@ These addresses are not routed on the Internet backbone. When a network using pr
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514307539.png" alt="" style="">
 <br>
 <b>IPv6 Addresses</b>
+The IPv4 address space provides approximately 4.3 billion addresses. Of that address space, approximately 3.7 billion addresses are actually assignable; the other addresses are reserved for special purposes, such as multicasting, private address space, loopback testing, and research.<br>
+<br>
+The IPv4 public address space has now been exhausted. Many enterprises have sufficient address space (public or private) to manage their intranet needs for the next few years. However, the length of time that is needed to transition to IPv6 demands that administrators and managers consider the issue well in advance. The largest enterprises may need to act sooner rather than later to ensure sufficient enterprise connectivity.<br>
+<br>
+A simplified IPv6 header architecture and protocol operation translates into reduced operational expenses. Built-in security features mean easier security practices that are sorely lacking in many current networks. However, perhaps the most significant IPv6 improvement is the address autoconfiguration features.<br>
+<br>
+The Internet is rapidly evolving from a collection of stationary devices to a fluid network of mobile devices. IPv6 allows mobile devices to quickly acquire and transition between addresses as they move among foreign networks, with no need for a foreign agent. A foreign agent is a router that can function as the point of attachment for a mobile device when it roams from its home network to a foreign network.<br>
+<br>
+IPv6 address autoconfiguration also means more robust plug-and-play network connectivity. Autoconfiguration supports consumers who can have any combination of computers, printers, digital cameras, digital radios, IP phones, Internet-enabled household appliances, and robotic toys that are connected to their home networks. Many manufacturers already integrate IPv6 into their products.<br>
+<br>
+The figure below compares the fields of an IPv6 header to the fields of an IPv4 header.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514337004.png" alt="" style="">
+<br>
