@@ -2,8 +2,11 @@
 layout: page
 title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP Protocol Suite"
 ---
-<a href="#OSI Model">OSI Model</a><br>
-<a href="#TCP/IP Model">TCP/IP Model</a><br>
+<a href="#OSI Model">1.2 OSI Model</a><br>
+<a href="#TCP/IP Model">1.3 TCP/IP Model</a><br>
+<a href="#Introduction to the Internet Protocol">1.4 Introduction to the Internet Protocol</a><br>
+<a href="#IP Addressing">1.5 IP Addressing</a><br>
+
 
 <a name="OSI Model"></a>
 <b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
@@ -109,6 +112,7 @@ Your web browser is an application that operates at the application layer. After
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514083207.png" alt="" style="">
 At the destination, the process is reversed. As information in each header is read, the header is stripped and the remaining data is sent up to the next layer.<br>
 <br>
+<a name="Introduction to the Internet Protocol"></a>
 <b>Introduction to the Internet Protocol</b><br>
 The IP layer in TCP/IP determines where packets of data are to be routed based on their destination IP addresses. IP uses packets to carry information through the network. A packet is a self-contained, independent entity that contains data and sufficient information to be routed from the source to the destination without reliance on previous packets.<br>
 <br>
@@ -151,6 +155,7 @@ Attackers may manipulate the fields in the IP header to carry out their attacks,
 <li><b>Options and padding:</b> A field that varies in length from 0 to a multiple of 32 bits. If the option values are not a multiple of 32 bits, 0s are added or padded to ensure that this field contains a multiple of 32 bits.</li>
 </ul>
 <br>
+<a name="IP Addressing"></a>
 <b>IP Addressing</b><br>
 Consider how physical street addresses are necessary to locate specific homes and businesses, so that mail can reach those real-world locations efficiently. In a similar way, logical IP addresses are used to identify the location of specific devices on an IP network so that data can reach those network locations efficiently. Every host, computer, networking device, or peripheral connected to the Internet must have an IP address. Without a structure for allocating all those IP addresses, it would be impossible to route packets efficiently.<br>
 <br>
