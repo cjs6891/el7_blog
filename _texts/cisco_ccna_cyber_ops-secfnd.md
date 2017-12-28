@@ -13,14 +13,26 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP
 <a href="#Introduction to the Transmission Control Protocol">1.10 Introduction to the Transmission Control Protocol</a><br>
 <a href="#TCP Three-Way Handshake">1.11 TCP Three-Way Handshake</a><br>
 <a href="#Introduction to the User Datagram Protocol">1.12 Introduction to the User Datagram Protocol</a><br>
+<a href="#TCP and UDP Ports">1.13 TCP and UDP Ports</a><br>
+<a href="#Address Resolution Protocol">1.14 Address Resolution Protocol</a><br>
+<a href="#Host-to-Host Packet Delivery Using TCP">1.15 Host-to-Host Packet Delivery Using TCP</a><br>
+<!--
+<a href="#">1.</a><br>
+<a href="#">1.</a><br>
+<a href="#">1.</a><br>
+<a href="#">1.</a><br>
+<a href="#">1.</a><br>
+<a href="#">1.</a><br>
 <a href="#">1.</a><br>
 
-
-
-
-
 <a name=""></a>
-
+<a name=""></a>
+<a name=""></a>
+<a name=""></a>
+<a name=""></a>
+<a name=""></a>
+<a name=""></a>
+-->
 <a name="OSI Model"></a>
 <b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
 The OSI reference model separates network functions into seven categories, or layers, and defines the network functions that occur at each layer. Each layer provides services to the layer above it, uses services from the layer below it, and has an abstract connection to the same layer on the peer system. This modularization of function simplifies the implementation of complex network functions. And by defining these functions, the OSI model helps users understand how data from an application program travels through a network medium to an application program that is located in another computer.<br>
@@ -416,6 +428,7 @@ A UDP header consists of these fields:<br>
 <li><b>Checksum:</b> Calculated checksum of the header and data fields (16 bits)</li>
 </ul>
 <br>
+<a name="TCP and UDP Ports"></a>
 <b>TCP and UDP Ports</b><br>
 TCP and UDP use internal software ports to support multiple conversations between different network devices. The figure shows the range of port numbers available for each protocol and some of the corresponding applications.<br>
 <br>
@@ -431,6 +444,7 @@ As shown in the figure below, a single host can have multiple sessions running a
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514411224.png" alt="" style="">
 <br>
+<a name="Address Resolution Protocol"></a>
 <b>Address Resolution Protocol</b><br>
 To send data to a destination, a host on an Ethernet network must know the MAC address of the destination. ARP provides the essential service of mapping IP addresses to physical addresses on a network.<br>
 <br>
@@ -456,4 +470,12 @@ The ARP table on the Windows system includes mappings for some multicast address
 ARP operates between Layer 2 and Layer 3 of the OSI model. ARP messages are sent using Ethertype 0x0806. Ethertype is a two-octet field in an Ethernet header. Ethertype is used to indicate which protocol is encapsulated in the payload of an Ethernet Frame. Ethertype 0x0800 indicates an IPv4 payload, Ethertype 0x86DD indicates an IPv6 payload.<br>
 <br>
 ARP is a necessary and fundamental service in the TCP/IP protocol suite. It does have some security shortcomings. One significant issue is that there is no validation of the ARP replies. Under the right circumstances, a system can produce fraudulent ARP replies, tricking victim systems into mapping the attacker's MAC address to a different IP address, and causing the victim systems to send traffic that is intended for other systems to the attacker. The attacker can then become a man in the middle, and can monitor and manipulate the misdirected traffic before forwarding it to the valid destination.<br>
+<br>
+<a name="Host-to-Host Packet Delivery Using TCP"></a>
+<b>Host-to-Host Packet Delivery Using TCP</b><br>
+A lot of complexity is involved in TCP/IP communications. The data link layer, networking layer, transport layer, and application layers must all coordinate. There are MAC addresses and IP addresses. ARP is used to bridge the gap between the two. TCP connections start with a three-way handshake, and then data is transmitted and acknowledged. The following example depicts all these processes in a detailed, step-by-step fashion.<br>
+<br>
+In this example, an application on the host with a Layer 3 address of 192.168.3.1 wants to send some data to the host with a Layer 3 address of 192.168.3.2. The application wants to use a reliable connection. The application requests this service from the transport layer.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514486851.png" alt="" style="">
 <br>
