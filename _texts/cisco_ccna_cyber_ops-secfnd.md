@@ -479,3 +479,10 @@ In this example, an application on the host with a Layer 3 address of 192.168.3.
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514496699.png" alt="" style="">
 <br>
+The transport layer selects TCP to set up the session. TCP initiates the session by passing a TCP header with the SYN bit set and the destination Layer 3 address (192.168.3.2) to the IP layer.<br>
+<br>
+The IP layer encapsulates the TCP's SYN in a Layer 3 packet by prepending the local Layer 3 address and the destination Layer 3 address that IP received from TCP. IP then passes the packet to Layer 2.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514497148.png" alt="" style="">
+<br>
+
