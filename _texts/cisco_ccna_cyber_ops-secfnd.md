@@ -477,5 +477,5 @@ A lot of complexity is involved in TCP/IP communications. The data link layer, n
 <br>
 In this example, an application on the host with a Layer 3 address of 192.168.3.1 wants to send some data to the host with a Layer 3 address of 192.168.3.2. The application wants to use a reliable connection. The application requests this service from the transport layer.<br>
 <br>
-<img src="https://cjs6891.github.io/el7_blog/public/img/1514486851.png" alt="" style="">
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514496699.png" alt="" style="">
 <br>
