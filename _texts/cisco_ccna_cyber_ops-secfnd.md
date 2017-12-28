@@ -2,8 +2,11 @@
 layout: page
 title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP Protocol Suite"
 ---
+<a href="#OSI Model">OSI Model</a>
+<a href="#TCP/IP Model">TCP/IP Model</a>
 
-<b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
+<a name="OSI Model">
+<b>The OSI Model (Open Systems Interconnection Reference Model)</b><br></a>
 The OSI reference model separates network functions into seven categories, or layers, and defines the network functions that occur at each layer. Each layer provides services to the layer above it, uses services from the layer below it, and has an abstract connection to the same layer on the peer system. This modularization of function simplifies the implementation of complex network functions. And by defining these functions, the OSI model helps users understand how data from an application program travels through a network medium to an application program that is located in another computer.<br>
 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514079693.png" alt="" style="">
@@ -66,7 +69,8 @@ The term "decapsulation" is sometimes used in place of the term "de-encapsulatio
 </code></pre>
 When the data link layer receives the data, it checks the data-link trailer (the FCS) to see if the binary data has been corrupted in transit. While some data-link technologies can request retransmission for corrupt data, most modern data-links, including Ethernet, will simply discard the corrupted frame. In such environments, if reliability is required, it must be provided by upper layers in the stack. If the data is not in error, the data link layer reads and interprets the control information in the data-link header. The data link layer strips the data-link header and trailer, and then passes the remaining data up to the network layer based on the control information in the data-link header. Each subsequent layer performs a similar de-encapsulation process eventually presenting the original user data from the source to the program running on the peer system.<br>
 <br>
-<b>TCP/IP Model</b><br>
+<a name="TCP/IP Model">
+<b>TCP/IP Model</b><br></a>
 Development of the 4-layer TCP/IP model started before work began on the 7-layer OSI model. As it turned out, TCP/IP had too much momentum to be overtaken by the OSI model or any of the other competing network models. The TCP/IP model is now the dominant protocol suite that is used on today's Internet. The TCP/IP model is also referred to as the TCP/IP protocol suite, the Internet protocol suite, the TCP/IP stack, and the DoD model.<br>
 <br>
 Development of the OSI model began in the late 1970s, and the model was published in 1984. Although the OSI model was never actually implemented, the theory that it embodies has influenced the continual development and maturation of TCP/IP. TCP/IP was developed in a rather ad hoc fashion. The timeline includes the following:
