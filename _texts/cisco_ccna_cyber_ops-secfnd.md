@@ -495,3 +495,59 @@ When host 192.168.3.2 receives the frame, it notes the broadcast address and str
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514497524.png" alt="" style="">
 <br>
+The ARP program builds an ARP request and passes it to Layer 2, telling Layer 2 to send the request to a broadcast address (all F hex values). Layer 2 encapsulates the ARP request in a Layer 2 frame. It uses the broadcast address that was provided by ARP as the destination MAC address, and the local MAC address as the source.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514497771.png" alt="" style="">
+<br>
+The remaining ARP request is passed to ARP.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514497839.png" alt="" style="">
+<br>
+Using the information in the ARP request, ARP updates its table.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514497939.png" alt="" style="">
+<br>
+ARP builds a response and passes it to Layer 2, telling Layer 2 to send the response to MAC address 0800:0222:2222 (host 192.168.3.1).<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498023.png" alt="" style="">
+<br>
+Layer 2 encapsulates the ARP in a Layer 2 frame using the destination MAC address that is provided by ARP and the local source MAC address.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498108.png" alt="" style="">
+<br>
+When host 192.168.3.1 receives the frame, it notes that the destination MAC address is the same as its own address. It strips the Layer 2 encapsulation.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498179.png" alt="" style="">
+<br>
+The remaining ARP reply is passed to ARP.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498248.png" alt="" style="">
+<br>
+ARP updates its table and passes the mapping to Layer 2.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498313.png" alt="" style="">
+<br>
+Layer 2 can now encapsulate the pending packet into a Layer 2 frame and send it to host 192.168.3.2<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498388.png" alt="" style="">
+<br>
+At host 192.168.3.2, the frame is passed up the stack where encapsulation is removed. The remaining PDU is passed to TCP.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498462.png" alt="" style="">
+<br>
+In response to the SYN, TCP passes SYN-ACK down the stack to be encapsulated.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498548.png" alt="" style="">
+<br>
+After the three-way handshake is completed, TCP can inform the application that the session has been established.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498658.png" alt="" style="">
+<br>
+Now the application can send the data over the session, relying on TCP for error detection.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498741.png" alt="" style="">
+<br>
+The data exchange continues until the application stops sending data.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514498818.png" alt="" style="">
+<br>
