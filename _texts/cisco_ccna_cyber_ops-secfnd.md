@@ -6,7 +6,20 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP
 <a href="#TCP/IP Model">1.3 TCP/IP Model</a><br>
 <a href="#Introduction to the Internet Protocol">1.4 Introduction to the Internet Protocol</a><br>
 <a href="#IP Addressing">1.5 IP Addressing</a><br>
+<a href="#IP Address Classes">1.6 IP Address Classes</a><br>
+<a href="#Reserved IP Addresses">1.7 Reserved IP Addresses</a><br>
+<a href="#Public and Private IP Addresses">1.8 Public and Private IP Addresses</a><br>
+<a href="#IPv6 Addresses">1.9 IPv6 Addresses</a><br>
+<a href="#Introduction to the Transmission Control Protocol">1.10 Introduction to the Transmission Control Protocol</a><br>
+<a href="#TCP Three-Way Handshake">1.11 TCP Three-Way Handshake</a><br>
+<a href="#Introduction to the User Datagram Protocol">1.12 Introduction to the User Datagram Protocol</a><br>
+<a href="#">1.</a><br>
 
+
+
+
+
+<a name=""></a>
 
 <a name="OSI Model"></a>
 <b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
@@ -180,6 +193,7 @@ For IPv4, a subnet mask is a 32-bit combination that identifies which part of th
 <br>
 When you express an IP address, you accompany it with a subnet mask in dotted decimal format, or you append a prefix length. A prefix length performs the same function as a subnet mask by providing the number of bits in the address that are used for the network portion. For example, in 172.16.55.87/20, /20 is the prefix length. It tells you that the first 20 bits are the network address. The remaining 12 bits make up the host portion. A /20 prefix is the equivalent of the subnet mask 255.255.240.0 (11111111.11111111.11110000.00000000).<br>
 <br>
+<a name="IP Address Classes"></a>
 <b>IP Address Classes</b><br>
 To accommodate different sizes of networks and to aid in classifying them, IP addresses are divided into categories that are called classes. Assigning IP addresses to classes is known as classful addressing. The classes were determined by the IANA (Internet Assigned Numbers Authority).<br>
 <br>
@@ -205,6 +219,7 @@ Each address class has a default mask, but each default mask can be extended to 
 <li><b>Class C:</b> 255.255.255.0 or a/24</li>
 </ul>
 <br>
+<a name="Reserved IP Addresses"></a>
 <b>Reserved IP Addresses</b><br>
 The following IP addresses are reserved and cannot be assigned to individual devices on a network:<br>
 <br>
@@ -216,6 +231,7 @@ The following IP addresses are reserved and cannot be assigned to individual dev
 <li><b>Autoconfiguration IP addresses:</b> Sometimes, neither a statically nor a dynamically configured IP address is found on startup. In such instances, hosts supporting IPv4 link-local addresses (RFC 3927) generate an address in the 169.254/16 prefix range. This address can be used only for local network connectivity and operates with many caveats, one of which is that it will not be routed. You will mostly see this address as a failure condition when a PC fails to obtain an address via DHCP.</li>
 </ul>
 <br>
+<a name="Public and Private IP Addresses"></a>
 <b>Public and Private IP Addresses</b><br>
 Internet stability depends directly on the uniqueness of publicly used network addresses. Therefore, some mechanism is needed to ensure that addresses are, in fact, unique. Originally, it was the responsibility of an organization that is known as the InterNIC. IANA succeeded the InterNIC. IANA carefully manages the remaining supply of IP addresses to ensure that duplication of publicly used addresses does not occur. Such duplication would cause instability in the Internet and would compromise its capability to deliver datagrams to networks using the duplicated addresses.<br>
 <br>
@@ -234,6 +250,7 @@ These addresses are not routed on the Internet backbone. When a network using pr
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514307539.png" alt="" style="">
 <br>
+<a name="IPv6 Addresses"></a>
 <b>IPv6 Addresses</b><br>
 The IPv4 address space provides approximately 4.3 billion addresses. Of that address space, approximately 3.7 billion addresses are actually assignable; the other addresses are reserved for special purposes, such as multicasting, private address space, loopback testing, and research.<br>
 <br>
@@ -282,6 +299,7 @@ IPv6 address examples:<br>
 <li>Unspecified: 0:0:0:0:0:0:0:0 or ::</li><br>
 </ul>
 <br>
+<a name="Introduction to the Transmission Control Protocol"></a>
 <b>Introduction to the Transmission Control Protocol</b><br>
 TCP is a transport layer protocol that is used for sending data over an IP network. TCP provides a communication service at an intermediate level between an application program and the Internet Protocol. It is a connection-oriented protocol that provides data reliability between hosts, and it is the most widely used transport layer protocol. Each time that you browse to a site such as http://www.cisco.com, an HTTP request is encapsulated into IP packets using TCP as the transport, which are sent to the http://www.cisco.com web server to request the web page.<br>
 <br>
@@ -341,6 +359,7 @@ TCP delivers these applications, among others:<br>
 <li><b>SMTP:</b> SMTP is used by e-mail servers to exchange e-mail messages and by e-mail clients to send messages to an e-mail server. It works with POP3 and IMAP4 to enable e-mail clients to retrieve and store e-mail messages.</li>
 </ul>
 <br>
+<a name="TCP Three-Way Handshake"></a>
 <b>TCP Three-Way Handshake</b><br>
 TCP requires a connection to be established between two end systems before data transfer can begin. TCP establishes the connection using a process that is called the three-way handshake. This process involves setting the SYN bit and ACK bit in the segments between the two devices. An important function that is performed during connection establishment is that the devices exchange their initial sequence numbers (ISNs). This number is used to track data bytes on this connection. The table below includes a simplified explanation of the three-way handshake process, which is illustrated in the figure.<br>
 <br>
@@ -355,6 +374,7 @@ A TCP connection is normally and gracefully terminated when each side of the con
 <li>Host A sends an ACK to Host B.</li>
 </ul>
 <br>
+<a name="Introduction to the User Datagram Protocol"></a>
 <b>Introduction to the User Datagram Protocol</b><br>
 UDP is another widely used transport layer protocol. There are many UDP-based attacks, so a security analyst should have a good understanding of how UDP is intended to function and what a normal UDP datagram looks like. The security analyst must know what a normal UDP datagram looks like in order to recognize an abnormal UDP datagram that might contain hidden threats.<br>
 <br>
