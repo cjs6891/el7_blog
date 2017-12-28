@@ -487,9 +487,11 @@ The IP layer encapsulates the TCP's SYN in a Layer 3 packet by prepending the lo
 <br>
 Layer 2 encapsulates the Layer 3 packet into a Layer 2 frame. To do this, Layer 2 needs to map the Layer 3 destination address of the packet to its MAC address by requesting a mapping from ARP.<br>
 <br>
-Layer 2 encapsulates the Layer 3 packet into a Layer 2 frame. To do this, Layer 2 needs to map the Layer 3 destination address of the packet to its MAC address by requesting a mapping from ARP.<br>
-<br>
 ARP checks the ARP table. In this example, it is assumed that this host has not communicated with the other host, so there is no entry in the ARP table, which results in Layer 2 holding the packet until ARP can provide a mapping.<br>
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514497302.png" alt="" style="">
+<br>
+When host 192.168.3.2 receives the frame, it notes the broadcast address and strips the Layer 2 encapsulation.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514497524.png" alt="" style="">
 <br>
