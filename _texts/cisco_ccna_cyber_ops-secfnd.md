@@ -402,3 +402,29 @@ As shown in the figure below, a single host can have multiple sessions running a
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514411224.png" alt="" style="">
 <br>
+<b>Address Resolution Protocol</b><br>
+To send data to a destination, a host on an Ethernet network must know the MAC address of the destination. ARP provides the essential service of mapping IP addresses to physical addresses on a network.<br>
+<br>
+<pre>
+<code>
+Note:
+The MAC address is the unique identifier of the device. It is usually embedded in the hardware during manufacturing. The MAC address is also referred to as the hardware address or the physical address. The address is 48 bits long and is usually represented using hexadecimal notation. Groups of digits are commonly separated with colons, dashes, or periods. The following three example notations are common and equivalent: 54:EE:75:B1:6F:22, 54-EE-75-B1-6F-22, and 54EE.75B1.6F22.
+</code>
+</pre>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514486851.png" alt="" style="">
+<br>
+When a system knows the IP address of its peer but does not know the MAC address, it sends an ARP request. The ARP request specifies the known IP address and is broadcast on the local network. The broadcast is received by all devices on the Ethernet segment. When the target recognizes its own IP address by reading the contents of the ARP request packet, it responds with the required MAC address in its ARP reply. The address resolution procedure is completed when the originator receives the reply packet (containing the required MAC address) from the target. The originator then updates the table containing all the current bindings. This table is called the ARP cache or ARP table. The ARP cache is used to maintain a correlation between each IP address and its corresponding MAC address.<br>
+<br>
+The bindings in the table are kept current by a process of aging out unused entries after a period of inactivity. The aging time is operating system dependent. Aging out ensures that the table does not contain information for systems that might be switched off or that have been moved.<br>
+<br>
+The <code>arp -a</code> command can be used on both Windows and Linux devices to display the current state of the ARP table on the device.<br>
+<br>
+<pre><code>
+Note:
+The ARP table on the Windows system includes mappings for some multicast addresses, such as IGMP and LLMNR.
+</code></pre>
+ARP operates between Layer 2 and Layer 3 of the OSI model. ARP messages are sent using Ethertype 0x0806. Ethertype is a two-octet field in an Ethernet header. Ethertype is used to indicate which protocol is encapsulated in the payload of an Ethernet Frame. Ethertype 0x0800 indicates an IPv4 payload, Ethertype 0x86DD indicates an IPv6 payload.<br>
+<br>
+ARP is a necessary and fundamental service in the TCP/IP protocol suite. It does have some security shortcomings. One significant issue is that there is no validation of the ARP replies. Under the right circumstances, a system can produce fraudulent ARP replies, tricking victim systems into mapping the attacker's MAC address to a different IP address, and causing the victim systems to send traffic that is intended for other systems to the attacker. The attacker can then become a man in the middle, and can monitor and manipulate the misdirected traffic before forwarding it to the valid destination.<br>
+<br>
