@@ -16,10 +16,10 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP
 <a href="#TCP and UDP Ports">1.13 TCP and UDP Ports</a><br>
 <a href="#Address Resolution Protocol">1.14 Address Resolution Protocol</a><br>
 <a href="#Host-to-Host Packet Delivery Using TCP">1.15 Host-to-Host Packet Delivery Using TCP</a><br>
-<!--
-<a href="#">1.</a><br>
-<a href="#">1.</a><br>
-<a href="#">1.</a><br>
+<a href="#Dynamic Host Configuration Protocol">1.16 Dynamic Host Configuration Protocol</a><br>
+<a href="#Domain Name System">1.17 Domain Name System</a><br>
+<a href="#Internet Control Message Protocol">1.18 Internet Control Message Protocol</a><br>
+
 <a href="#">1.</a><br>
 <a href="#">1.</a><br>
 <a href="#">1.</a><br>
@@ -29,10 +29,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
--->
+
 <a name="OSI Model"></a>
 <b>The OSI Model (Open Systems Interconnection Reference Model)</b><br>
 The OSI reference model separates network functions into seven categories, or layers, and defines the network functions that occur at each layer. Each layer provides services to the layer above it, uses services from the layer below it, and has an abstract connection to the same layer on the peer system. This modularization of function simplifies the implementation of complex network functions. And by defining these functions, the OSI model helps users understand how data from an application program travels through a network medium to an application program that is located in another computer.<br>
@@ -551,3 +548,74 @@ The data exchange continues until the application stops sending data.<br>
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514498818.png" alt="" style="">
 <br>
+<a name="Dynamic Host Configuration Protocol"></a>
+<b>Dynamic Host Configuration Protocol</b><br>
+Another basic IP service that is needed for host-to-host communications over an IP network is DHCP. DHCP is used to assign IP addresses automatically and to set TCP/IP stack configuration parameters, such as the subnet mask, default router, and DNS servers. DHCP is also used to provide other configuration information that is needed, including the length of time the address has been allocated to the host. DHCP consists of two components: a protocol for delivering host-specific configuration parameters from a DHCP server to a host, and a mechanism for allocating network addresses to hosts.<br>
+<br>
+<pre>
+<code>
+Note:
+For certain types of servers such as DHCP servers and DNS servers, you should assign static (permanent) IP addresses.
+</code>
+</pre>
+<br>
+Like ARP, DHCP is frequently used to carry out attacks, so it is important for a security analyst to understand how it works. Two of the most common DHCP attacks are the insertion of rogue DHCP servers and DHCP starvation. Rogue DHCP servers can be used to provide valid users with incorrect-configuration information to prevent them from accessing the network. DHCP starvation is exhausting the pool of IP addresses available to the DHCP server.<br>
+<br>
+Using DHCP, a host can obtain an IP address quickly and dynamically. A range or pool of IP addresses is defined on a DHCP server. As hosts come online, they send broadcast requests for their IP configuration. The DHCP server selects an address from the pool and allocates it to that host. The address that is provided by the DHCP server is only leased to the host, requiring the host to periodically contact the DHCP server to extend the lease. This lease mechanism ensures that hosts that have been moved or are switched off for extended periods of time do not keep addresses from the pool that are not actually in use. The addresses are returned to the address pool by the DHCP server, to be reallocated as necessary. The normal process is shown in the figure below.<br>
+<br>
+Four messages are exchanged during the process:<br>
+<br>
+<ol>
+<li>The client sends a DHCPDISCOVER message.</li><br>
+<li>The server sends a DHCPOFFER message containing IP address and other IP configuration information.</li><br>
+<li>The client sends a DHCPREQUEST, which is an acknowledgement of the server's offer.</li><br>
+<li>The process ends with the server sending a DHCPACK, confirming the reservation for the client.</li>
+</ol>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514559359.png" alt="" style="">
+<br>
+DHCP uses UDP port number 67 as the destination port of a server, and UDP port number 68 is used by the client. DHCP is the most widely deployed protocol for the dynamic configuration of systems over an IP network.<br>
+<br>
+<a name="Domain Name System"></a>
+<b>Domain Name System</b><br>
+<br>
+DNS is another one of the basic IP services that are required for host-to-host communications over an IP network. It provides an efficient way to convert human-readable names of IP end systems into machine-readable IP addresses necessary for routing.<br>
+<br>
+Like ARP and DHCP, DNS may be leveraged to carry out attacks. If DNS is compromised, threat actors can cause victims to establish connections with fraudulent, malicious systems. DNS can be used to covertly tunnel data from an internal compromised host out to systems controlled by the attacker. Because DNS is a UDP-based service, it can be leveraged in amplification DDoS attacks. To recognize, analyze, and accurately report on such attacks, security analysts need a solid understanding of DNS basics.<br>
+<br>
+DNS is a globally distributed dynamic database that is used to translate names to IP addresses. DNS frees the users of IP networks from the burden of needing to remember the IP addresses. Without this freedom, the World Wide Web would not be as popular or as usable as it has become.<br>
+<br>
+The translation process is accomplished by a DNS resolver. The DNS resolver could be a client application such as a web browser or an e-mail client, or a DNS application such as BIND sending a DNS query to a DNS server.<br>
+<br>
+DNS uses TCP and UDP port 53. TCP port 53 is used for zone transfers when replicating the DNS database between different DNS servers. UDP port 53 is used for performing DNS queries from the clients.<br>
+<br>
+<a name="Internet Control Message Protocol"></a>
+<b>Internet Control Message Protocol</b><br>
+ICMP is used to report errors and other information regarding IP packet processing back to the source. ICMP, which is documented in [RFC 792](http://www.rfc-editor.org/rfc/rfc792.txt){:target="_blank"}, is best known for its use by the "ping" and "traceroute" programs on IP-enabled hosts, or devices. The ping utility sends ICMP echo request packets out to a destination host to test the IP connectivity to that destination host. Receiving an ICMP echo reply message indicates that the host can be successfully reached.<br>
+<br>
+As a security analyst, it is important to understand ICMP. For example, in ICMP echo request packets, one should not expect to see a large data payload. Echo replies should also be paired with echo requests. If you see many ICMP echo request and reply packets with large payloads, or if you see an imbalance in echo request and echo reply numbers, you should suspect that something suspicious may be happening. An attacker may be tunneling data out using ICMP. ICMP tunneling is possible because RFC 792, which documents IETF's rules governing ICMP packets, allows for an arbitrary data length for any type 8 (echo request), or type 0 (echo reply) ICMP packets.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514562999.png" alt="" style="">
+<br>
+In addition to echo request and echo reply, ICMP has several kinds of useful messages, including destination unreachable, redirect, time exceeded, and so on.<br>
+<br>
+Two reasons exist for why a destination might be unreachable. Most commonly, the source host has specified a nonexistent address. Less frequently, the router does not have a route to the destination.<br>
+<br>
+Destination-unreachable messages include four basic types: network-unreachable, host-unreachable, protocol-unreachable, and port-unreachable.<br>
+<br>
+<ul>
+<li><b>Network-unreachable</b> messages usually mean that a failure has occurred in the routing or addressing of a packet.</li><br>
+<li><b>Host-unreachable</b> messages usually indicate that the packet has been correctly routed to the destination network, but the destination is not active on that network.</li><br>
+<li><b>Protocol-unreachable</b> messages generally mean that the destination does not support the transport-layer protocol that is specified in the packet.</li><br>
+<li><b>Port-unreachable</b> messages imply that the destination is not listening on the specified TCP or UDP port.</li>
+</ul>
+<br>
+An ICMP redirect message is sent by the router to the source host to stimulate more efficient routing if another router with a better path exists on the local subnet. The router still forwards the original packet to the destination.<br>
+An ICMP time-exceeded message is sent by the router if an IP packet’s TTL field reaches zero. The TTL field prevents packets from continuously circulating the internetwork if the internetwork contains a routing loop. The router then discards the original packet.<br>
+<br>
+ICMP uses IP protocol number 1. ICMP messages are identified by the type field. Many of these ICMP types also use a code field to indicate different conditions. The table below shows a few of the common ICMP messages.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514563345.png" alt="" style="">
+<br>
+
+
