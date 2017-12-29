@@ -19,13 +19,12 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP
 <a href="#Dynamic Host Configuration Protocol">1.16 Dynamic Host Configuration Protocol</a><br>
 <a href="#Domain Name System">1.17 Domain Name System</a><br>
 <a href="#Internet Control Message Protocol">1.18 Internet Control Message Protocol</a><br>
+<a href="#Packet Capture Using tcpdump">1.19 Packet Capture Using tcpdump</a><br>
 
 <a href="#">1.</a><br>
 <a href="#">1.</a><br>
 <a href="#">1.</a><br>
-<a href="#">1.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -578,7 +577,6 @@ DHCP uses UDP port number 67 as the destination port of a server, and UDP port n
 <br>
 <a name="Domain Name System"></a>
 <b>Domain Name System</b><br>
-<br>
 DNS is another one of the basic IP services that are required for host-to-host communications over an IP network. It provides an efficient way to convert human-readable names of IP end systems into machine-readable IP addresses necessary for routing.<br>
 <br>
 Like ARP and DHCP, DNS may be leveraged to carry out attacks. If DNS is compromised, threat actors can cause victims to establish connections with fraudulent, malicious systems. DNS can be used to covertly tunnel data from an internal compromised host out to systems controlled by the attacker. Because DNS is a UDP-based service, it can be leveraged in amplification DDoS attacks. To recognize, analyze, and accurately report on such attacks, security analysts need a solid understanding of DNS basics.<br>
@@ -617,5 +615,101 @@ ICMP uses IP protocol number 1. ICMP messages are identified by the type field. 
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514563345.png" alt="" style="">
 <br>
+<a name="Packet Capture Using tcpdump"></a>
+<b>Packet Capture Using tcpdump</b><br>
+Packet capturing tools are used legitimately in networks today for network troubleshooting and traffic analysis. One such tool is tcpdump, a free, powerful, CLI-based tool for capturing and analyzing packet data. As a text-based utility, tcpdump can be run only from the command line of a computer. It can read live traffic from interfaces and prerecorded traffic from PCAP files, and it allows you to display TCP, IP, and other packets being transmitted or received over the network to which the computer is attached.<br>
+<br>
+Packet capturing tools are valuable tools for security analysts. However, analysts should be aware of the fact that packet capturing tools are also valuable tools for attackers. Network management protocols (such as Telnet, FTP, HTTP, and SNMPv1 and SNMPv2) send data in cleartext. If an attacker can capture such management traffic, sensitive information such as usernames and passwords can be easily revealed.<br>
+<br>
+Tcpdump is extremely common on Linux and UNIX hosts and on network infrastructure devices that are based on these operating systems. On the rare occasion that tcpdump does not come preinstalled, it is usually easy to download and install.<br>
+<br>
+Windump, a Microsoft Windows variant of tcpdump, is also available. Tcpdump and windump can capture and display live network traffic from any directly connected interfaces, including traffic that is not addressed to the local machine. To capture traffic that is not destined for the local machine, the network card must be placed into a special mode, referred to as "promiscuous mode," which causes the network card to interpret all traffic that it sees. Administrative or superuser permissions within the operating system are required to enter promiscuous mode. For this reason, tcpdump (and windump) must be run as the root user (or administrator user).<br>
+<br>
+Tcpdump has machine-dependent limitations, which are based on the number of packets that it can process per second. If traffic arrives too quickly and cannot be saved in time, it is dropped by the kernel. Also, as with most packet capture software, tcpdump does not read data link layer data before the destination MAC.<br>
+<br>
+In the following tcpdump live capture example, two tcpdump command options were used. The <code>-i</code> option defines the interface, which is eth0 in this case. The <code>-n</code> option specifies that addresses are displayed as IP addresses rather than as hostnames. Using the <code>-n</code> option is best for live captures. Without the <code>-n</code> option, the system attempts to look up the name of the host through DNS.<br>
+<br>
+Use <code>control+c</code> to stop the traffic capture.<br>
+<br>
+<pre>
+<code>
+root@Kali:~# tcpdump -i eth0 -n
 
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+10:06:57.246670 IP 192.168.28.1.137 > 192.168.28.255.137: NBT UDP PACKET(137): QUERY; REQUEST; BROADCAST
+10:06:57.665021 ARP, Request who-has 192.168.28.128 (00:0c:29:66:4d:29) tell 192.168.28.1, length 46
+10:06:57.665041 ARP, Reply 192.168.28.128 is-at 00:0c:29:66:4d:29, length 28
+10:06:57.996116 IP 192.168.28.1.137 > 192.168.28.255.137: NBT UDP PACKET(137): QUERY; REQUEST; BROADCAST
+10:06:58.746225 IP 192.168.28.1.137 > 192.168.28.255.137: NBT UDP PACKET(137): QUERY; REQUEST; BROADCAST
+5 packets captured
+5 packets received by filter
+0 packets dropped by kernel
 
+root@Kali:~#
+</code>
+</pre>
+<br>
+The figure below shows the different parts of the tcpdump output.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514564587.png" alt="" style="">
+<br>
+Other <code>tcpdump</code> command options:<br>
+<br>
+The <code>-w</code> option specifies that tcpdump will write the network traffic to a PCAP file, specified here as "sample.pcap." No output will occur while tcpdump is capturing to a file.<br>
+<br>
+<pre>
+<code>
+root@Kali:~# tcpdump -i eth0 -w sample.pcap 
+
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+7 packets captured
+7 packets received by filter
+0 packets dropped by kernel
+
+root@Kali:~#
+</code>
+</pre>
+<br>
+The <code>-r</code> option commands tcpdump to read from the same PCAP file that was created in the example here. In addition, the <code>-x</code> option is used to output the hexadecimal representation.<br>
+<br>
+<pre>
+<code>
+root@Kali:~# tcpdump -x -r sample.pcap
+
+reading from file sample.pcap, link-type EN10MB (Ethernet)
+06:52:39.152387 IP 192.168.28.1.137 > 192.168.28.255.137: NBT UDP PACKET(137): QUERY; REQUEST; BROADCAST
+        0x0000:  4500 004e 7195 0000 8011 0eb9 c0a8 1c01
+        0x0010:  c0a8 1cff 0089 0089 003a d504 e499 0110
+        0x0020:  0001 0000 0000 0000 2046 4445 4c46 4a45
+        0x0030:  4f45 4646 4543 4e45 4345 4d43 4143 4143
+        0x0040:  4143 4143 4143 4142 4d00 0020 0001
+
+root@Kali:~#
+</code>
+</pre>
+<br>
+The <code>-XX</code> option outputs both the hexadecimal and ASCII representations. The ASCII representation is extremely useful when working with plaintext or human-readable data.<br>
+<br>
+<pre>
+<code>
+root@Kali:~# tcpdump -i eth0 -XX 
+
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+12:00:34.494200 IP 192.168.28.1 > 192.168.28.129: ICMP echo request, id 1, seq 5, length 40
+        0x0000:  000c 2966 4d29 0050 56c0 0008 0800 4500  ..)fM).PV.....E.
+        0x0010:  003c 691d 0000 8001 17d1 c0a8 1c01 c0a8  .<i.............
+        0x0020:  1c81 0800 4d56 0001 0005 6162 6364 6566  ....MV....abcdef
+        0x0030:  6768 696a 6b6c 6d6e 6f70 7172 7374 7576  ghijklmnopqrstuv
+        0x0040:  7761 6263 6465 6667 6869                 wabcdefghi
+1 packets captured
+1 packets received by filter
+0 packets dropped by kernel
+
+root@Kali:~#
+</code>
+</pre>
+<br>
+Tcpdump uses the PCAP (Packet Capture) library, or libpcap, to capture and filter network traffic. Similarly, windump requires the WinPcap libraries to capture and filter network traffic. Libpcap (and its Windows counterpart) uses a unique language to describe protocols and fields within the packets that it sees. This language is referred to as BPF (Berkley Packet Filter) syntax and has become the de-facto standard in many network utilities.<br>
+<br>
