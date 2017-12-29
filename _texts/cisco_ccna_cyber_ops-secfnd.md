@@ -713,3 +713,49 @@ root@Kali:~#
 <br>
 Tcpdump uses the PCAP (Packet Capture) library, or libpcap, to capture and filter network traffic. Similarly, windump requires the WinPcap libraries to capture and filter network traffic. Libpcap (and its Windows counterpart) uses a unique language to describe protocols and fields within the packets that it sees. This language is referred to as BPF (Berkley Packet Filter) syntax and has become the de-facto standard in many network utilities.<br>
 <br>
+BPF syntax allows you to combine criteria to form a capture filter to be used within the <code>tcpdump</code> command:<br>
+<br>
+<ul>
+<li><code>host</code>: Defines a specific host</li><br>
+<li><code>net</code>: Defines a network, classful or classless, and can be combined with <code>mask</code><br>
+ - <code>net 192.168.1.0</code><br>
+ - <code>net 192.168.1.0 mask 255.255.255.0</code><br>
+ - <code>net 192.168.1.0/24</code><br></li>
+<li><code>port</code>: Specifies a specific port</li><br>
+<li><code>src</code>: Source, can be combined with any type</li><br>
+<li><code>dst</code>: Destination, can be combined with any type</li><br>
+<li><code>and</code>: Combines two filters; both must be true</li><br>
+<li><code>or</code>: Combines two filters; either must be true</li><br>
+<li><code>not</code>: Negates a filter (useful for ignoring designated traffic)</li><br>
+<li><code>ip</code>: Filters, based on IPv4 packets</li><br>
+<li><code>ip6</code>: Filters, based on IPv6 packets</li><br>
+<li><code>arp</code>: Filters, based on ARP traffic</li><br>
+<li><code>icmp</code>: Filters, based on ICMP messages</li><br>
+<li><code>tcp</code>: Filters, based on TCP segments</li><br>
+<li><code>udp</code>: Filters, based on UDP datagrams</li>
+</ul>
+<br>
+In the following example, the tcpdump command will capture traffic on the eth0 interface that matches IP address 10.1.1.2 and port 80 traffic. Examining the first three packets, you can see the TCP three-way handshake, where the first packet has the SYN flag, the second packet has the SYN and ACK flags, and the third packet has the ACK flag.<br>
+<br>
+<pre>
+<code>
+root@Kali:~# tcpdump -i eth0 port 80 and host 10.1.1.2
+
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+18:42:18.923345 IP 172.16.1.2.54769 > 10.1.1.2.80: Flags [S], seq 2471859586, win 8192, options [mss 1460,nop,wscale 2,nop,nop,sackOK], length 0
+18:42:19.022097 IP 10.1.1.2.80 > 172.16.1.2.54769: Flags [S.], seq 2637141512, ack 2471859587, win 8190, options [mss 1460], length 0
+18:42:19.022326 IP 172.16.1.2.54769 > 10.1.1.2.80: Flags [.], ack 1, win 64240, length 0
+18:42:19.425546 IP 172.16.1.2.54769 > 10.1.1.2.80: Flags [P.], ack 1, win 64240, length 461
+18:42:19.510902 IP 10.1.1.2.80 > 172.16.1.2.54769: Flags [.], ack 462, win 10649, length 0
+ 
+<output omitted>
+</code>
+</pre>
+<br>
+BPF Syntax Examples:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514567111.png" alt="" style="">
+<br>
+Tcpdump is a powerful utility with a great deal of potential. Many resources are available to provide more detailed examples, and a more thorough explanation of the numerous command-line options.<br>
+<br>
