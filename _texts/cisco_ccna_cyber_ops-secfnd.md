@@ -753,7 +753,6 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
 </code>
 </pre>
 <br>
----
 BPF Syntax Examples:<br>
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514567111.png" alt="" style="">
