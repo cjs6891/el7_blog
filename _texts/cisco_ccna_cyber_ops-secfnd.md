@@ -749,7 +749,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
 18:42:19.425546 IP 172.16.1.2.54769 > 10.1.1.2.80: Flags [P.], ack 1, win 64240, length 461
 18:42:19.510902 IP 10.1.1.2.80 > 172.16.1.2.54769: Flags [.], ack 462, win 10649, length 0
  
-<output omitted>
+[output omitted]
 </code>
 </pre>
 <br>
