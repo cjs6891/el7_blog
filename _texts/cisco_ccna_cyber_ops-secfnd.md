@@ -20,12 +20,11 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 1: Understanding the TCP/IP
 <a href="#Domain Name System">1.17 Domain Name System</a><br>
 <a href="#Internet Control Message Protocol">1.18 Internet Control Message Protocol</a><br>
 <a href="#Packet Capture Using tcpdump">1.19 Packet Capture Using tcpdump</a><br>
+<a href="#Wireshark">1.20 Wireshark</a><br>
 
 <a href="#">1.</a><br>
 <a href="#">1.</a><br>
-<a href="#">1.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 
@@ -758,4 +757,50 @@ BPF Syntax Examples:<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514567111.png" alt="" style="">
 <br>
 Tcpdump is a powerful utility with a great deal of potential. Many resources are available to provide more detailed examples, and a more thorough explanation of the numerous command-line options.<br>
+<br>
+<a name="Wireshark"></a>
+<b>Wireshark</b><br>
+During the incident investigation process, a typical task for an analyst is to perform packet capture and packet analysis. Wireshark is one of the common tools that is used to perform packet capture and analysis. Wireshark is available for Windows, Linux, and Macintosh systems.<br>
+<br>
+Wireshark is designed to provide a graphical environment for packet analysis. Wireshark allows you to capture packets live and to open PCAP files that have been captured through another packet-capture device. As with tcpdump, there are limitations to the speed at which Wireshark can capture. It can take a considerable amount of time to process large files. Similar to tcpdump, Wireshark needs to run as Administrator or root to use promiscuous mode. To open a prerecorded PCAP file, a standard user account is acceptable.<br>
+<br>
+Below is an example of using Wireshark to examine a PCAP containing Telnet traffic. Telnet traffic is sent one character at a time in cleartext, that is why you won’t see the Telnet username and password in a single Telnet packet. Using the Wireshark Follow the TCP Stream feature, Wireshark will put all the data together so you will be able to see the Telnet username and cleartext password. The example below shows the username student and the password Cisco123!.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514571176.png" alt="" style="">
+<br>
+This section provides a high-level overview of Wireshark.<br>
+<br>
+Clicking Capture Options from the main screen opens the Capture Options window. The Capture Options window allows you to select an interface if there are multiple interfaces, define filenames for output, set display options, end capture options, and define name-resolution options. If you are capturing traffic live, it is strongly recommended that you disable network name resolution by unchecking the Enable Network Name Resolution check box.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514571291.png" alt="" style="">
+<br>
+Double-click an interface to open the Edit Interface Settings window, which is shown in the figure below. This window allows you to limit the packet size, which sometimes may be required by your organization because of legal restraints. Also, you can set capture filters. Click the Capture Filter button to display examples of capture filters.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514571378.png" alt="" style="">
+<br>
+Alternatively, Wireshark can read data from a prerecorded PCAP file, using the File menu Open option. Note a brief summary at the bottom of the window of the PCAP file to be opened.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514571906.png" alt="" style="">
+<br>
+Once a packet capture has been started or a PCAP file has been opened, the main interface of Wireshark (shown below) is presented.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514571965.png" alt="" style="">
+<br>
+The main interface of Wireshark consists of three components:<br>
+<br>
+<ul>
+<li>The packet list shows a complete list of packets within the current capture. Information about each packet is presented in customizable columns. By default, this information includes the packet number, time stamp, source address, destination address, protocol, and a summary field of protocol-specific information.</li><br>
+<li>The packet details list shows detailed information about the highlighted packet. Protocols within the packet are presented in expandable panes, with each field enumerated and explained. Some basic analysis is performed, such as translating port numbers to more human-readable names or displaying the human-readable flags in the <b>Flags</b> field.</li><br>
+<li>The packet bytes pane shows the raw bytes of the highlighted packet, starting at the link-level header. The output is divided into three columns: offset, hexadecimal representation, and ASCII representation.</li>
+</ul>
+<br>
+In the main interface, analysts can quickly move around the capture to inspect packets of interest. Clicking a packet in the top third of the window, the packet list, alters the other two panes to show the details and bytes of the highlighted packet.<br>
+<br>
+Expanding protocols within the packet details pane, analysts may find a field that interests them. As shown in the figure below, clicking a field highlights the relevant bytes in the packet bytes pane. This information not only helps analysts quickly learn about protocol structures, it also allows users who are more familiar with the protocol to quickly identify any inconsistencies.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514572174.png" alt="" style="">
+<br>
+A brief mention of the role of filters is necessary at this point to distinguish the display filters at the top of the Wireshark window. In the example below, the <b>http</b> filter is applied to show HTTP traffic only. Do not confuse the display filters with the capture filters that were described with tcpdump. Tcpdump capture filters use BPF syntax. Wireshark display filters do not affect what is being captured, and they use proprietary syntax.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514572316.png" alt="" style="">
 <br>
