@@ -250,3 +250,50 @@ VLSM offers these benefits:<br>
 <br>
 <a name="Hubs, Bridges, and Layer 2 Switches"></a>
 <b>Hubs, Bridges, and Layer 2 Switches</b><br>
+LANs can vary widely in size. A LAN may consist of only two computers in a home office or small business, or it may include hundreds of computers in a large corporate office spanning a single or multiple buildings.<br>
+<br>
+When you connect three or more devices together, you need a dedicated network device to enable communication between hosts. Network devices, such as the hubs, bridges, and switches, form the aggregation point for LANs. These devices enable communication between hosts by connecting them to the other segments of the network. A basic understanding of how these devices operate will help a security analyst investigate any malicious or suspicious activity from the logs that the devices generate.<br>
+<br>
+A hub is a multiport repeater that takes an electronic signal that has been received from a device on one of its ports, magnifies the signal, and re-transmits that signal out all other ports on the hub, except for the original incoming port. Any traffic that comes into a hub or repeater port is sent out or repeated to all other ports. All ports on the hub share both a single collision domain and a single broadcast domain as the hub or repeater operates at the physical layer of the OSI model.<br>
+<br>
+A collision domain, which is common in early versions of Ethernet, is a section of a network that is connected by a shared medium where data packets sent from one device will be heard by all other devices on the segment.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514651517.png" alt="" style="">
+<br>
+In the figure above, Computer A sends the message to Computer B through the hub. The hub, in addition to sending the message to the port where Computer B is connected, also sends the message out to the ports where Computer C and Computer D are connected, with no regard for where the actual destination host is connected to the hub. The bandwidth for the Computer C and Computer D are affected when Computer A and Computer B are communicating. Because everyone that is connected in this network can hear anyone’s message, you can use sniffing tools to easily eavesdrop on the network, which can also be a major security concern.<br>
+<br>
+Whenever a packet is received on a port, the hub has no memory to store any data and the packet has to be transmitted. Hubs can run only in half-duplex mode where it can provide communication in both directions, but only one direction at a time. A network collision occurs when more than one device attempts to send a packet on a network segment at the same time.<br>
+<br>
+To avoid the collision, devices in the Ethernet segment participate in the CSMA/CD (Carrier Sense Multiple Access with Collision Detection). This method uses a carrier sensing scheme in which a transmitting data station detects other signals on the wire and they won’t send their frame if someone else is using the wire. Simultaneous transmission still takes place and collision can happen. With the collision detection mechanism, the transmitting device stops transmitting the frame and transmits a jam signal when the collision is detected. Then the transmitting device waits for a random time interval, recognizing the need to retransmit before trying to resend the frame.<br>
+<br>
+As the number of devices increase in hub-based environments, the problem gets much worse because of the nature of the half-duplex communication. Too many collisions and retransmissions occur which can lead to excessive LAN traffic congestion.<br>
+<br>
+<b>Traffic Flow: Hub vs. Bridge</b><br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514651791.png" alt="" style="">
+<br>
+The left side of the diagram above shows the packet flow when the hosts are connected to the hub. All the devices must compete for the same bandwidth due to the half-duplex nature. So, when PC1 sends a message to the PC3, no other communications can happen between the devices in the network.<br>
+<br>
+The right side of the diagram shows the packet flow when the hosts are connected to a bridge. In this example, review the simultaneous data flow, where PC1 sends traffic to PC3, PC2 sends traffic to PC4, and PC4 sends traffic to PC2. Ethernet bridges selectively forward individual frames from a receiving port to the port where the destination node is connected. This selective forwarding process can be thought of as establishing a momentary point-to-point connection between the transmitting and receiving nodes. The connection is made only long enough to forward a single frame. During this instance, the two nodes have a full-bandwidth connection between them and represent a logical point-to-point connection.<br>
+<br>
+<b>Need for Switches</b><br>
+Bridges and switches operate at the data link layer of the OSI model and use data link MAC addresses to differentiate between hosts that are connected to their ports. Although bridges preceded switches, these devices function in a similar way. These devices learn which ports lead to which host MAC addresses by monitoring the source MAC addresses in the Ethernet headers on frames that arrive on their switch ports. The port to MAC address mappings are stored in MAC address tables. The MAC address tables are commonly called CAM tables because many switches use CAM (a special type of technology) to store the MAC address tables.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514652071.png" alt="" style="">
+<br>
+The figure above shows that the switch and each of its switch ports is connected to a single PC or a server. Switches are really multi-port bridges. Bridges perform the bridging logic that was usually implemented in software. In contrast, switches perform the Layer 2 switching in hardware. Today, it is common to use switches to divide a network into segments and reduce the number of devices that compete for bandwidth. Each new segment, then, results in a new collision domain. More bandwidth is available to the devices on a segment, and collisions in one collision domain do not interfere with the working of the other segments.<br>
+<br>
+In the figure, each switch port represents a unique collision domain. All the ports on the switch fall under a single broadcast domain.<br>
+<br>
+A broadcast domain is a logical division of a computer network, in which all nodes can reach each other by broadcast at the data link layer. Filtering frames by the MAC address of the switch does not extend to filtering broadcast frames. By their nature, broadcast frames must be forwarded. Therefore, all ports on a switch form a single broadcast domain. It takes a Layer 3 entity, such as a router, to terminate a Layer 2 broadcast domain.<br>
+<br>
+<b>Switching Operations</b><br>
+Understanding switching operations will help analysts understand adversary operations against the Layer 2 devices in the network. For example, if an attacker can exhaust the switch's MAC address table, the attacker can turn the switch into a hub. Therefore, analysts must understand the content of the MAC address table and how the information in the MAC address table is learned.<br>
+<br>
+The switch builds and maintains a table, called a CAM table, that matches a destination MAC address with the port that is used to connect to a node. For each incoming frame, the destination MAC address in the frame header is compared to the list of addresses in the CAM table. Switches then use MAC addresses as they decide whether to filter, forward, or flood frames.<br>
+<br>
+The switch creates and maintains a table using the source MAC addresses of incoming frames and the port number through which the frame entered the switch. When an address is not known, a switch learns the network topology by analyzing the source address of incoming frames from all the attached networks.<br>
+<br>
+If a switch receives a frame that is destined for a MAC address that is in its MAC address table, then that frame is only forwarded out of the appropriate port leading to that MAC address. This conserves bandwidth on all the other ports on the switch. If the switch receives a frame that is destined for a MAC address that is not in its MAC address table, it floods the frame out of all ports, except for the port where the frame was received. If the destination replies to the source, the switch will be able to learn the new MAC address based on the source MAC address in the Ethernet header of the reply.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514652430.png" alt="" style="">
+<br>
