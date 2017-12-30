@@ -80,6 +80,3 @@ In addition to the four most common DHCP messages, you might also see other DHCP
 <b>DHCP Relay Agent</b><br>
 The DHCP server does not have to reside directly on the same subnet where the DHCP client resides. Moreover, it’s impractical to have a DHCP server on every subnet. Most enterprise networks will have a few centralized DHCP servers. The DHCP relay agent acts as an intermediary and ensures that local DHCP client requests are passed onto centralized DHCP servers. Any Layer 3 capable devices such as routers or switches can function as the DHCP relay agent.<br>
 <br>
-
-
-
