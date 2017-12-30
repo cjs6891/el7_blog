@@ -5,7 +5,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 2: Understanding the Networ
 
 <a href="#Analyzing DHCP Operations">2.2 Analyzing DHCP Operations</a><br>
 <a href="#IP Subnetting">2.3 IP Subnetting</a><br>
-<a href="#">2.</a><br>
+<a href="#Hubs, Bridges, and Layer 2 Switches">2.4 Hubs, Bridges, and Layer 2 Switches</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
@@ -17,7 +17,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 2: Understanding the Networ
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -91,7 +90,7 @@ The return packets from the DHCP server are directly sent to the relay agent ide
 <b>Capturing DHCP Examples</b><br>
 If you want to monitor DHCP communication between a DHCP server and a client, you can run a packet sniffing tool, such as tcpdump or dhcpdump, on the same local network and capture DHCP traffic. You can also run debug commands on Cisco IOS routers and switches if they are acting as DHCP servers or relay agents to view DHCP traffic going to or transiting these devices.<br>
 <br>
-Below is a sample <code>tcpdump</code>code> output from a Linux machine. The <code>tcpdump</code>code> capture shows renewals. Typically a client sends a REQUEST when the lease lifetime is 50% used up, and an ACK from the server resets the lifetime back to its full value.<br>
+Below is a sample <code>tcpdump</code> output from a Linux machine. The <code>tcpdump</code> capture shows renewals. Typically a client sends a REQUEST when the lease lifetime is 50% used up, and an ACK from the server resets the lifetime back to its full value.<br>
 <br>
 <pre>
 <code>
@@ -105,7 +104,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 </code>
 </pre>
 <br>
-Packet sniffing is enabled on the port 67 (DHCP server port) and port 68 (DHCP client port). The <code>–e</code>code> parameter instructs the command to display the source and the destination MAC addresses. The <code>–n</code>code> parameter instructs the command not to convert the addresses to names. The <code>–i</code>code> parameter instructs the command to listen on the particular interface. Here, eth0 is the name of the interface.<br>
+Packet sniffing is enabled on the port 67 (DHCP server port) and port 68 (DHCP client port). The <code>–e</code> parameter instructs the command to display the source and the destination MAC addresses. The <code>–n</code> parameter instructs the command not to convert the addresses to names. The <code>–i</code> parameter instructs the command to listen on the particular interface. Here, eth0 is the name of the interface.<br>
 <br>
 For in-depth analysis of the DHCP packets, use the dhcpdump tool. The following is a sample <code>dhcpdump</code> output from the Linux machine on the eth0 interface.<br>
 <br>
@@ -143,7 +142,7 @@ OPTION: 44 (  4) NetBIOS name server         192.168.198.2
 </code>
 </pre>
 <br>
-This output is more detailed than the <code>tcpdump</code>code> output. The <b>YIADDR</b> field is populated with the IP address of the client, and <b>SIADDR</b> field is populated with the IP address of the server. Notice the multiple options field in this output; multiple options were not available in the <code>tcpdump</code>code> output. For example, <b>Option 53</b> tells the DHCP message type. The message type in this output is <b>DHCPACK</b> message. The DHCP client lease time in the <b>Option 51</b> can also be seen.<br>
+This output is more detailed than the <code>tcpdump</code> output. The <b>YIADDR</b> field is populated with the IP address of the client, and <b>SIADDR</b> field is populated with the IP address of the server. Notice the multiple options field in this output; multiple options were not available in the <code>tcpdump</code> output. For example, <b>Option 53</b> tells the DHCP message type. The message type in this output is <b>DHCPACK</b> message. The DHCP client lease time in the <b>Option 51</b> can also be seen.<br>
 <br>
 The IP address, subnet mask, default gateway, and the DNS server are the minimal configuration parameters that are required for the DHCP client to get online. In addition to that, DHCP server provides the DNS domain name, NETBIOS name servers, and so on, which can be seen in the <b>Options</b> section of this output.<br>
 <br>
@@ -221,3 +220,31 @@ Network address:<br>
 </ul>
 <br>
 <b>Variable-Length Subnet Masking</b><br>
+The figure below illustrates a network that uses fixed-length prefixes to address various segments. Address space is wasted because large subnets are used for addressing the WAN interfaces which are simply point-to-point segments. The three WAN segments only require the use of two host addresses, yet a subnet containing 254 hosts has been assigned to each WAN segment, wasting lots of usable IP addressing space.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514650459.png" alt="" style="">
+<br>
+VLSM affords the options of including more than one subnet mask within a network and of subnetting an already subnetted network address.<br>
+<br>
+Network using VLSM:<br>
+<br>
+<ul>
+<li>The subnet 172.16.14.0/24 is divided into smaller subnets</li><br>
+<li>One subnet has a subnet mask /27.</li><br>
+<li>Further subnetting of one of the unused /27 subnets into /30 subnets.</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514650630.png" alt="" style="">
+<br>
+VLSM offers these benefits:<br>
+<br>
+<ul>
+<li><b>More efficient use of IP addresses:</b> Without the use of VLSM, companies must implement a single subnet mask within an entire Class A, B, or C network number.<br>
+ - For example, consider the 172.16.0.0/16 network address that is divided into subnetworks using /24 masking. One of the subnetworks in this range, 172.16.14.0/24, is further divided into smaller subnetworks using /27 masking. These smaller subnetworks range from 172.16.14.0/27, 172.16.14.32/27, 172.16.14.64/27, and so on to 172.16.14.224/27.<br>
+  - In the figure, one of these smaller subnets, 172.16.14.128/27, is further divided using the /30 prefix, which creates subnets with only two hosts, to be used on the WAN links. The /30 subnets range from 172.16.14.128/30 to 172.16.14.156/30. The WAN links used the 172.16.14.132/30, 172.16.14.136/30, and 172.16.14.140/30 subnets out of the range.<br>
+</li><br>
+<li><b>Better-defined network hierarchical levels:</b> VLSM allows more hierarchical levels within an addressing plan, which enables easier aggregation of network addresses. For example, in the figure, subnet 172.16.14.0/24 describes all the addresses that are further subnets of 172.16.14.0, including addresses from subnet 172.16.14.0/27 to subnet 172.16.14.128/30, and so on.</li>
+</ul>
+<br>
+<a name="Hubs, Bridges, and Layer 2 Switches"></a>
+<b>Hubs, Bridges, and Layer 2 Switches</b><br>
