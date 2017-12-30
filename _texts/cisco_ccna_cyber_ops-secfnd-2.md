@@ -4,7 +4,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 2: Understanding the Networ
 ---
 
 <a href="#Analyzing DHCP Operations">2.2 Analyzing DHCP Operations</a><br>
-<a href="#">2.</a><br>
+<a href="#IP Subnetting">2.3 IP Subnetting</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
@@ -17,8 +17,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 2: Understanding the Networ
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 
-
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -71,12 +69,155 @@ The lease mechanism ensures that hosts that have been moved or are switched off 
 In addition to the four most common DHCP messages, you might also see other DHCP messages in packet captures as follows:<br>
 <br>
 <ul>
-<li><b>DHCPNAK:</b>b> A DHCPNAK is a negative acknowledgment from the DHCP server. For example, the server sends DHCPNAK if the client requests an address that is already in use by another client.</li><br>
-<li><b>DHCPDECLINE:</b>b> If the DHCP client determines the offered configuration parameters are invalid, it sends a DHCPDECLINE packet to the server, and the client must begin the lease process again.</li><br>
-<li><b>DHCPRELEASE:</b>b> After the client is ready to give up the DHCP IP address, it sends a DHCPRELEASE message.</li><br>
-<li><b>DHCPINFORM:</b>b> A DHCP client that already has an IP address can use DHCPINFORM message to request more information from the server. For example, browsers use DHCP Inform to obtain web proxy settings.</li>
+<li><b>DHCPNAK:</b> A DHCPNAK is a negative acknowledgment from the DHCP server. For example, the server sends DHCPNAK if the client requests an address that is already in use by another client.</li><br>
+<li><b>DHCPDECLINE:</b> If the DHCP client determines the offered configuration parameters are invalid, it sends a DHCPDECLINE packet to the server, and the client must begin the lease process again.</li><br>
+<li><b>DHCPRELEASE:</b> After the client is ready to give up the DHCP IP address, it sends a DHCPRELEASE message.</li><br>
+<li><b>DHCPINFORM:</b> A DHCP client that already has an IP address can use DHCPINFORM message to request more information from the server. For example, browsers use DHCP Inform to obtain web proxy settings.</li>
 </ul>
 <br>
 <b>DHCP Relay Agent</b><br>
 The DHCP server does not have to reside directly on the same subnet where the DHCP client resides. Moreover, it’s impractical to have a DHCP server on every subnet. Most enterprise networks will have a few centralized DHCP servers. The DHCP relay agent acts as an intermediary and ensures that local DHCP client requests are passed onto centralized DHCP servers. Any Layer 3 capable devices such as routers or switches can function as the DHCP relay agent.<br>
 <br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514641575.png" alt="" style="">
+<br>
+The primary function of a DHCP relay agent is to forward DHCP messages from the local clients to the remote DHCP server.<br>
+<br>
+When a DHCP relay agent receives a broadcast packet from a connected client, it examines the giaddr(Gateway IP Address) field. If the field has an IP address of 0.0.0.0, then the DHCP relay agent changes the giaddr field in DHCP packets from zero to the relay agent IP address and forwards the message to the remote subnet where the DHCP server is located.<br>
+<br>
+The DHCP server uses this IP address to select an IP address pool from which to assign the IP addresses to the DHCP client.<br>
+<br>
+The return packets from the DHCP server are directly sent to the relay agent identified in the giaddr field. The DHCP relay agent forwards or relays the reply to the DHCP client.<br>
+<br>
+<b>Capturing DHCP Examples</b><br>
+If you want to monitor DHCP communication between a DHCP server and a client, you can run a packet sniffing tool, such as tcpdump or dhcpdump, on the same local network and capture DHCP traffic. You can also run debug commands on Cisco IOS routers and switches if they are acting as DHCP servers or relay agents to view DHCP traffic going to or transiting these devices.<br>
+<br>
+Below is a sample <code>tcpdump</code>code> output from a Linux machine. The <code>tcpdump</code>code> capture shows renewals. Typically a client sends a REQUEST when the lease lifetime is 50% used up, and an ACK from the server resets the lifetime back to its full value.<br>
+<br>
+<pre>
+<code>
+root@Kali:~# tcpdump -i eth0 port 67 or port 68 -e -n
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+
+15:40:44.336909 00:0c:29:1b:a3:84 > ff:ff:ff:ff:ff:ff, ethertype IPv4 (0x0800), length 342: 0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 00:0c:29:1b:a3:84, length 300
+15:40:44.337311 00:50:56:fd:83:cd > 00:0c:29:1b:a3:84, ethertype IPv4 (0x0800), length 342: 192.168.198.254.67 > 192.168.198.1.68: BOOTP/DHCP, Reply, length 300
+16:01:58.549937 00:0c:29:1b:a3:84 > ff:ff:ff:ff:ff:ff, ethertype IPv4 (0x0800), length 365: 192.168.198.1.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 00:0c:29:1b:a3:84, length 323
+16:01:58.551804 00:50:56:fd:83:cd > 00:0c:29:1b:a3:84, ethertype IPv4 (0x0800), length 342: 192.168.198.254.67 > 192.168.198.1.68: BOOTP/DHCP, Reply, length 300		
+</code>
+</pre>
+<br>
+Packet sniffing is enabled on the port 67 (DHCP server port) and port 68 (DHCP client port). The <code>–e</code>code> parameter instructs the command to display the source and the destination MAC addresses. The <code>–n</code>code> parameter instructs the command not to convert the addresses to names. The <code>–i</code>code> parameter instructs the command to listen on the particular interface. Here, eth0 is the name of the interface.<br>
+<br>
+For in-depth analysis of the DHCP packets, use the dhcpdump tool. The following is a sample <code>dhcpdump</code> output from the Linux machine on the eth0 interface.<br>
+<br>
+<pre>
+<code>
+root@Kali:~# dhcpdump -i eth0
+[output omitted]
+
+TIME: 2016-07-22 18:03:26.783 
+    IP: 192.168.198.254 (0:50:56:fd:83:cd) > 192.168.198.128 (0:c:29:lb:a3:84) 
+    OP: 2 (BOOTPREPLY) 
+HTYPE: 1 (Ethernet) 
+HLEN: 6 
+HOPS: 0 
+XID: 98bd7222 
+SECS: 0 
+FLAGS: 0
+CIADDR: 0.0.0.0
+YIADDR: 192.168.198.128
+SIADDR: 192.168.198.254
+GIADDR: 0.0.0.0
+CHADDR: 00:0c:29:lb:a3:84:00:00:00:00:00:00:00:00:00:00 
+SNAME:  .
+FNAME:  .
+OPTION: 53 (  1) DHCP message type           5 (DHCPACK)
+OPTION: 54 (  4) Server identifier           192.168.198.254
+OPTION: 51 (  4) IP address leasetime        1800 (30m)
+OPTION:  1 (  4) Subnet mask                 255.255.255.0
+OPTION: 28 (  4) Broadcast address           192.168.198.255
+OPTION:  3 (  4) Routers                     192.168.198.2
+OPTION: 15 ( 11) Domainname                  localdomain
+OPTION:  6 (  4) DNS server                  192.168.198.2
+OPTION: 44 (  4) NetBIOS name server         192.168.198.2
+[output omitted]
+</code>
+</pre>
+<br>
+This output is more detailed than the <code>tcpdump</code>code> output. The <b>YIADDR</b> field is populated with the IP address of the client, and <b>SIADDR</b> field is populated with the IP address of the server. Notice the multiple options field in this output; multiple options were not available in the <code>tcpdump</code>code> output. For example, <b>Option 53</b> tells the DHCP message type. The message type in this output is <b>DHCPACK</b> message. The DHCP client lease time in the <b>Option 51</b> can also be seen.<br>
+<br>
+The IP address, subnet mask, default gateway, and the DNS server are the minimal configuration parameters that are required for the DHCP client to get online. In addition to that, DHCP server provides the DNS domain name, NETBIOS name servers, and so on, which can be seen in the <b>Options</b> section of this output.<br>
+<br>
+Apart from the configuration parameters that are mentioned in this output, DHCP server has the flexibility to provide other configuration parameters as well. For example, LWAP (Lightweight Access Point) can use the information that is provided in the <b>Option 43</b> to join the specific WLAN controllers. Similarly, IP phones and gateways can utilize the DHCP information that is provided in the <b>Option 150</b> to discover the TFTP server IP address for Image download. In this way, DHCP provides an expandable framework so that vendors can implement dynamic configuration for their product services.<br>
+<br>
+As an analyst examining the partially captured PCAP with the DHCP packets shown below, what suspicions should you determine?<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514642608.png" alt="" style="">
+<br>
+The above figure is an example of the result of using a tool that is called <b>Yersinia</b> to launch a DHCP attack against the DHCP server. The Yersinia tool is capable of generating DHCP DISCOVER requests using spoofed MAC address at a rapid rate to quickly exhaust the IP address pool on the DHCP server. All the DHCP clients of the victim network are starved of the DHCP resource. The attacker can then set up a rogue DHCP server on the network and perform man-in-the-middle attacks.<br>
+<br>
+As shown in the Wireshark output above, a large amount of DHCP discover packets are being broadcasted out using different spoofed MAC addresses. The DHCP server (192.168.200.1) then responded with the DHCP offer packets until all the available IP addresses are exhausted.<br>
+<br>
+<a name="IP Subnetting"></a>
+<b>IP Subnetting</b><br>
+To increase scalability, network administrators often need to divide networks (especially large networks) into subnetworks, or subnets. A subnet segments the hosts within the network. With proper network segmentation, even when attackers get in, their access is limited to only a segment of the network and not to the entire network. One very basic task that an analyst will need to perform is to determine which subnet that a given IP address belongs to. For example, when investigating the 10.1.1.36/24 IP address, one should be able to determine that this IP address belongs in the 10.1.1.0/24 subnet. Therefore, it is important for the security analyst to understand the purposes and functions of the subnets and their addressing schemes.<br>
+<br>
+A subnet segments the hosts within the network. Without subnets, the network has a flat topology. A flat topology has a small routing table and relies on MAC addresses to deliver packets. MAC addresses have no hierarchical structure. As the network grows, the use of the network bandwidth becomes less efficient.<br>
+<br>
+A company that occupies a three-story building might have a network that is divided by floors, with each floor divided into offices. Think of the building as the network, the floors as the three subnets, and the offices as the individual host addresses.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514649493.png" alt="" style="">
+<br>
+There are other disadvantages to a flat network. All devices share the same broadcast domain, and it is difficult to apply security policies because there are no boundaries between devices.<br>
+<br>
+In multiple-network environments, each subnetwork may be connected to the Internet by a single router. This figure shows one router connecting multiple subnetworks to the Internet. The details of the internal network environment and how the network is divided into multiple subnetworks are inconsequential to other IP networks.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514649614.png" alt="" style="">
+<br>
+The advantages of subnetting a network are as follows:<br>
+<br>
+<ul>
+<li>Smaller networks are easier to manage and map to geographical or functional requirements.</li><br>
+<li>Contain the broadcast traffic to the individual subnets to improve performance.</li><br>
+<li>More easily apply network security measures at the interconnections between subnets than within a large single network.</li>
+</ul>
+<br>
+<b>Subnet Masks</b><br>
+The IP addressing that is used in the flat network must be modified to accommodate the required segmentation. A subnet mask identifies the network-significant portion of an IP address. The network-significant portion of an IP address is simply the part that identifies the network that the host device is on. This part is called the network address and defines every subnetwork. The use of segmentation is important for the routing operation to be efficient.<br>
+<br>
+A subnet mask:<br>
+<br>
+<ul>
+<li>Defines the number of bits that represent the network and subnet part of the address</li><br>
+<li>Is used by end systems to identify the destination IP address as either local or remote</li><br>
+<li>Is used by Layer 3 devices to determine network path</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514649851.png" alt="" style="">
+<br>
+How do you know how many bits represent the network portion of the address and how many bits represent the host portion? When you express an IPv4 network address, you add a prefix length to the network address. The prefix length is the number of bits in the address that give the network portion. For example, in 172.16.55.87 /20, /20 is the prefix length. It tells you that the first 20 bits are the network address, leaving the remaining 12 bits as the host portion. The entity that is used to specify the network portion of an IPv4 address to the network devices is called the subnet mask. The subnet mask consists of 32 bits, just as the address does, and uses 1s and 0s to indicate which bits of the address are network bits and which bits are host bits. You express the subnet mask in the same dotted decimal format as the IPv4 address. The subnet mask is created by placing a binary 1 in each bit position that represents the network portion and placing a binary 0 in each bit position that represents the host portion. Both the network and host portion of the subnet mask must be continuous. A /20 prefix is expressed as a subnet mask of 255.255.240.0 (11111111.11111111.11110000.00000000). The remaining bits (low order) of the subnet mask are zeroes, indicating the host address within the network.<br>
+<br>
+The subnet mask is configured on a host with its IPv4 address to help the host determine the network portion of that address. The host makes this determination by logically ANDing the binary bits of its IPv4 address with the binary bits of the subnet mask.<br>
+<br>
+Networks are not always assigned the same prefix. Depending on the number of hosts on the network, the prefix that is assigned may be different. Having a different prefix number changes the host range and broadcast address for each network.<br>
+<br>
+For example, look at the host 10.1.20.70/26:<br>
+<br>
+<ul>
+<li>
+Address:<br>
+ - 10.1.20.70<br>
+ - 00001010.00000001.00010100.01000110<br>
+</li><br>
+<li>
+Subnet mask:<br>
+ - 255.255.255.192<br>
+ - 11111111.11111111.11111111.11000000<br>
+</li><br>
+<li>
+Network address:<br>
+ - 10.1.20.64<br>
+ - 00001010.00000001.00010100.01000000<br>
+</li>
+</ul>
+<br>
+<b>Variable-Length Subnet Masking</b><br>
