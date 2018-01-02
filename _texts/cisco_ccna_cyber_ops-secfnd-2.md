@@ -8,18 +8,15 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 2: Understanding the Networ
 <a href="#Hubs, Bridges, and Layer 2 Switches">2.4 Hubs, Bridges, and Layer 2 Switches</a><br>
 <a href="#VLANs and Trunks">2.5 VLANs and Trunks</a><br>
 <a href="#Spanning Tree Protocols">2.6 Spanning Tree Protocols</a><br>
-<a href="#">2.</a><br>
-<a href="#">2.</a><br>
-<a href="#">2.</a><br>
+<a href="#Standalone (Autonomous) and Lightweight Access Points">2.7 Standalone (Autonomous) and Lightweight Access Points</a><br>
+<a href="#Routers">2.8 Routers</a><br>
+<a href="#Routing Protocols">2.9 Routing Protocols</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -397,4 +394,171 @@ This log information is a MAC flap notification message and tells that the MAC a
 For example, if there is an attacker on the port G1/2 trying to spoof the MAC address of the host on G1/1, then there is a possibility that the switch generated the log message. This type of event is not always triggered by an attacker. Sometimes, in a network with redundant links, due to misconfigurations or interface flaps, STP might toggle the redundant links, which also could have caused the MAC address flap.<br>
 <br>
 In the scenario above, a security analyst can use their knowledge of STP to analyze the log information and narrow down the issue a lot faster, which can save time while identifying or correlating attacks on the network infrastructure.<br>
+<br>
+<a name="Standalone (Autonomous) and Lightweight Access Points"></a>
+<b>Standalone (Autonomous) and Lightweight Access Points</b><br>
+Wireless networks are everywhere today; at home, in shopping malls, at coffee shops, at the airport, at the office, and so on. There are many attacks that can be launched against wireless networks. A very basic attack is where the attacker hosts a rogue wireless AP to lure victims to connect to it so that the attacker can capture the victim's traffic. A rogue AP is an access point that has been installed on a secure network without explicit authorization from a system administrator. Understanding the concepts of autonomous and the lightweight access points will help the security analyst in their mission to secure these important yet vulnerable network resources.<br>
+<br>
+A wireless AP is a wireless LAN networking hardware device that allows a Wi-Fi compliant device with a wireless network adaptor to connect to a wired network. The AP converts the radio frequency communications into digital signals and vice versa. The AP usually connects to a router via a wired Ethernet connection as a standalone device. The AP can also be an integral component of the router itself. A Wi-Fi hotspot is the physical location where Wi-Fi access to a wireless LAN is available.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514733608.png" alt="" style="">
+<br>
+The figure shows two types of wireless access points. In the standalone solution, to make changes on the autonomous APs, the administrator must connect to each access point and perform the changes. In the controller-based solution, to make changes on the LWAPs (Lightweight Access Point), the administrator has to connect just to the WLAN controller and perform the changes.<br>
+<br>
+<b>Standalone (Autonomous) APs</b><br>
+Standalone (autonomous) APs can be configured one-by-one and offer complete functionality by themselves; they are well-adapted for very small deployments. Standalone APs support standalone network configurations, where all configuration settings are maintained locally. Each standalone AP can load its starting configuration independently, and still operate in a cohesive fashion on the network. The autonomous AP is equipped with both wired and wireless hardware so that wireless client associations can be terminated onto a wired connection locally at the AP. The APs and their data connections must be distributed across the coverage area and across the network.<br>
+<br>
+Autonomous APs are self-contained, each offering one or more fully functional, standalone BSSs (Basic Service Set). BSS is wireless service that is provided by an AP to one or more associated clients. The AP serves as a single point of contact for every device that wants to use the BSS. It advertises the existence of the BSS so that devices can find it and try to join. To do that, the AP uses a unique BSSID (Basic Service Set Identifier) that is based on the AP’s own radio MAC address.<br>
+<br>
+In addition, the AP advertises the wireless network with an SSID (Service Set Identifier), which is a text string containing a logical name. Think of the BSSID as a machine-readable name tag that uniquely identifies the BSS ambassador (the AP), and the SSID as a non-unique, human-readable name tag that identifies the wireless service.<br>
+<br>
+Autonomous APs are also a natural extension of a switched network, connecting wireless SSIDs to wired VLANs at the access layer.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514733943.png" alt="" style="">
+<br>
+The above figure shows the basic architecture of an autonomous AP and focuses on just one AP and its connections. The wireless network consists of two SSIDs: WLAN 100 and WLAN 200, which correspond to wired VLANs 100 and 200, respectively. The VLANs must be trunked from the distribution layer switch (where routing commonly takes place) to the access layer, where they are extended further over a trunk link to the AP.<br>
+<br>
+Wireless users join using the SSIDs and the data has to travel only through the AP to reach the network on the other side. An autonomous AP must also be configured with a management IP address (10.10.10.10 in the figure) so that you can remotely manage it. The management address is not normally part of any of the data VLANs, so a dedicated management VLAN (VLAN 10 in the figure) must be added to the trunk links to reach the AP.<br>
+<br>
+<b>Lightweight APs</b><br>
+There are some disadvantages in using the autonomous APs. As a network administrator, you are in charge of selecting and configuring the channel that is used by each autonomous AP and detecting and dealing with any rogue APs that might be interfering. You must also manage things such as the transmit power level to make sure that the wireless coverage is sufficient, does not overlap too much, and there are no coverage holes—even when an AP’s radio fails.<br>
+<br>
+Managing wireless network security can also be difficult. Each autonomous AP handles its own security policies, with no central point of entry between the wireless and wired networks. That means there is no convenient place to monitor traffic for things such as intrusion detection and prevention, quality of service, bandwidth policing, and so on.<br>
+<br>
+Early implementers of WLAN systems that used "fat" access points (autonomous or intelligent APs) found that the implementation and configuration of such APs was the equivalent of deploying and managing hundreds of individual firewalls, each requiring constant attention to ensure correct firmware, configuration, and safeguarding. Even worse, APs are often deployed in physically unsecured areas where theft of an AP could result in someone accessing its configuration to gain information to aid in some other form of malicious activity.<br>
+<br>
+To overcome the limitations of distributed autonomous APs, many of the functions that are found within autonomous APs have to be shifted toward some central location.<br>
+<br>
+LWAPs rely on a central WLC (Wireless LAN Controller) where the configuration is managed. LWAPs retrieve their configurations from a central WLC. They are called "lightweight" APs because most of the wireless LAN administration work is done by the central WLC.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514734264.png" alt="" style="">
+<br>
+The above figure shows how most of the activities that are performed by an autonomous AP are broken up into two groups for the lightweight AP: management processes on the top and real-time processes on the bottom.<br>
+<br>
+The real-time processes involve sending and receiving IEEE 802.11 frames, beacons, and probe messages. 802.11 data encryption is also handled in real time, on a per-packet basis. The AP must interact with wireless clients on some low level, which is known as the MAC layer. These functions must stay with the AP, closest to the clients.<br>
+<br>
+The management functions are not integral to handling frames over the RF channels, but are things that should be centrally administered. Therefore, those functions are moved to a centrally located platform away from the AP.<br>
+<br>
+The two devices must use a tunneling protocol between them, to carry 802.11-related messages and also client data. Lightweight AP and WLC can be located on the same VLAN or IP subnet, but they do not have to be. Instead, they can be located on two entirely different IP subnets in two entirely different locations.<br>
+<br>
+The CAPWAP (Control and Provisioning of Wireless Access Points) tunneling protocol makes this possible by encapsulating the data between the LWAP and WLC within new IP packets. The tunneled data can then be switched or routed across the campus network.<br>
+<br>
+Once CAPWAP tunnels are built from a WLC to one or more lightweight APs, the WLC can begin offering various additional functions such as the following:<br>
+<br>
+<ul>
+<li>Dynamic channel assignment</li><br>
+<li>Transmit power optimization</li><br>
+<li>Self-healing wireless coverage</li><br>
+<li>Flexible client roaming</li><br>
+<li>Dynamic client load balancing</li><br>
+<li>Security management</li><br>
+<li>Wireless intrusion protection system</li>
+</ul>
+<br>
+Let's explore sample log information that is related to AP in more detail.<br>
+<br>
+<pre>
+<code>
+Sat Sep 12 17:42:39 2015: 00:0b:85:51:5a:e0 Received CAPWAP DISCOVERY REQUEST from AP 00:0b:85:51:5a:e0 to ff:ff:ff:ff:ff:ff on port '1'
+Sat Sep 12 17:42:39 2015: 00:0b:85:51:5a:e0 Successful transmission of CAPWAP Discovery-Response to AP 00:0b:85:51:5a:e0 on Port 1
+Sat Sep 12 17:42:50 2015: 00:0b:85:51:5a:e0 Received CAPWAP JOIN REQUEST from AP 00:0b:85:51:5a:e0 to 00:0b:85:33:52:80 on port '1'
+Sat Sep 12 17:42:50 2015: spamRadiusProcessResponse: AP Authorization failure for 00:0b:85:51:5a:e0
+</code>
+</pre>
+<br>
+This log shows the LWAP that is trying to join the controller. Review the CAPWAP messages that are exchanged between the APs and the WLAN controller, and finally, the AP authorization failure message for the AP with the MAC address of 00:0b:85:51:5a:e0.<br>
+<br>
+With the basic understanding of a CAPWAP tunnel and how it is built between the WLC and the LWAP, a security analyst can identify whether the request made by the LWAP is valid or not. As it is an LWAP, all the configurations will need be performed on the WLC. So, the security analyst can quickly check or suggest that the network administrator checks the WLC for the AP’s MAC address, 00:0b:85:51:5a:e0, and determine whether the AP is valid or a rogue AP that is trying to get into the network.<br>
+<br>
+As part of their job role, the security analyst will often be required to narrow down an issue to a specific root cause. In this example, with the knowledge of APs, a security analyst is able to analyze the logs to identify or correlate attacks on the network, and plan or implement security measures efficiently.<br>
+<br>
+<a name="Routers"></a>
+<b>Routers</b><br>
+Understanding how routers operate helps the security analyst better understand adversary operations that are taken against routers in the network and analyze output logs generated by these devices. For example, if an attacker can corrupt a router’s routing table, the attacker can redirect the victim’s traffic to the attacker. Therefore, the analyst needs to be able to understand the content of the router’s routing table and how that information is learned.<br>
+<br>
+Routing is the process that routers, OSI network layer devices, use to forward data packets between networks or subnetworks. The routing process uses network routing tables, protocols, and algorithms to determine the most efficient path for forwarding an IP packet. Routers gather routing information and update other routers about changes in the network. Routers greatly expand the scalability of networks by terminating Layer 2 collisions and broadcast domains.<br>
+<br>
+<ul>
+<li>Routers are required to reach hosts that are not in the local network.</li><br>
+<li>Routers use a routing table to route between networks.</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514735812.png" alt="" style="">
+<br>
+While switches switch data frames between segments to enable communication within a single network, routers are required to reach hosts that are not in the local LAN. Routers enable internetwork communication by placing the interface of each router in the network of the other routers. They use routing tables to route traffic between different networks.<br>
+<br>
+Routers are devices that gather routing information from neighboring routers in the network. The routing information that is processed locally goes into the routing table. The routing table contains a list of all destinations that are known to the router and the information how to reach them. Routers have these two important functions:<br>
+<br>
+<ul>
+<li><b>Path determination:</b> Routers must maintain their own routing tables and ensure that other routers know about changes in the network. Routers use a routing protocol to communicate network information to other routers. A routing protocol distributes the information from a local routing table on the router. Different protocols use different methods to populate the routing table. In the <code>show ip route</code> output in the figure, the first letter in each line of the routing table indicates which protocol was the source for the information (for example, O = OSPF). It is possible to statically populate routing tables by manually configuring static routes (S = static). However, statically populating routing tables does not scale well and leads to problems when the network topology changes. Static routes can also pose routing issues when the network design changes or when link outages occur.<br>
+<br>
+Administrative distance is the feature that routers use to select the best path when there are two or more routes to the same destination network from two routing protocols. Routing protocols use different metrics to measure the distance and desirability of a path to a destination network. The metric calculation is done by the routing protocol. You can influence it by adjusting bandwidth, applying route-maps, or offset lists. Once the protocol is determined, the lowest metric is used to choose the appropriate route within the protocol when there are two or more routes to the same destination network. Administrative distance defines the reliability of a routing protocol. Each routing protocol is prioritized from most to least reliable (believable) with the help of an administrative distance value.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514736115.png" alt="" style="">
+<br>
+For example, in the figure, the router on the far left has two paths to the destination network on the far right. One of the paths is learned through a dynamic routing protocol, OSPF, and the other path is learned through EIGRP. Since EIGRP has a better (lower) administrative distance than OSPF, the router on the far left will use the EIGRP path and publish only the EIGRP path to the destination network in its routing table.
+</li><br>
+<li><b>Packet forwarding:</b> Routers use the routing table to determine where to forward packets. Routers forward packets through a network interface toward the destination network. Each line of the routing table indicates which network interface is used to forward a packet. The destination IP address in the packet defines the packet destination. Routers use their local routing table and compare the entries to the destination IP address of the packet. If there are multiple entries to the destination in the local routing table, the longer prefixes are always preferred over shorter ones when forwarding a packet. The result is a decision about which outgoing interface to use to send the packet out of the router. If routers do not have a matching entry in their routing tables, the packets are dropped and the router sends an ICMP message to the source address of the packet.</li>
+</ul>
+<br>
+<b>Types of Routes</b><br>
+Routers can learn about other networks via directly connected networks, static routes, dynamic routes, and default routes. This topic describes each of these types of routes.<br>
+<br>
+The routing table can be populated by these methods:<br>
+<br>
+<ul>
+<li><b>Directly connected networks:</b> This entry comes from having router interfaces that are directly attached to network segments. This method is the most certain method of populating a routing table. If the interface fails or is administratively shut down, the entry for that network is removed from the routing table. The administrative distance is 0 and therefore preempts all other entries for that destination network. Entries with the lowest administrative distance are the best, most-trusted sources.</li><br>
+<li><b>Static routes:</b> A system administrator manually enters static routes directly into the configuration of a router. The default administrative distance for a static route is 1; therefore, static routes will be included in the routing table unless there is a direct connection to that network. Static routes can be an effective method for small, simple networks that do not change frequently. For bigger or unstable networks, static routes are not a scalable solution.</li><br>
+<li><b>Dynamic routes:</b> The router learns dynamic routes automatically when a routing protocol is configured and a neighbor relationship to other routers is established. The information changes with changes in the network and updates constantly. Larger networks require the dynamic routing method because there are usually many addresses and constant changes. These changes require updates to routing tables across all routers in the network, or connectivity is lost.</li><br>
+<li><b>Default routes:</b> A default route is an optional entry that is used when no explicit path to a destination is found in the routing table. The default route can be manually inserted or it can be populated from a dynamic routing protocol.</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514736690.png" alt="" style="">
+<br>
+The figure displays the <code>show ip route</code> command, which is used to show the contents of the routing table in a router. The first part of the output explains the codes, presenting the letters and the associated source of the entries in the routing table.<br>
+<br>
+<ul>
+<li>C is for the directly connected networks.</li><br>
+<li>L is for the local routes and indicates local interfaces within connected networks.</li><br>
+<li>S is for the static routes. The letter S with an asterisk (*) indicates a static default route.</li><br>
+<li>O is for the OSPF routing protocol.</li><br>
+<li>D is for the EIGRP routing protocol. The letter D stands for DUAL, the update algorithm used by EIGRP.</li>
+</ul>
+<br>
+<a name="Routing Protocols"></a>
+<b>Routing Protocols</b><br>
+Routing is one of the most important parts of the infrastructure that keeps a network running. Successful attacks against routers compromise the router itself, its peering sessions, or its routing information. Routing protocols are used by routers to learn routes and maintain routing tables. Having a basic knowledge of routing protocols will help the security analysts to identify potential attacks and take protective measures to prevent them.<br>
+<br>
+The basic objective of routing protocols is to exchange network reachability information between routers and dynamically adapt to network changes. These protocols use routing algorithms to determine the optimal path between different segments in the network, and update routing tables with the best paths.<br>
+<br>
+It is best practice to use one IP routing protocol throughout the enterprise, if possible. Often, one may manage network infrastructures where several routing protocols will coexist. One common example of when multiple routing protocols are used is when the organization needs to connects to two or more ISPs for Internet connectivity. In this scenario, the most commonly used protocol to exchange routes with the service provider is BGP (Border Gateway Protocol), while within the organization, OSPF (Open Shortest Path First) or EIGRP (Enhanced Interior Gateway Routing Protocol) are typically used.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514850379.png" alt="" style="">
+<br>
+Several different possibilities exist when choosing the optimal routing protocol for your organization. There is no one optimal selection, so it is important that you understand the benefits and drawbacks of each protocol. The different routing protocols can be grouped in several ways. One option is to group them based on whether protocols operate within or between AS's (Autonomous System).<br>
+<br>
+An AS represents a collection of network devices under a common administrator. Typical examples of an AS are an internal network of an enterprise or a network infrastructure of an ISP.<br>
+<br>
+<ul>
+<li><b>Interior gateway protocols:</b> IGPs are used within the organization, and exchange routes within an AS. They can support small, medium-sized, and large organizations, but their scalability has its limits. The protocols can offer very fast convergence, and basic functionality is easy to configure. The most commonly used IGPs in enterprises are EIGRP and OSPF. RIP (Routing Information Protocol) is also used, but rarely. IS-IS (Intermediate System-to-Intermediate System) is commonly found within the service provider internal network.</li><br>
+<li><b>Exterior gateway protocols:</b> EGPs take care of exchanging routes between different ASs. BGP is the only EGP that is used today. The main capability of BGP is to exchange a huge number of routes between different ASs that are part of the Internet.</li><br>
+<br>
+Routing protocols can also be grouped based on how they operate.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514850674.png" alt="" style="">
+<br>
+<li><b>Distance vector protocols:</b> The distance vector routing approach determines the direction (vector) and distance (such as link metric or number of hops) to any link in the network. Distance vector protocols use routers as signposts along the path to the final destination. The only information that a router knows that about a remote network is the distance or metric to reach this network and which path or interface to use to get there. Distance vector routing protocols do not have an actual map of the network topology. While at first, the distance vector protocols supported only the periodic exchange of routing information, the two most commonly used distance vector protocols, EIGRP and RIPv2, use triggered updates to respond to topology changes.</li><br>
+<li><b>Link-state protocols:</b> The link-state approach, which uses the SPF algorithm, creates an abstract of the exact topology of the entire network, or at least of the partition in which the router is situated. Using an analogy of signposts, a link-state routing protocol is like having a complete map of the network topology. The signposts along the way from the source to the destination are not necessary because all link-state routers use an identical "map" of the network. A link-state router uses the link-state information to create a topology map and to select the best path to all destination networks in the topology. The OSPF and IS-IS protocols are examples of link-state routing protocols.</li><br>
+<li><b>Path vector protocols:</b> The path vector routing approach exchanges not only information about the existence of destination networks but also the path on how to reach the destination. Path information is used to determine the best paths and to prevent routing loops. Using an analogy of signposts, routers are not only familiar with the direction of the destination network but also with the specific path to the destination. The only widely used path vector protocol is BGP.</li>
+</ul>
+<br>
+Routing protocols like BGP, IS-IS, OSPF, EIGRP, and RIPv2 provide a set of tools such as routing protocol authentication to help secure the routing infrastructure.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514851042.png" alt="" style="">
+<br>
+n the above sample log information, the IP address, 192.168.1.2 is sending the RIPv1 Request to the broadcast address, 255.255.255.255 on that segment. Routing Information Protocol (RIP) is one of the oldest distance-vector routing protocols which uses UDP 520 as its transport protocol. RIPv1 has no support for router authentication.<br>
+<br>
+While analyzing the logs, if you see many messages like the one shown above, it is possible that an attacker is trying to perform the DoS attack to make the network resources unavailable. A malicious attacker can also spoof the source IP address and craft the same request query type as above, in order to form neighbors with nearby routers and get the complete routing information of the network. Once the network information is exposed, attackers may explore entire networks, and perform large-scale attacks.<br>
+<br>
+The log message can also be generated when a legitimate router sends the RIPv1 request. With routing protocol knowledge, a security analyst can be aware of the circumstances when they get these types of log messages, and identify or correlate attacks faster on the networks.<br>
 <br>
