@@ -14,10 +14,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 2: Understanding the Networ
 <a href="#Multilayer Switches">2.10 Multilayer Switches</a><br>
 <a href="#NAT Fundamentals">2.11 NAT Fundamentals</a><br>
 <a href="#Packet Filtering with ACLs">2.12 Packet Filtering with ACLs</a><br>
-<a href="#">2.</a><br>
-<a href="#">2.</a><br>
-
-<a name=""></a>
+<a href="#ACLs with the Established Option">2.13 ACLs with the Established Option</a><br>
 
 <a name="Analyzing DHCP Operations"></a>
 <b>Analyzing DHCP Operations</b><br>
@@ -702,3 +699,52 @@ Common options include:<br>
 <li>When the traffic is TCP, the presence of the ACK bit or the RST bit can be verified. Under normal TCP connection flow, neither of these bits is ever set in the first packet of a new TCP connection.</li>
 </ul>
 <br>
+Packet filtering is commonly implemented on Cisco IOS routers and switches. ACLs are used to classify packets. ACLs can be used for various functions on a Cisco IOS router. For example, they can be used to classify which packets are permitted into a priority queue. They can be used to classify which networks an OSPF process will advertise or which network advertisements an OSPF process will accept. They can be used to classify which packets will have their forwarding path specified by a policy-based route.<br>
+<br>
+When an ACL is applied to an interface with the <code>access-group</code> command, it implements a packet filter. Consider the following ACL applied to the gi0/1 interface in the inbound direction regarding the topology that is depicted above:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514911175.png" alt="" style="">
+<br>
+The ACL describes a policy of what is permitted and denied from the user subnet to the server subnet. To be effective, it can either be applied inbound on the interface connecting to the user subnet or it can be applied outbound to the interface connected to the server subnet. Some points of interest in this example include:<br>
+<br>
+<ul>
+<li>Clients on the user subnet are permitted to send packets to TCP ports 80 and 443 on the two web servers on the server subnet.</li><br>
+<li>Clients on the user subnet are permitted to send packets to TCP ports 20 and 21 on the FTP server on the server subnet.</li><br>
+<li>Standard FTP will function. Clients establish the control channel by connecting to port 21 on the FTP server. When the client requests a data transfer, it will obtain an ephemeral TCP port from its operating system and convey the appropriate port to the FTP server. The server will then open a data channel by connecting from TCP port 20 to the specified ephemeral port on the client. All packets that are sent from the client to the server that is associated with this data connection will be sent to TCP port 20.</li><br>
+<li>Passive FTP will not function. Clients establish the control channel by connecting to port 21 on the FTP server. When the client requests a data transfer, it specifies the request as passive. The server application then requests an ephemeral port from its operating system and communicates the port to the client. The client then initiates the data channel by connecting to the ephemeral port on the server. This connection would not be allowed by the ACL as written, which is a single example of the difficulty packet filters have in handling protocols which use dynamically negotiated connections.</li><br>
+<li>No connections are allowed from the user subnet to the SQL server. The SQL server is there to provide real time data to be presented by the web servers. Access to the data must be through the interface that is provided by the web servers. The SQL server is largely protected from the user subnet.</li><br>
+<li>There is an explicit deny for all other packets as the last entry in the ACL. While this line is not required to deny all packets that were not matched by earlier entries, it does serve two purposes. First, hit counters are maintained for each line in the ACL. The administrator can use the <code>show access-list 100</code> command to view the ACL and each entry’s hit count. Without the explicit deny, there would be no record of the number of packets that were denied by the ACL. Also, the explicit deny uses the <code>log</code> argument, which will cause the generation of syslog messages that are associated with the denies, which can facilitate central audit trails of rejected traffic. Unfortunately, ACL logging can be CPU intensive and can negatively affect other functions of the network device. It should therefore be used with discretion.</li>
+</ul>
+<br>
+<pre>
+<code>
+Note:
+By default, there is an implicit deny ip any any entry at the end of every ACL. Anything that is not explicitly permitted is denied.
+</code>
+</pre>
+<br>
+The <code>ip access-group</code> command is then used to apply the access list to an interface.<br>
+<br>
+A primary focus of the security analysts is to investigate the ACL-related logs to identify or correlate attacks on the network. It would also be beneficial if a security analyst can assist the network administrators in troubleshooting or fixing certain issue by looking at the logs.<br>
+<br>
+<pre>
+<code>
+Mar 30 2016 11:41:48.681 EDT: %SEC-6-IPACCESSLOGP: list 185 denied tcp 172.16.1.92(59078) -> 192.168.2.1(80), 1 packet
+</code>
+</pre>
+<br>
+Take a sample scenario where there is a complaint that the hosts on the 172.16.1.0/24 subnet cannot access the 192.168.2.1 Internal web server. For example, the above denied tcp log message indicates the connection from the source IP address, 172.16.1.92, to the destination IP address, 192.168.2.1 on TCP port 80, is denied.<br>
+<br>
+With the basic knowledge of the access control list, a security analyst can quickly verify the ACL configuration regarding the 192.168.2.1 web server and the hosts on the 172.16.1.0/24 subnet. In this case, if it is not intended to deny the traffic from the hosts on the 172.16.1.0/24 subnet to the 192.168.2.1 web server on TCP port 80, and it looks to be a configuration issue, the security analyst can report the findings to the network administrator.<br>
+<br>
+<a name="ACLs with the Established Option"></a>
+<b>ACLs with the Established Option</b><br>
+A common requirement for access control is to allow TCP connections from the trusted network to a non-trusted network, and not allow TCP connections from a non-trusted network to the trusted network. Consider the figure below. A potential requirement is to allow hosts on NetA to initiate TCP connections to hosts on NetB, but not allow hosts on NetB to initiation connections to hosts on NetA.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514919085.png" alt="" style="">
+<br>
+Stateless devices such as routers do not track the state of TCP connections and are challenged to meet this requirement. Cisco IOS extended ACLs provide the <code>established</code> keyword to approximate stateful behavior. The <code>established</code> keyword requires that either the ACK bit or the RST bit to be set in the TCP flags of a packet. Consider access-list 102 depicted below. It permits TCP packets from any source IP address to any destination IP address as long as either the TCP ACK bit or the TCP RST bit is set. This ACL is applied to R1 on interface Ethernet 0 in the inbound direction. Effectively, this will allow TCP connections originating from NetA and destined for NetB. At the same time it will deny TCP connections originating from NetB and destined for NetA.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514919315.png" alt="" style="">
+<br>
+Note that there are no ACL restrictions for packets originating from NetA and destined for NetB.
