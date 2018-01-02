@@ -747,4 +747,25 @@ Stateless devices such as routers do not track the state of TCP connections and 
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1514919315.png" alt="" style="">
 <br>
-Note that there are no ACL restrictions for packets originating from NetA and destined for NetB.
+Note that there are no ACL restrictions for packets originating from NetA and destined for NetB. The position and direction of the ACL only affects packets arriving from NetB. With no restrictions, a host on NetA can initiate a TCP connection to a host on NetB by sending a TCP SYN to start the three-way handshake. The reply packet from the host on NetB will have the TCP SYN and ACK bits set. This meets the <code>established</code> keyword criteria and is allowed. For the duration of this TCP connection, all packets from the host on NetB will have the ACK bit set, and hence the TCP connection is allowed. On the other hand, if a host on NetB attempts to initiate a TCP connection with a host on NetA, the first step of the three-way handshake is denied. This packet only has the SYN bit set. It does not meet the criteria of the <code>established</code> keyword.<br>
+<br>
+It is important to understand that the <code>established</code> keyword does not imply stateful inspection. Each packet is considered independently with no consideration of TCP connection state. Consider this scenario. Access-list 102 does not permit ICMP traffic at all. Hence, hosts on NetB cannot use ICMP echo to perform a ping scan of NetA. But, given access-list 102, they can perform an ACK scan. A host on NetB could send crafted TCP packets with the ACK bit set to IP addresses on NetA. The active hosts on NetA will respond with TCP reset packets. Sending a TCP ACK and waiting for a TCP RST is fundamentally the same as sending an ICMP echo and waiting for an ICMP echo reply. A stateful packet filter would recognize that the crafted TCP ACK does not belong to an established TCP connection and would drop the packet.<br>
+<br>
+This example is used to demonstrate the utility and the limitations of the established keyword available for TCP access control entries. In this scenario, the ACL is applied inbound on the interface that is connected to the untrusted network, but it could also be applied outbound on the interface that is connected to the trusted network.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514923916.png" alt="" style="">
+<br>
+Consider the following ACL regarding the topology that is depicted above:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514924264.png" alt="" style="">
+<br>
+In this scenario, the ACL would most likely be applied inbound on the interface that is connected to the untrusted network. Clients on the trusted network can establish the FTP control channel by connecting to TCP port 21 on the FTP server. The connection is initiated with a three-way handshake. The first packet, sent from the client to the server, only sets the SYN flag in the TCP header and it presents the clients initial sequence number. The server then responds with a packet that has both the SYN bit and the ACK bit set. The server presents its initial sequence number and it acknowledges the clients initial sequence number. The client then completes the three-way handshake with an ACK, acknowledging the server’s initial sequence number. Note that all packets from the server that are associated with this connection have the ACK bit set<br>
+<br>
+FTP passive mode data channels can also establish. The FTP server will specify the ephemeral port to the client through the FTP control channel. The passive mode data channel is then opened with the client connecting to the server on the specified ephemeral port. As with the control channel, all packets from the server back to the client will have the ACK bit set.<br>
+<br>
+However, standard mode FTP data channels will not function. The client will specify the ephemeral port to the server through the FTP control channel. The three-way handshake then begins with a TCP SYN sent from the FTP server to the client from source TCP port 20. This packet does not have the ACK bit set and hence the packet will be denied.<br>
+<br>
+The last thing to point out in this scenario is an example of a limitation of relying on packet filters that reference the TCP flags in the TCP header of packets. Imagine the attacker in the topology wants to start reconnaissance by mapping out the IP addresses of hosts on the trusted side of the packet filter. Note that the ACL will not permit ping via ICMP echo requests. The attacker can, however, make clever use of an “ACK scan.” Instead of sending an ICMP echo request, the attacker can send a TCP packet with the ACK bit set to a destination address. Since the ACK bit is set, these packets will match the established keyword reference in the ACL and will be permitted. If there is a host present, that host will respond with a TCP reset (a TCP packet with the RST bit set) in response. The attacker can perform the same sort of reconnaissance as it could with ICMP ping. If a reset response is received, the IP address is active. If not, the IP address is not active.<br>
+<br>
+
+
