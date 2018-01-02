@@ -11,13 +11,12 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 2: Understanding the Networ
 <a href="#Standalone (Autonomous) and Lightweight Access Points">2.7 Standalone (Autonomous) and Lightweight Access Points</a><br>
 <a href="#Routers">2.8 Routers</a><br>
 <a href="#Routing Protocols">2.9 Routing Protocols</a><br>
-<a href="#">2.</a><br>
+<a href="#Multilayer Switches">2.10 Multilayer Switches</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 <a href="#">2.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -561,4 +560,68 @@ n the above sample log information, the IP address, 192.168.1.2 is sending the R
 While analyzing the logs, if you see many messages like the one shown above, it is possible that an attacker is trying to perform the DoS attack to make the network resources unavailable. A malicious attacker can also spoof the source IP address and craft the same request query type as above, in order to form neighbors with nearby routers and get the complete routing information of the network. Once the network information is exposed, attackers may explore entire networks, and perform large-scale attacks.<br>
 <br>
 The log message can also be generated when a legitimate router sends the RIPv1 request. With routing protocol knowledge, a security analyst can be aware of the circumstances when they get these types of log messages, and identify or correlate attacks faster on the networks.<br>
+<br>
+<a name="Multilayer Switches"></a>
+<b>Multilayer Switches</b><br>
+There are many different types of attacks that can occur at Layer 2 and Layer 3 in campus environments. It is important for analysts to understand how multilayer switches operate including how frame and packet forwarding take place on the switch. This knowledge will help when creating network defense mechanisms and can decrease the adversary's likelihood of success with each subsequent intrusion attempt.<br>
+<br>
+Multilayer switches (also known as Layer 3 switches) not only perform Layer 2 switching, but also forward frames that are based on Layer 3 and 4 information. Multilayer switches use ASIC (Application-Specific Integrated Circuit) hardware to perform header rewrites and forwarding.<br>
+<br>
+The below figure shows a typical multilayer switch and the decision processes that must occur.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514904519.png" alt="" style="">
+<br>
+Packets arriving on a switch port are placed in the appropriate ingress queue, just as in a Layer 2 switch. Each packet is pulled off an ingress queue and inspected for both Layer 2 and Layer 3 destination addresses.<br>
+<br>
+As with a Layer 2 switch, there are questions that need answers:<br>
+<br>
+<ul>
+<li>Where should I forward the frame?</li><br>
+<li>Should I even forward the frame?</li><br>
+<li>How should I forward the frame?</li>
+</ul>
+<br>
+Decisions about these three questions are made as follows:<br>
+<br>
+<ul>
+<li><b>Layer 2 forwarding table:</b> MAC addresses in the CAM (Content-Addressable Memory) table are used as indexes. If the frame encapsulates a Layer 3 packet that needs to be routed, the destination MAC address of the frame is that of the Layer 3 port on the multilayer switch.</li><br>
+<li><b>Layer 3 forwarding table:</b> The IP addresses in the FIB (Forwarding Information Base) table are used as indexes. The best match to the destination IP address is the Layer 3 next-hop address. The FIB also lists next-hop MAC addresses, the egress switch port, and the VLAN ID, so there is no need for additional lookup.</li><br>
+<li><b>ACLs:</b> The TCAM (Ternary Content-Addressable Memory) contains these ACLs (Access Control List). A single lookup is needed to decide whether the frame should be forwarded. TCAM is a specialized CAM designed for rapid table lookups.</li><br>
+<li><b>QoS:</b> Incoming frames can be classified according to QoS (Quality of Service) parameters. Traffic can then be prioritized and rate-limited. QoS decisions are also made by the TCAM in a single table lookup.</li>
+</ul>
+<br>
+After CAM and TCAM table lookups are done, the packet is placed into an egress queue on the appropriate outbound Layer 3 switch port. The appropriate egress queue is determined by QoS, and more important packets are processed first.<br>
+<br>
+On a Cisco Catalyst switch, a Layer 3 SVI (Switch Virtual Interface) can be configured for any VLAN that exists on the Layer 3 switch. The SVI provides Layer 3 processing for packets from all switch ports that are associated with that VLAN. Only one SVI can be associated with a VLAN. The SVI can be the default gateway for a VLAN so traffic can be routed between VLANs. The SVI also provides Layer 3 IP management connectivity to the switch.<br>
+<br>
+<b>Frame Rewrite</b><br>
+A multilayer switch, like a router, obtains next-hop destinations from the FIB table. Before forwarding the frame, it needs to rewrite certain parts of the frame.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1514905763.png" alt="" style="">
+<br>
+When the frame arrives on the port, the destination MAC address of the frame belongs to the multilayer switch. After the switch processes the frame, the next-hop Layer 2 address must be put into the frame in place of the original destination address. The source MAC address of the frame is replaced with the MAC address that belongs to the multilayer switch. Also, the TTL is decreased by one, like with a router. The source and destination IP addresses stay the same.<br>
+<br>
+When the frame arrives on the port, the switch does checksum calculation on the frame and IP packet to ensure that there was no frame or packet corruption during transit. Again, the frame and packet checksums are recalculated before being sent out of the switch.<br>
+<br>
+<b>CAM and TCAM Tables</b><br>
+Cisco Catalyst switches maintain CAM and TCAM tables. CAM is used in Layer 2 switching and TCAM is used in Layer 3 switching. Both tables are kept in fast memory so that processing of data is quick.<br>
+<br>
+<ul>
+<li>CAM:<br>
+ - MAC address-to-port mappings<br>
+ - Layer 2 forwarding decisions
+</li><br>
+<li>TCAM:<br>
+ - Found in multilayer switches and routers<br>
+ - ACL, QoS, and other information for upper-layer processing
+ - Switches can have multiple TCAMs to boost performance.
+</li>
+</ul>
+<br>
+Multilayer switches forward frames and packets at wire speed by using ASIC hardware. Specific Layer 2 and Layer 3 components, such as learned MAC addresses or ACLs, are cached into the hardware. These tables are stored in CAM and TCAM.<br>
+<br>
+<ul>
+<li><b>CAM table:</b> The CAM table is the primary table that is used to make Layer 2 forwarding decisions. The table is built by recording the source MAC address and inbound port of all incoming frames. When a frame arrives at the switch with a destination MAC address of an entry in the CAM table, the frame is forwarded out through only the port that is associated with that specific MAC address. If no exact match is found, the switch floods the packet out of all ports in the VLAN, except the incoming port.</li><br>
+<li><b>TCAM table:</b> The TCAM table stores ACL, QoS, and other information that is generally associated with upper-layer processing. Most switches have multiple TCAMs, such as one for inbound ACLs, one for outbound ACLs, one for QoS, and so on. Multiple TCAMs allow switches to perform different checks in parallel, thus shortening the packet-processing time. Cisco switches perform CAM and TCAM lookups in parallel. This behavior is the reason that Cisco switches do not suffer any performance degradation by enabling QoS or ACL processing.</li>
+</ul>
 <br>
