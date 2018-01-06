@@ -6,7 +6,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 3: Understanding Common TCP
 <a href="#Legacy TCP/IP Vulnerabilities">3.2 Legacy TCP/IP Vulnerabilities</a><br>
 <a href="#IP Vulnerabilities">3.3 IP Vulnerabilities</a><br>
 <a href="#ICMP Vulnerabilities">3.4 ICMP Vulnerabilities</a><br>
-<a href="#">3.</a><br>
+<a href="#TCP Vulnerabilities">3.5 TCP Vulnerabilities</a><br>
 <a href="#">3.</a><br>
 <a href="#">3.</a><br>
 <a href="#">3.</a><br>
@@ -19,8 +19,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 3: Understanding Common TCP
 <a href="#">3.</a><br>
 <a href="#">3.</a><br>
 
-
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -98,3 +96,63 @@ The following are the security issues of ICMP messages that a security analyst n
 <br>
 </li><br>
 </ul>
+<br>
+<a name="TCP Vulnerabilities"></a>
+<b>TCP Vulnerabilities</b><br>
+TCP segments reside within IP packets. The TCP header appears immediately after the IP header and supplies information specific to the TCP protocol. TCP provides more functionality than UDP, at the cost of higher overhead, but additional fields in the TCP header help provide reliability, flow control, and stateful communication. Reliable communication is the largest benefit of TCP. TCP incorporates acknowledgments to guarantee delivery instead of relying on upper-layer protocols to detect and resolve errors. If a timely acknowledgment is not received, the sender retransmits the data. But requiring acknowledgments of received data can cause substantial delays. TCP implements flow control to address this issue. Rather than acknowledge one segment at a time, multiple segments can be acknowledged with a single acknowledgment segment.<br>
+<br>
+TCP stateful communication between two parties happens by way of TCP three-way handshake. Before data can be transferred using TCP, a three-way handshake opens the TCP connection. If both sides agree to the TCP connection, data can be sent and received by both parties using TCP. At the conclusion of the TCP session, a four-way handshake generally closes the TCP connection gracefully where a typical tear-down requires a pair of FIN and ACK segments from each TCP endpoint.<br>
+<br>
+Examples of application-layer protocols that make use of TCP reliability are DNS zone transfers, HTTP, SMB, SSL/TLS, FTP, and so on.<br>
+<br>
+Though TCP protocol is a connection-oriented and reliable protocol, there are still vulnerabilities that can be exploited. These vulnerabilities are explained in terms of following attacks:<br>
+<br>
+<ul>
+<li><b>TCP SYN flooding:<b> TCP SYN flooding causes a DoS attack. It exploits an implementation characteristic of the TCP that can be used to make server processes incapable of responding to any legitimate client's requests. Any service, such as server applications for email, web, and file storage, that binds to and listens on a TCP socket, is potentially vulnerable to TCP SYN flooding attacks. The basis of the SYN flooding attack lies in the design of the three-way handshake that begins a TCP connection.<br>
+<br>
+TCP connections that have been initiated but not finished are called half-open connections. A finite-sized data structure in each host is used to store the state of the half-open connections. As shown in the figure below, an attacking host can send an initial SYN packet with a spoofed IP address, and then the victim sends the SYN-ACK packet, and waits for a final ACK to complete the three-way handshake. If the spoofed address does not belong to a host, then this connection stays in the half-open state indefinitely, thus occupying the finite-sized data structure. If there are enough half-open connections to fill up the entire finite-sized data structure, then the host cannot accept further TCP connection requests, thus denying service to the legitimate TCP connections.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515246367.png" alt="" style="">
+<br>
+Setting a time limit for half-open connections, then deleting them after the timeout, can help with the TCP SYN flooding problem, but the attacker may continuously send the TCP SYN flood attack traffic. The attacked host will not have space to accept new incoming legitimate TCP connections, but the TCP connection that was established before the attack will have no effect. In this type of attack, the attacker has no interest in examining the responses from the victim. When the spoofed address does belong to a connected host, that host sends a reset to indicate the end of the handshake.<br>
+<br>
+The following are some variations of the TCP SYN flooding attack methods:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515246519.png" alt="" style="">
+<br>
+ - <b>Direct attack:</b> When attackers rapidly send SYN segments without spoofing their IP source address, that is a direct attack. This method of attack is very easy to perform because it does not involve directly injecting or spoofing packets below the user level of the attacker's operating system. It can be performed by simply using many TCP connect() calls. To be effective, attackers must prevent their operating system from responding to the SYN-ACKs in any way, because any ACKs, RSTs, or ICMP messages will allow the listener to move the TCP out of SYN-RECEIVED. This scenario can be accomplished through firewall rules that either filter outgoing packets to the listener (allowing only SYNs out), or filter incoming packets so that any SYN-ACKs are discarded before they reach the local TCP processing code. When detected, this type of attack is very easy to defend against—a simple firewall rule to block packets with the attacker's source IP address is all that is needed. This defense behavior can be automated, and such functions are available in off-the-shelf reactive firewalls.<br>
+<br>
+ - <b>Spoofing-based attack:</b> Another form of SYN flooding attacks uses IP address spoofing, which might be considered more complex than the method used in a direct attack. Instead of merely manipulating local firewall rules, the attacker also needs to be able to form and inject raw IP packets with valid IP and TCP headers. Popular libraries exist to aid with raw packet formation and injection, therefore attacks that are based on spoofing are actually fairly easy. For spoofing attacks, a primary consideration is address selection. If the attack is to succeed, the machines at the spoofed source addresses must not respond in any way to the SYN-ACKs that are sent to them. A very simple attacker might spoof only a single source address that it knows will not respond to the SYN-ACKs, either because no machine physically exists at the address presently, or because of some other property of the address or network configuration. Another option is to spoof many different source addresses, assuming that some percentage of the spoofed addresses will be unrespondent to the SYN-ACKs. This option is accomplished either by cycling through a list of source addresses that are known to be desirable for the purpose, or by generating addresses inside a subnet with similar properties.<br>
+<br>
+ - <b>Distributed attacks:</b> The real limitation of single-attacker spoofing-based attacks is that if the packets can somehow be traced back to their true source, the attacker can be easily shut down. Although the tracing process typically involves some time and coordination between ISPs, it is not impossible. A distributed version of the SYN flooding attack, in which the attacker takes advantage of numerous drone machines throughout the Internet, is much more difficult to stop. The example that is shown in figure above, the drones use direct attacks. But to increase the effectiveness even further, each drone could use a spoofing attack and multiple spoofed addresses. Currently, distributed attacks are feasible because there are several "botnets" or "drone armies" of thousands of compromised machines that are used by criminals for DoS attacks. Drone machines are constantly added or removed from the armies and can change their IP addresses or connectivity, so it is quite challenging to block these attacks.<br>
+<br></li><br>
+<li><b>TCP session hijacking:</b> TCP hijacking is the oldest type of session hijacking. Session hijacking is the attempt to overtake an already active session between two hosts. TCP session hijacking is different from IP spoofing, in which you spoof an IP address or MAC address of another host. With IP spoofing, you still need to authenticate to the target. With TCP session hijacking, the attacker takes over an already-authenticated host as it communicates with the target. The attacker will probably spoof the IP address or MAC address of the host, but session hijacking involves more than address spoofing.<br>
+<br>
+As discussed earlier, sequence numbers are exchanged during a TCP three-way handshake, as follows:<br>
+<br>
+<ol>
+<li>Host A sends a SYN bit set packet with a sequence number to Host B to establish a TCP session. The sequence number is used to assure the transmission of packets in a chronological order. It is increased by one with each packet. Both sides of the connection wait for a packet with a specified sequence number. The first seq-number for both directions is random.</li><br>
+<li>Host B will reply with a packet that has the SYN and ACK bits set and contains an initial sequence number. The packet also contains an acknowledgment number, which is the seq-number of the client + 1.</li><br>
+<li>Host A will reply with an ACK bit set packet to Host B with ISN (Initial Sequence Number) + 1.</li>
+</ol>
+<br>
+If attackers manage to predict the ISN, they can actually send the last ACK data packet to the server, spoofing as the original host, and then hijack the TCP connection. Systems with poor TCP ISN generation are vulnerable to blind TCP spoofing attacks. Attackers can make a full connection to those systems and send, but not receive, data while spoofing a different IP address. The target's logs will show the spoofed IP address, and the attacker can take advantage of any trust relationship between the server and the client. This attack was popular in the mid-90's when people commonly used rlogin, which is an rsh (similar to SSH) that allows users to log in on another host via the network, communicating using TCP port number 513. While the rlogin family is mostly a thing of the past, other types of session hijacking are still actively being used. Session hijacking can also be done at the application level. At the application level, a hijacker can hijack already existing sessions but can also create new sessions from the stolen data, for example, HTTP session hijacking. Hijacking an HTTP session involves obtaining the session ID of the HTTP session, which is the unique identifier of the HTTP session. One way for the attacker to obtain the session ID is by sniffing the HTTP packets. Tools that can be used to perform session hijacking attacks include Juggernaut, Hunt, TTY Watcher, and T-Sight.<br>
+<br>
+Hijacking a TCP session requires an attacker to send a packet with a right seq-number, otherwise they are dropped. The attacker has two options to get the right seq-number:<br>
+<br>
+ - <b>Non-blind spoofing:</b> The attacker can see the traffic that is being sent between the host and the target. Non-blind spoofing is the easiest type of session hijacking to perform, but it requires attacker to capture packets as they are passing between the two machines. Spoofing-based attacks were discussed earlier in TCP SYN flooding attack methods.<br>
+<br>
+ - <b>Blind spoofing:</b> The attacker cannot see the traffic that is being sent between the host and the target. Blind spoofing is the most difficult type of session hijacking because it is nearly impossible to correctly guess TCP sequence numbers. TCP sequence prediction is a type of blind hijacking because an attacker needs to make an educated guess on the sequence numbers between the host and target. In TCP-based applications, sequence numbers inform the receiving machine which order to put the packets in if they are received out of order. Sequence numbers are a 32-bit field in the TCP header. Therefore, they range from 1 to 4,294,967,295. Every byte is sequenced, but only the sequence number of the first byte in the segment is put in the TCP header. To effectively hijack a TCP session, you must accurately predict the sequence numbers that are being used between the target and host.<br>
+<br></li><br>
+<li><b>TCP reset attack:</b> The TCP reset attack, also known as "forged TCP reset" or "spoofed TCP reset packet," is a technique of maliciously killing TCP communications between two hosts. A TCP connection is terminated by using the FIN bit in the TCP flags or by using the RST bit. The regular way that a TCP connection is torn down is by using the FIN bit in the TCP flags. One side of the connection sends a packet with the FIN bit set. The other side of the connection responds with two packets, an ACK, and a FIN of its own. This last FIN is acknowledged by the original station, indicating that the connection has been closed on both sides, as shown in the figure below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515247612.png" alt="" style="">
+<br>
+Closing a connection can also be done by using the RST bit in the TCP flags field. In most packets, the RST bit is set to 0 and has no effect. If the RST bit is set to 1, it indicates to the receiving computer that the computer should immediately stop using the TCP connection. A reset indicates that this connection is considered closed, and there is no need to send additional packets. A reset is an abrupt way to tear down the TCP connection. Resets are commonly seen when TCP data packets are sent to a server where no connection has been established, or when SYNs are sent to a port that the server is not listening on. The server should reply with a reset, showing that the connection is closed or unavailable, as shown in the figure below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515247745.png" alt="" style="">
+<br>
+Resets can also be sent by applications when a user is suddenly kicked out of an application. When the RST bit is used as designed, it can be a useful tool. But it is possible for an attacker to monitor the TCP packets on the connection and then send a spoofed packet containing a TCP reset to one or both endpoints. The headers in the spoofed packet must indicate, falsely, that the RST packet came from the victim host and not from the attacker. Every field in the IP and TCP headers must be set to a convincing spoofed value for the fake RST packet to trick the victim host into closing the TCP connection. Properly formatted spoofed TCP resets can be a very effective way to disrupt any TCP connection that the attacker can monitor.
+</li>
+</ul>
+<br>
