@@ -7,9 +7,9 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 3: Understanding Common TCP
 <a href="#IP Vulnerabilities">3.3 IP Vulnerabilities</a><br>
 <a href="#ICMP Vulnerabilities">3.4 ICMP Vulnerabilities</a><br>
 <a href="#TCP Vulnerabilities">3.5 TCP Vulnerabilities</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
+<a href="#UDP Vulnerabilities">3.6 UDP Vulnerabilities</a><br>
+<a href="#Attack Surface and Attack Vectors">3.7 Attack Surface and Attack Vectors</a><br>
+<a href="#Reconnaissance Attacks">3.8 Reconnaissance Attacks</a><br>
 <a href="#">3.</a><br>
 <a href="#">3.</a><br>
 <a href="#">3.</a><br>
@@ -19,9 +19,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 3: Understanding Common TCP
 <a href="#">3.</a><br>
 <a href="#">3.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -108,7 +105,7 @@ Examples of application-layer protocols that make use of TCP reliability are DNS
 Though TCP protocol is a connection-oriented and reliable protocol, there are still vulnerabilities that can be exploited. These vulnerabilities are explained in terms of following attacks:<br>
 <br>
 <ul>
-<li><b>TCP SYN flooding:<b> TCP SYN flooding causes a DoS attack. It exploits an implementation characteristic of the TCP that can be used to make server processes incapable of responding to any legitimate client's requests. Any service, such as server applications for email, web, and file storage, that binds to and listens on a TCP socket, is potentially vulnerable to TCP SYN flooding attacks. The basis of the SYN flooding attack lies in the design of the three-way handshake that begins a TCP connection.<br>
+<li><b>TCP SYN flooding:</b> TCP SYN flooding causes a DoS attack. It exploits an implementation characteristic of the TCP that can be used to make server processes incapable of responding to any legitimate client's requests. Any service, such as server applications for email, web, and file storage, that binds to and listens on a TCP socket, is potentially vulnerable to TCP SYN flooding attacks. The basis of the SYN flooding attack lies in the design of the three-way handshake that begins a TCP connection.<br>
 <br>
 TCP connections that have been initiated but not finished are called half-open connections. A finite-sized data structure in each host is used to store the state of the half-open connections. As shown in the figure below, an attacking host can send an initial SYN packet with a spoofed IP address, and then the victim sends the SYN-ACK packet, and waits for a final ACK to complete the three-way handshake. If the spoofed address does not belong to a host, then this connection stays in the half-open state indefinitely, thus occupying the finite-sized data structure. If there are enough half-open connections to fill up the entire finite-sized data structure, then the host cannot accept further TCP connection requests, thus denying service to the legitimate TCP connections.<br>
 <br>
@@ -155,4 +152,111 @@ Closing a connection can also be done by using the RST bit in the TCP flags fiel
 Resets can also be sent by applications when a user is suddenly kicked out of an application. When the RST bit is used as designed, it can be a useful tool. But it is possible for an attacker to monitor the TCP packets on the connection and then send a spoofed packet containing a TCP reset to one or both endpoints. The headers in the spoofed packet must indicate, falsely, that the RST packet came from the victim host and not from the attacker. Every field in the IP and TCP headers must be set to a convincing spoofed value for the fake RST packet to trick the victim host into closing the TCP connection. Properly formatted spoofed TCP resets can be a very effective way to disrupt any TCP connection that the attacker can monitor.
 </li>
 </ul>
+<br>
+<a name="UDP Vulnerabilities"></a>
+<b>UDP Vulnerabilities</b><br>
+UDP is a connectionless transport-layer protocol that provides an interface between IP and upper-layer processes. UDP protocol ports distinguish multiple applications running on a single device from one another. Unlike the TCP, UDP adds no reliability, flow-control, or error-recovery functions to IP. Because of UDP’s simplicity, UDP headers contain fewer bytes and consume less network overhead than TCP. The UDP segment’s header contains only source and destination port numbers, a UDP checksum, and the segment length. UDP is useful in situations where the reliability mechanisms of TCP are not necessary, such when a higher-layer protocol might provide error and flow control. UDP is the transport protocol for several well-known application-layer protocols, including NFS, SNMP, DNS, TFTP, and real-time services, such as online games, streaming media, and VoIP.<br>
+<br>
+UDP is vulnerable because the checksum, which is an optional field that is used to detect transmission errors, is easy to recompute for attackers who want to alter application data. UDP has no algorithm for verifying the sending packet source. An attacker can eavesdrop on UDP packets and make up false UDP packets, pretending that the UDP packet is sent from another source (spoofing). The receiver of the packet has no guarantee that the source IP address in the receiving packet is the real source of the packet. For example, SNMPv1 and DNS messages use UDP as transport protocol, and are vulnerable to eavesdropping. It is easy for an attacker to eavesdrop on and make up false messages using UDP, as long as the attacker knows the format of the messages that are sent and that the messages are not encrypted.<br>
+<br>
+Most attacks involving UDP relate to exhaustion of some shared resource (buffers, link capacity, and so on), or exploitation of bugs in protocol implementations, causing system crashes or other insecure behavior. Both fall into the broad category of DoS attacks. For example, in UDP flood attacks, similar to TCP flood attacks, the main goal of the attacker is to cause system resource starvation. A UDP flood attack is triggered by sending many UDP packets to random ports on the victim's system. The victim's system will notice that no application is listening on that port and reply with an ICMP destination port unreachable packet. If many UDP packets are sent, the victim will be forced to send numerous ICMP destination port unreachable packets. Usually, these attacks are accomplished by spoofing the attacker's source IP address. Software, such as Low Orbit Ion Cannon and UDP Unicorn, can be used to perform UDP flooding attacks.<br>
+<br>
+The SQL Slammer worm attack of 2003 is a classic example of a software security vulnerability involving UDP port 1434. Microsoft SQL Server 2000 contains three vulnerabilities that can allow a remote attacker to execute arbitrary code or crash the server. The vulnerabilities lie in the SQL Server 2000 Resolution Service. SQL Server 2000 allows several instances of the SQL server to be used on a single machine. Because multiple instances cannot use the standard SQL server session port, TCP port 1433, other instances listen on assigned ports. The SQL Server Resolution Service, which operates on UDP port 1434, responds to the clients' query, so the clients can connect to the appropriate SQL server instance. Two buffer overflow vulnerabilities can be exploited by sending a specially malformed packet to the SQL Server Resolution Service on UDP port 1434 to cause the heap or the stack memory to be overwritten. If remote attackers successfully exploit the vulnerabilities, they can execute arbitrary code on the system. An unsuccessful attempt is likely to crash the SQL server service. The arbitrary code would be executed in the security context of the SQL server and may be able to perform any database function. Exploit code for the discussed vulnerabilities is publicly available.<br>
+<br>
+A DoS vulnerability can also be exploited through the SQL keep-alive mechanism over UDP port 1434. The SQL server system uses a keep-alive mechanism to determine which instances are active and which are inactive. When an instance receives a keep-alive packet with the value of 0x0A on UDP port 1434, it generates and returns to the sender a keep-alive packet with the same 0x0A value. If the first keep-alive packet has been spoofed to appear to come from another SQL server system's UDP port 1434, both servers will continually send packets with the value of 0x0A to each other, generating a packet storm that continues until one of the servers is brought offline or rebooted.A DoS vulnerability can also be exploited through the SQL keep-alive mechanism over UDP port 1434. The SQL server system uses a keep-alive mechanism to determine which instances are active and which are inactive. When an instance receives a keep-alive packet with the value of 0x0A on UDP port 1434, it generates and returns to the sender a keep-alive packet with the same 0x0A value. If the first keep-alive packet has been spoofed to appear to come from another SQL server system's UDP port 1434, both servers will continually send packets with the value of 0x0A to each other, generating a packet storm that continues until one of the servers is brought offline or rebooted.<br>
+<br>
+<a name="Attack Surface and Attack Vectors"></a>
+<b>Attack Surface and Attack Vectors</b><br>
+Attack surface is the total sum of all the vulnerabilities in a given computing device or network that are accessible to the attackers. Attack surface may be categorized into different areas, such as software attack surfaces (open ports on a server), physical attack surfaces (USB ports on a laptop), network attack surfaces (console ports on a router), and human/social engineering attack surfaces (employees with access to sensitive information).<br>
+<br>
+Attack vectors are the paths or means by which the attackers gain access to a resource (such as end-user hosts or servers) in order to deliver malicious software or malicious outcome. Attack vectors enable the attackers to exploit system vulnerabilities. Many attack vectors take advantage of the human element in the system, because that is often the weakest link. For example, if the attack vector is a malicious file, then the victim needs to be tricked into opening it for the attack to work.<br>
+<br>
+A smaller attack surface can help make the organization less exploitable, reducing the risk. A greater attack surface makes the organization more vulnerable to attacks, which increases the risk.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515331976.png" alt="" style="">
+<br>
+Attack surfaces can be divided in to the following four categories:<br>
+<br>
+<ul>
+<li>The <b>network</b> attack surface comprises all vulnerabilities that are related to ports, protocols, channels, devices (smart phones, laptops, routers, and firewalls), services, network applications (SaaS), and even firmware interfaces. For example, some network protocols are inherently more insecure than others as they pass data over the network unencrypted. These protocols include Telnet, FTP, HTTP, and SMTP. Many network file systems, such as NFS and SMB, pass information over the network unencrypted. Remote memory dump services, like netdump, also pass the contents of memory over the network unencrypted. Memory dumps can contain passwords or, even worse, database entries and other sensitive information. Other services, such as <code>finger</code> and <code>rwhod</code>, reveal information about users of the system. Network printers are also the target of a wide array of attacks from hackers because the operating system driver, management tools, and the printer’s software make them vulnerable. Printers can be attacked via the web-based administrative interface, SMTP, FTP, and SNMP.</li><br>
+<li>The <b>software</b> attack surface is the complete profile of all functions in any code that is running in a given system that is available to an unauthenticated user. An attacker or a piece of malware can use various exploits to gain access and run code on the target machine. The software attack surface is calculated across many different kinds of code, including applications, email services, configurations, compliance policy, databases, executables, DLLs, web pages, mobile apps, device OS, and so on. Unpatched software, such as Java, Adobe Reader, and Adobe Flash, also provide greater software attack surface because they are widely used. Publicly known cybersecurity vulnerabilities are listed in CVE libraries. Common CVE identifiers make it easier to share data across separate network security databases and tools, and provide a baseline for evaluating the coverage of an organization’s security tools.</li><br>
+<li>The <b>physical</b> attack surface is composed of the security vulnerabilities in a given system that are available to an attacker in the same location as the target. The physical attack surface is exploitable through inside threats such as rogue employees, social engineering ploys, and intruders who are posing as service workers. External threats include password retrieval from carelessly discarded hardware, passwords on sticky notes, and physical break-ins. Also, consider a scenario where an intruder steals or downloads the information from an entire drive and extracts the target data in the future.
+<pre>
+<code>
+Note:
+While the network and software attack surface categories are generally agreed upon within the IT industry, the other categories are more loosely defined. For example, you may see overlap between the physical and social engineering categories or references to social engineering as an attack vector within the physical attack surface.
+</code>
+</pre></li><br>
+<li>The <b>social engineering</b> attack surface usually takes advantage of human psychology: the desire for something free, the susceptibility to distraction, or the desire to be liked or to be helpful. A few examples of human social engineering attacks are fake calls to IT, where the attacker is posing as an employee to get a password; or media drops where an employee might find a flash drive in the parking lot, and when they use that device, they inadvertently execute automatic running code leading to a data breach. Socially engineered Trojans provide another method of attack. An end user browses to a website that is usually trusted, which prompts the end user to run a Trojan. Most of the time the website is a legitimate, innocent victim that has been temporarily compromised by hackers. Another very popular method is an APT attacker sends a very specific phishing campaign, which is known as spear-phishing, to multiple employees' email addresses. The phishing email contains a Trojan attachment, which at least one employee is tricked into running. After the initial execution and first computer takeover, an APT (advanced persistent threat) attacker can compromise an entire enterprise in a short time.</li>
+</ul>
+<br>
+An attack vector is a path or route by which an attack was carried out. Examples of attack vectors include malware that is delivered to users who are legitimately browsing mainstream websites, spam emails that appear to be sent by well-known companies but contain links to malicious sites, third-party mobile applications that are laced with malware that are downloaded from popular online marketplaces, and insiders using information access privileges to steal intellectual property from employers.<br>
+<br>
+Common security threats include the following:<br>
+<br>
+<ul>
+<li><b>Reconnaissance:</b> The attacker attempts to gather information about targeted computers or networks that can be used as a preliminary step toward a further attack seeking to exploit the target system. For example, what operating system is on the target systems? Is there a firewall? Which ports are available? What CMS does the system run? There are also sources of information such as Facebook, Twitter, and Google that can be used to gather information about organizations or persons that are being targeted.</li><br>
+<li><b>Known vulnerabilities:</b> The attacker finds weakness in hardware and software and then exploits those vulnerabilities. There are several online resources that publish information about vulnerabilities that have been discovered in different systems. Often, a proof-of-concept attack code will be provided with the vulnerability disclosure. Each platform has its own strengths and weakness. Once the target system is identified, it is simply a matter of trying out the different attacks for the targeted system to see if any of them work.</li><br>
+<li><b>SQL injection:</b> This attack works by manipulating the SQL database queries that the web application sends. An application can be vulnerable if it does not sanitize user input properly, or uses untrusted parameter values in database queries without validation.</li><br>
+<li><b>Phishing:</b> The attacker sends out spam email to thousands of recipients. The email contains a link to a malicious site that has been set up to look like, for instance, a regular bank’s site. When the user enters their credentials in the login form, it actually is captured by the malicious site and then used to impersonate that user on the real site. Spear phishing is another variation of the phishing attack, in which the attacker usually targets specific persons. The RSA breach in 2011, which resulted in unspecified data that are related to their SecurID product being stolen, started with a spear phishing attack.</li><br>
+<li><b>Malware:</b> Short for “malicious software,” malware may be computer viruses, worms, Trojan horses, dishonest spyware, and malicious rootkits.</li><br>
+<li><b>Weak authentication:</b> These attacks exploit poorly designed and/or implemented authentication mechanisms. Weak authentication usually means one or more of the following: weak, guessable passwords are allowed, no lockout enforcement after a specific number of invalid login attempts, or the password reset methods are not secure.</li>
+</ul>
+<br>
+Other common threats, such as security misconfiguration, cross-site scripting, cross-site request forgery, and HTTP header manipulation, have not been included in the list above.<br>
+<br>
+<a name="Reconnaissance Attacks"></a>
+<b>Reconnaissance Attacks</b><br>
+A reconnaissance attack is an attempt to learn more about the intended victim before attempting a more intrusive attack, such as an actual access or DoS. The goal of reconnaissance is to discover the following information about targeted computers or networks:<br>
+<br>
+<ul>
+<li>IP addresses, sub-domains, and related information on a target network</li><br>
+<li>Accessible UDP and TCP ports on target systems</li><br>
+<li>The operating system on target systems</li>
+</ul>
+<br>
+There are four main subcategories or methods for gathering network data:<br>
+<br>
+<ul>
+<li><b>Packet sniffers:</b> Packet sniffing, or packet analysis, is the process of capturing any data that are passed over the local network and looking for any information that may be useful to an attacker. The packet sniffer may be either a software program or a piece of hardware with software installed in it that captures traffic that is sent over the network, which is then decoded and analyzed by the sniffer. Tools, such as Wireshark, Ettercap, or NetworkMiner, give anyone the ability to sniff network traffic with a little practice or training.</li><br>
+<li><b>Ping sweeps:</b> A ping sweep is another kind of network probe. In a ping sweep, the attacker sends a set of ICMP echo packets to a network of machines, usually specified as a range of IP addresses, and sees which ones respond. The idea is to determine which machines are alive and which aren't. Once the attacker knows which machines are alive, he can focus on which machines to attack and work from there. The fping command is one of the many tools that can be used to conduct ping sweeps.</li><br>
+<li><b>Port scans:</b> A port scanner is a software program that surveys a host network for open ports. As ports are associated with applications, the attacker can use the port and application information to determine a way to attack the network. The attacker can then plan an attack on any vulnerable service that they find. Examples of insecure services, protocols, or ports include but are not limited to port 21 (FTP), port 23 (Telnet), port 110 (POP3), 143 (IMAP), and port 161 (SNMPv1 and SNMPv2) because protocols using these ports do not provide authenticity, integrity, and confidentiality. NMAP is one of the many tools that can be used for conducting port scans.</li><br>
+<li><b>Information queries:</b> Information queries can be sent via the Internet to resolve hostnames from IP addresses or vice versa. One of the most commonly used queries is the nslookup command. You can use nslookup by opening a Windows or Linux command prompt window on your computer and entering the nslookup command, followed by the IP address or hostname that you are attempting to resolve.</li>
+</ul>
+<br>
+<b>Passive and Active Reconnaissance</b><br>
+Initially, an attacker attempts to gain information about targeted computers or networks that can be used as a preliminary step toward a further attack seeking to exploit the target system. A reconnaissance attack can be active or passive.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515346349.png" alt="" style="">
+<br>
+<b>whois</b><br>
+Attackers passively start using standard networking command-line tools such as <code>dig</code>, <code>nslookup</code>, and <code>whois</code> to gather public information about a target network from DNS registries. The <code>nslookup</code> and <code>whois</code> tools are available on both Windows, UNIX, and Linux platforms, and <code>dig</code> (domain information groper) is available on UNIX and Linux systems.<br>
+<br>
+<b>Shodan Search Engine</b><br>
+Another innocuous tool is the Shodan search engine with metadata filter capabilities that can help an attacker identify a specific device, such as a computer, router, and server. For example, an attacker can search for a specific system, such as a Cisco 3945 router, running a certain version of the software, and then explore further vulnerabilities.<br>
+<br>
+<b>Robots.txt File</b><br>
+The Robots.txt file is another example where attacker can gather a lot of valuable information from a target's website. The Robots.txt file is publicly available and found on websites that gives instructions to web robots (also known as search engine spiders), about what is and is not visible using the robots exclusion protocol. An attacker can find the Robots.txt file in the root directory of a target website.<br>
+<br>
+After the passive reconnaissances, the attacker can start using active reconnaissance tools such as ping sweeps, traceroutes, port scans, or operating system fingerprinting to actually send packets to discover the target systems. One of the tools that can be used is traceroute to find out the IP addresses of routers and firewalls that protect victim hosts. Ping sweeps of the addresses can present a picture of the live hosts in a particular environment. After a list of live hosts is generated, the attacker can probe further by running port scans on the live hosts. The attacker can use this information to determine the easiest way to exploit a vulnerability.<br>
+<br>
+<b>NMAP Port Scan</b><br>
+Port scanning tools like Network Mapper can cycle through all well-known ports to provide a complete list of all services that are running on the hosts. Nmap is an open-source tool that is specialized in network exploration and security auditing. Design and operation of port scans uses two components: a host address and a port number that is used by host services. An attacker can attempt to connect to a device on a specified array of ports, such as 21 (FTP), 23 (Telnet) and 25 (SMTP). With the information received from these scans, an attacker can find open ports that could allow access to a network and launch more sophisticated attacks.<br>
+<br>
+<pre>
+<code>
+Note:
+NMAP supports a range of scanning options. The SYN scan (-sS option) is the default and most popular scan option. It can be performed quickly, scanning thousands of ports per second on a fast network not hampered by restrictive firewalls. It is also relatively unobtrusive and stealthy since it never completes TCP connections. For more information, refer to https://nmap.org.
+</code>
+</pre>
+<br>
+<b>Vulnerability Scanners</b><br>
+An authorized security administrator can use vulnerability scanners, such as Nessus and OpenVAS, to locate vulnerabilities in their own networks and patch them before they can be exploited. Of course, these tools can also be used by attackers to locate vulnerabilities before an organization even knows that they exist. After getting a foothold in a network, an attacker can use these same tools to pivot sideways and scan machines on the network to extend their positions.<br>
+<br>
+<pre>
+<code>
+Note:
+Use of vulnerability scanners by unauthorized personnel is usually a violation of governing security policies. Do not experiment with vulnerability scanners on networks unless you are explicitly authorized to do so.
+</code>
+</pre>
 <br>
