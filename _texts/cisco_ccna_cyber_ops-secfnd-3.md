@@ -10,23 +10,12 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 3: Understanding Common TCP
 <a href="#UDP Vulnerabilities">3.6 UDP Vulnerabilities</a><br>
 <a href="#Attack Surface and Attack Vectors">3.7 Attack Surface and Attack Vectors</a><br>
 <a href="#Reconnaissance Attacks">3.8 Reconnaissance Attacks</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-<a href="#">3.</a><br>
-
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
+<a href="#Access Attacks">3.9 Access Attacks</a><br>
+<a href="#Man-in-the-Middle Attacks">3.10 Man-in-the-Middle Attacks</a><br>
+<a href="#Denial of Service and Distributed Denial of Service">3.11 Denial of Service and Distributed Denial of Service</a><br>
+<a href="#Reflection and Amplification Attacks">3.12 Reflection and Amplification Attacks</a><br>
+<a href="#Spoofing Attacks">3.13 Spoofing Attacks</a><br>
+<a href="#DHCP Attacks">3.14 DHCP Attacks</a><br>
 
 <a name="Legacy TCP/IP Vulnerabilities"></a>
 <b>Legacy TCP/IP Vulnerabilities</b><br>
@@ -181,6 +170,7 @@ Attack surfaces can be divided in to the following four categories:<br>
 <li>The <b>network</b> attack surface comprises all vulnerabilities that are related to ports, protocols, channels, devices (smart phones, laptops, routers, and firewalls), services, network applications (SaaS), and even firmware interfaces. For example, some network protocols are inherently more insecure than others as they pass data over the network unencrypted. These protocols include Telnet, FTP, HTTP, and SMTP. Many network file systems, such as NFS and SMB, pass information over the network unencrypted. Remote memory dump services, like netdump, also pass the contents of memory over the network unencrypted. Memory dumps can contain passwords or, even worse, database entries and other sensitive information. Other services, such as <code>finger</code> and <code>rwhod</code>, reveal information about users of the system. Network printers are also the target of a wide array of attacks from hackers because the operating system driver, management tools, and the printer’s software make them vulnerable. Printers can be attacked via the web-based administrative interface, SMTP, FTP, and SNMP.</li><br>
 <li>The <b>software</b> attack surface is the complete profile of all functions in any code that is running in a given system that is available to an unauthenticated user. An attacker or a piece of malware can use various exploits to gain access and run code on the target machine. The software attack surface is calculated across many different kinds of code, including applications, email services, configurations, compliance policy, databases, executables, DLLs, web pages, mobile apps, device OS, and so on. Unpatched software, such as Java, Adobe Reader, and Adobe Flash, also provide greater software attack surface because they are widely used. Publicly known cybersecurity vulnerabilities are listed in CVE libraries. Common CVE identifiers make it easier to share data across separate network security databases and tools, and provide a baseline for evaluating the coverage of an organization’s security tools.</li><br>
 <li>The <b>physical</b> attack surface is composed of the security vulnerabilities in a given system that are available to an attacker in the same location as the target. The physical attack surface is exploitable through inside threats such as rogue employees, social engineering ploys, and intruders who are posing as service workers. External threats include password retrieval from carelessly discarded hardware, passwords on sticky notes, and physical break-ins. Also, consider a scenario where an intruder steals or downloads the information from an entire drive and extracts the target data in the future.
+<br>
 <pre>
 <code>
 Note:
@@ -260,3 +250,122 @@ Use of vulnerability scanners by unauthorized personnel is usually a violation o
 </code>
 </pre>
 <br>
+<a name="Access Attacks"></a>
+<b>Access Attacks</b><br>
+An access attack is an attempt to access another user account or network device through improper, unauthorized means. Access attacks exploit known vulnerabilities in authentication services, FTP services, and web services to gain entry to web accounts, confidential databases, and other sensitive information. After gaining access to your network with a valid account, an attacker can obtain lists of valid user and computer names and network information, modify server and network configurations, including access controls and routing tables, and modify, reroute, or delete your data.<br>
+<br>
+There are many attacks which can lead to a system being compromised, and allowing the attacker to gain unauthorized access to the system. The following are some prominent types of attacks:<br>
+<br>
+<ul>
+<li><b>Password attack</b> is typically used to obtain system access. When access is obtained, the attacker is able to read, modify, or delete data, and add, modify, or remove network resources. For example, tools like "John the ripper," and "Cain and Abel" are password cracker tools.</li><br>
+<li><b>Spoofing/masquerading</b> attack is a situation in which one person or program successfully masquerades as another by falsifying data and gaining illegitimate access.</li><br>
+<li><b>Session hijacking</b> is an attack in which the session established by the client to the server is taken over by a malicious person or process.</li><br>
+<li><b>Malware</b> is used to infect the victim's system with malicious software.</li>
+</ul>
+<br>
+<a name="Man-in-the-Middle Attacks"></a>
+<b>Man-in-the-Middle Attacks</b><br>
+MITM attacks, sometimes referred to as eavesdropping attacks or connection hijacking attacks, exploit inherent vulnerabilities of TCP/IP protocol at various layers. The attack is a derivative of packet sniffing and spoofing techniques and if carried out properly, it can be completely invisible to the victims, making it difficult to detect and stop. Generally, in MITM attacks, a system that has the ability to view the communication between two systems imposes itself in the communication path between those other systems. The main objective is to steal the information being transmitted between two parties. TCP/IP works on a handshake (SYN, SYN-ACK, ACK). This three-way handshake establishes a connection between two different network interface cards, which then use packet sequencing and data acknowledgements to send or receive data. The data flows from the physical layer all the way up to the application layer. As a security analyst, it is important to understand that MITM attacks may occur at the different layers.<br>
+<br>
+Examples of OSI layer MITM attacks include the following:<br>
+<br>
+<ul>
+<li><b>Physical layer:</b> Tap someone's physical connection, and send all packets to the MITM</li><br>
+<li><b>Data link layer:</b> Use ARP poisoning to cause victims to send all their packets to the MITM</li><br>
+<li><b>Network layer:</b> Manipulate packet routing to route all the packets to the MITM</li><br>
+<li><b>Session layer:</b> The SSL/TLS MITM de-crypts, examines, then re-encrypts the HTTP over SSL/TLS traffic. For this attack to work, the victim's web browser must trust the certificate that is presented by the SSL/TLS MITM which can be caused by first injecting some malware into the victim's web browser.</li><br>
+<li><b>Application layer:</b> Man-in-the-browser attack. Like most attacks, man-in-the-browser begins with a malware infection. The malware injects itself into the victim's web browser, and waits in stealth mode until the user visits a specific web site. At that point, the malware goes into action, tricking the user into entering sensitive information on the web page. Different types of malware typically have different attack targets hard-coded into its code. For example, Zeus generally targets banking sites. When the malware is activated, it may manipulate the web page being loaded by injecting extra fields into the web page to collect sensitive pieces of information, or act as a keylogger to intercept the data. The idea is that no matter how careful you are about scrutinizing URLs and ensuring that you go to the correct web site, the web browser cannot be trusted because it has been compromised.</li><br>
+<li><b>ARP poisoning:</b> An ARP-based MITM attack is achieved when an attacker poisons the ARP cache of two devices with the MAC address of the attacker's NIC. Once the ARP caches have been successfully poisoned, each victim device sends all its packets to the attacker when communicating to the other device and puts the attacker in the middle of the communications path between the two victim devices. It allows an attacker to easily monitor all communication between victim devices. The intent is to intercept and view the information being passed between the two victim devices and potentially introduce sessions and traffic between the two victim devices.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515366410.png" alt="" style="">
+<br>
+The figure illustrates an ARP-based MITM attack. The attacker poisons the ARP caches of hosts A and B so that each host will send all its packets to the attacker when communicating to the other host.<br>
+<br>
+A MITM attack can be passive or active. In passive attacks, attackers steal confidential information. In active attacks, attackers modify data in transit or inject data of their own. ARP cache poisoning attacks often target a host and the host’s default gateway. ARP cache poisoning puts the attacker as a MITM between the host and all other systems outside of the local subnet.<br></li><br>
+<li><b>ICMP-based MITM attack:</b> An ICMP MITM attack is accomplished by spoofing an ICMP redirect message to any router that is in the path between the victim client and server. An ICMP redirect message is typically used to notify routers of a better route; however, it can be abused to effectively route the victim's traffic through an attacker-controlled router. The threat of this attack is mitigated by routers that have static routes and routers that do not accept/process ICMP redirect packets.</li><br>
+<li><b>DNS-based MITM attack:</b> DNS spoofing is an MITM technique that is used to supply false DNS information to a host so that when they attempt to browse, for example, http://www.xyzbank.com at the IP address XXX.XX.XX.XX, the host is actually sent to an imposter https://www.xyzbank.com that is residing at IP address YYY.YY.YY.YY, which an attacker has created in order to steal online banking credentials and account information from unsuspecting users.</li><br>
+<li><b>DHCP-based MITM attack:</b> Similar to the DNS attack, DHCP server queries and responses are intercepted. This interception helps the attacker gain complete knowledge of the network, such as host names, MAC addresses, IP addresses, and the DNS servers. This information is further used to plant advanced attacks to steal the information. An attacker can initiate a DoS attack on a real DHCP server to keep it busy, and in the meanwhile spoof and respond to the DHCP host queries by itself.</li>
+</ul>
+<br>
+<pre>
+<code>
+Note:
+Security technologies can often be used either for attack or defense. The discussion above illustrates MITM techniques for attack. Some security products have features which also rely on MITM behavior. For example, the Cisco Web Security Appliance can be deployed as an HTTPS proxy, where it decrypts and re-encrypts SSL protected data so that it can analyze the contained data and provide services to protect against data loss and exfiltration.
+</code>
+</pre>
+<br>
+<a name="Denial of Service and Distributed Denial of Service"></a>
+<b>Denial of Service and Distributed Denial of Service</b><br>
+DoS attacks attempt to consume all the critical computer or network resources in order to make them unavailable for valid use. DoS attacks are considered a major risk, because they can easily disrupt the operations of a business and they are relatively simple to conduct.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515367330.png" alt="" style="">
+<br>
+<a name="Reflection and Amplification Attacks"></a>
+<b>Reflection and Amplification Attacks</b><br>
+A reflection attack is a type of DoS attack in which the attacker sends a flood of protocol request packets to various IP hosts. The attacker spoofs the source IP address of the packets such that each packet has as its source address the IP address of the intended target rather than the IP address of the attacker. The IP hosts that receive these packets become "reflectors." The reflectors respond by sending response packets to the spoofed address (the target), thus flooding the unsuspecting target.<br>
+<br>
+If the request packets that are sent by the attacker solicit a larger response, the attack is also an amplification attack. In an amplification attack, a small forged packet elicits a large reply from the reflectors. For example, some small DNS queries elicit large replies. Amplification attacks enable an attacker to use a small amount of bandwidth to create a massive attack on a victim by hosts around the Internet.<br>
+<br>
+It is important to note that reflection and amplification are two separate elements of an attack. An attacker can use amplification with a single reflector or multiple reflectors. Reflection and amplification attacks are very hard to trace because the actual source of the attack is hidden.<br>
+<br>
+A classic example of reflection and amplification attacks is the smurf attack, which was common during the late 1990s. Although the smurf attack no longer poses much of a threat (because mitigation techniques became standard practice some time ago), it provides a good example of amplification. In a smurf attack, the attacker sends numerous ICMP echo-request packets to the broadcast address of a large network. These packets contain the victim's address as the source IP address. Every host that belongs to the large network responds by sending ICMP echo-reply packets to the victim. The victim is flooded with unsolicited ICMP echo-reply packets.<br>
+<br>
+The figure below illustrates a smurf attack. Note the differentials in bandwidth of the Internet connections. The attacker has a very small, 56 Kbps dial-up connection. The target has a much larger T1 connection (1.544 Mbps). The reflector network has an even larger DS-3 connection (45 Mbps). The small 56K stream of echo requests with the spoofed source address of victim 10.1.1.5 is sent to the broadcast addresses of the large network. As a result, thousands of echo replies are sent to 10.1.1.5 for each spoofed echo, and the target T1 is fully consumed.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515373454.png" alt="" style="">
+<br>
+Smurf attacks can easily be mitigated on a Cisco IOS device by using the <code>no ip directed-broadcast</code> interface configuration command, which has been the default setting in Cisco IOS Software since release 12.0. With the <code>no ip directed-broadcast</code> command configured for an interface, broadcasts destined for the subnet to which that interface is attached will be dropped, rather than being broadcast.<br>
+<br>
+<pre>
+<code>
+Note:
+An IP-directed broadcast is an IP packet whose destination address is a valid broadcast address for some IP subnet, but which originates from a node that is not itself part of that destination subnet.
+</code>
+</pre>
+<br>
+While smurf attacks no longer pose the threat they once did, newer reflection and amplification attacks pose a huge threat. For example, in March 2013, DNS amplification was used to cause a DDoS that made it impossible for anyone to access an organization's website. This attack was so massive that it also slowed Internet traffic worldwide. The attackers were able to generate up to 300 Gbps of attack traffic by exploiting DNS open recursive resolvers, which will respond to DNS queries from any host. By sending an open resolver a very small, deliberately formed query with the spoofed source address of a target, an attacker can evoke a significantly larger response to the intended target. Attacks such as this use many compromised source systems and multiple DNS open resolvers, so the effects on the target devices are magnified. The Open Resolver Project cataloged 28 million open recursive DNS resolves on the internet in 2013. DNS operations and DNS-based attacks will be discussed in more details in later sections.<br>
+<br>
+In February 2014, an NTP amplification attack generated a new record in attack traffic: over 400 Gbps. NTP has some characteristics that make it an attractive attack vector. Like DNS, NTP uses UDP for transport. Like DNS, some NTP requests can result in replies that are much larger than the request. For example, NTP supports a command that is called <code>monlist</code>, which can be sent to an NTP server for monitoring purposes. The <code>monlist</code> command returns the addresses of up to the last 600 machines with which the NTP server has interacted. If the NTP server is relatively active, this response is much bigger than the request sent, making it ideal for an amplification attack.<br>
+<br>
+<a name="Spoofing Attacks"></a>
+<b>Spoofing Attacks</b><br>
+An attack can be considered a spoofing attack any time an attacker injects traffic that appears to be sourced from a system other than the attacker's system itself. Spoofing is not specifically an attack, but spoofing can be incorporated into various types of attacks.<br>
+<br>
+The figure below illustrates IP address spoofing. Attacker 172.25.9.7 sends a packet to server 10.1.2.3 but specifies 192.168.6.4 as the source address of the packet. Server 10.1.2.3 sends its response packet to what it believes to be the originating system, host 192.168.6.4.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515374204.png" alt="" style="">
+<br>
+There are several types of spoofing, including the following:<br>
+<br>
+<ul>
+<li><b>IP address spoofing:</b> IP address spoofing is the most common type of spoofing. To perform IP address spoofing, attackers use source IP addresses that are different than their real IP addresses.</li><br>
+<li><b>MAC address spoofing:</b> To perform MAC address spoofing, attackers use MAC addresses that are not their own. MAC address spoofing is generally used to exploit weakness at Layer 2 of the network.</li><br>
+<li><b>Application or service spoofing:</b> One example is DHCP spoofing, which can be done with either the DHCP server or the DHCP client. To perform DHCP server spoofing, the attacker enables a rogue DHCP server on a network. When a victim host requests a DHCP configuration, the rogue DHCP server responds before the authentic DHCP server. The victim is assigned an attacker-defined IP configuration. From the client side, an attacker can spoof many DHCP client requests, specifying a unique MAC address per request. The DHCP server's IP address pool may become exhausted, leading to a DoS against valid DHCP client requests. Another simple example of spoofing at the application layer is an email from an attacker which appears to have been sourced from a trusted email account.</li>
+</ul>
+<br>
+Another example of spoofing is a land attack. The attack is named for the name of the file, land.c, used for the original source code that is compiled into an attack tool. In a land attack, the attacker sends a TCP SYN request using the same IP address and port as both the source and destination IP address and port. The IP address and port combination that is used is that of the target system. The target system replies to itself and, if the system is vulnerable, the response leads to a system crash.<br>
+<br>
+<a name="DHCP Attacks"></a>
+<b>DHCP Attacks</b><br>
+In a TCP/IP-based network, every device must have a unique unicast IP address to access the network and its resources. Without DHCP, the IP address for each client (a host that is requesting initialization parameters from a DHCP server) must be configured manually and IP addresses for computers that are removed from the network must be manually reclaimed. With DHCP, the IP address allocation process is automated and managed centrally. The DHCP server maintains a pool of IP addresses and leases an address to any DHCP-enabled client when it starts up on the network. Because the IP addresses are dynamic (leased) rather than static (permanently assigned), addresses that are no longer in use are automatically returned to the pool for reallocation.<br>
+<br>
+DHCP was based on BOOTP when the Internet was relatively small. Not only does DHCP run over IP and UDP, which are inherently insecure, the DHCP protocol itself has no security provisions, which causes a serious vulnerability in networks because DHCP deals with critical configuration information.<br>
+<br>
+Two classes of potential security problems are related to DHCP:<br>
+<br>
+<ul>
+<li><b>DHCP server spoofing:</b> The attacker runs DHCP server software and replies to DHCP requests from legitimate clients. As a rogue DHCP server, the attacker can cause a DoS by providing invalid IP information. The attacker can also perform confidentiality or integrity breaches via a man-in-the-middle attack. The attacker can assign itself as the default gateway or DNS server in the DHCP replies, later intercepting IP communications from the configured hosts to the rest of the network.<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515375377.png" alt="" style="">
+<br>
+The following is the DHCP server spoofing attack process:<br>
+<br>
+<ol>
+<li>An attacker activates a malicious DHCP server on the attacker port</li><br>
+<li>The client broadcasts a DHCP configuration request.</li><br>
+<li>The DHCP server of the attacker responds before the legitimate DHCP server can respond, assigning attacker-defined IP configuration information.</li><br>
+<li>Host packets are redirected to the attacker address because it emulates the default gateway that it provided to the client.</li>
+</ol></li><br>
+<li><b>DHCP starvation:</b> A DHCP starvation attack works by the broadcasting of DHCP requests with spoofed MAC addresses. If enough requests are sent, the network attacker can exhaust the address space available to the DHCP servers in a time period. The network attacker can then set up a rogue DHCP server. However, the exhaustion of all the DHCP addresses is not required to introduce a rogue DHCP server.</li>
+</ul>
+<br>
+Whether an attacker attempts to take a DHCP server offline or provide clients with IP information that forces the client machine to use the wrong gateway or DNS server, attack indicators are available to security analysts. Cisco switch features such as DHCP Snooping and IP source guard can be used to defend against DHCP attacks.<br>
