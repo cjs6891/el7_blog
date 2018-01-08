@@ -7,7 +7,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#Cryptography Overview">4.3 Cryptography Overview</a><br>
 <a href="#Hash Algorithms">4.4 Hash Algorithms</a><br>
 <a href="#Encryption Overview">4.5 Encryption Overview</a><br>
-<a href="#">4.</a><br>
+<a href="#Cryptanalysis">4.6 Cryptanalysis</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
@@ -20,7 +20,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -231,5 +230,37 @@ A key is a required parameter for encryption algorithms. There are two classes o
 <ul>
 <li><b>Symmetric encryption algorithm:</b> Uses the same key to encrypt and decrypt data</li><br>
 <li><b>Asymmetric encryption algorithm:</b> Uses different keys to encrypt and decrypt data</li>
+</ul>
+<br>
+<a name="Cryptanalysis"></a>
+<b>Cryptanalysis</b><br>
+Cryptanalysis is the practice of breaking codes to obtain the meaning of encrypted data. An attacker who tries to break an algorithm or encrypted ciphertext may use one of the following attacks:<br>
+<br>
+<ul>
+<li><b>Brute-force attack:</b> In a brute-force attack, an attacker tries every possible key with the decryption algorithm, knowing that eventually one of the keys will work. All encryption algorithms are vulnerable to this attack. On average, a brute-force attack will succeed about 50 percent of the way through the key space, which is the set of all possible keys. The objective of modern cryptographers is to have a key space large enough that it takes too much money and too much time to accomplish a brute-force attack.<br>
+<br>
+<pre>
+<code>
+Note:
+Existing technology and computing power has resulted in cracking machines that are able to crack DES (Data Encryption Standard) in just a few hours. It is estimated that it would take 149 trillion years to crack AES (Advanced Encryption Standard) using the same method.
+</code>
+</pre>
+</li><br>
+<li><b>Ciphertext-only attack:</b> In a ciphertext-only attack, the attacker has the ciphertext of several messages, all of which have been encrypted using the same encryption algorithm, but the attacker has no knowledge of the underlying plaintext. The job of the attacker is to recover the plaintext of as many messages as possible—or better yet, to deduce the key or keys that are used to encrypt the messages in order to decrypt other messages that are encrypted with the same keys. The attacker can use statistical analysis to achieve the result. These kinds of attacks are no longer practical, because modern algorithms produce pseudorandom output that is resistant to statistical analysis.</li><br>
+<li><b>Known-plaintext attack:</b> In a known-plaintext attack, the attacker has access to the ciphertext of several messages but also knows something about the plaintext that underlies that ciphertext. With knowledge of the underlying protocol, file type, or some characteristic strings that may appear in the plaintext, the attacker uses a brute-force attack to try keys, until decryption with the correct key produces a meaningful result. This attack may be the most practical attack, because attackers can usually assume the type and some features of the underlying plaintext, if they can only capture the ciphertext. However, modern algorithms with enormous key spaces make it unlikely for this attack to succeed, because on average an attacker has to search through at least half of the key space to be successful.</li><br>
+<li><b>Chosen-plaintext attack:</b> In a chosen-plaintext attack, the attacker chooses what data the encryption device encrypts and observes the ciphertext output. A chosen-plaintext attack is more powerful than a known-plaintext attack, because the attacker gets to choose the plaintext blocks to encrypt, allowing the attacker to choose plaintext that might yield more information about the key. This attack might not be very practical, because it is often difficult or impossible to capture both the ciphertext and plaintext, unless the trusted network has been broken into and the attacker already has access to confidential information.</li><br>
+<li><b>Chosen-ciphertext attack:</b> In a chosen-ciphertext attack, the attacker can choose different ciphertext to be decrypted and has access to the decrypted plaintext. With the pair, the attacker can search through the key space and determine which key decrypts the chosen ciphertext in the captured plaintext. For example, the attacker has access to a tamper-proof encryption device with an embedded key. The attacker must deduce the embedded key by sending data through the box. This attack is analogous to the chosen-plaintext attack. This attack might not be very practical, because it is often difficult or impossible to capture both the ciphertext and plaintext, unless the trusted network has been broken into, and the attacker already has access to confidential information.</li><br>
+<li>Birthday attack: The birthday attack gets its name because of an amazing statistical probability that is involved in two individuals having the same birthday. According to statisticians, the probability that two people in a group of 23 people share the same birthday is greater than 50 percent.<br>
+<br>
+This particular attack is a form of brute-force attack against hash functions. If a specific function, when supplied with a random input, returns one of k equally likely values, then by repeating the function with different inputs, the same output is expected after 1.2k^1/2 number of times.<br>
+<br>
+<pre>
+<code>
+Note:
+To test the birthday theory, input 365 in the place of k.
+</code>
+</pre>
+<br></li><br>
+<li><b>Meet-in-the-middle:</b> The meet-in-the-middle attack is a known-plaintext attack. In a meet-in-the-middle attack, the attacker knows a portion of the plaintext and the corresponding ciphertext. The plaintext is encrypted with every possible key, and the results are stored. The ciphertext is then decrypted by using every key, until one of the results matches one of the stored values.</li>
 </ul>
 <br>
