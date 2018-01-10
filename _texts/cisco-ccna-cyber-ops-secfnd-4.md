@@ -8,10 +8,10 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#Hash Algorithms">4.4 Hash Algorithms</a><br>
 <a href="#Encryption Overview">4.5 Encryption Overview</a><br>
 <a href="#Cryptanalysis">4.6 Cryptanalysis</a><br>
-<a href="#">4.</a><br>
-<a href="#">4.</a><br>
-<a href="#">4.</a><br>
-<a href="#">4.</a><br>
+<a href="#Symmetric Encryption Algorithms">4.7 Symmetric Encryption Algorithms</a><br>
+<a href="#Asymmetric Encryption Algorithms">4.8 Asymmetric Encryption Algorithms</a><br>
+<a href="#Diffie-Hellman Key Agreement">4.9 Diffie-Hellman Key Agreement</a><br>
+<a href="#Use Case: SSH">4.10 Use Case: SSH</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
@@ -20,10 +20,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -263,4 +259,189 @@ To test the birthday theory, input 365 in the place of k.
 <br></li><br>
 <li><b>Meet-in-the-middle:</b> The meet-in-the-middle attack is a known-plaintext attack. In a meet-in-the-middle attack, the attacker knows a portion of the plaintext and the corresponding ciphertext. The plaintext is encrypted with every possible key, and the results are stored. The ciphertext is then decrypted by using every key, until one of the results matches one of the stored values.</li>
 </ul>
+<br>
+<a name="Symmetric Encryption Algorithms"></a>
+<b>Symmetric Encryption Algorithms</b><br>
+Symmetric encryption algorithms use the same key for encryption and decryption. Therefore, the sender and the receiver must share the same secret key before communicating securely. The security of a symmetric algorithm rests in the secrecy of the shared key; by obtaining the key, anyone can encrypt and decrypt messages. Symmetric encryption is often called secret-key encryption. Symmetric encryption is the more traditional form of cryptography. The typical key-length range of symmetric encryption algorithms is 40 to 256 bits.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515542620.png" alt="" style="">
+<br>
+Because symmetric algorithms are usually quite fast, they are often used for wire-speed encryption in data networks. Symmetric algorithms are based on simple mathematical operations and can easily be accelerated by hardware. Because of their speed, you can use symmetric algorithms for bulk encryption when data privacy is required, such as to protect a VPN.<br>
+<br>
+On the other hand, key management can be a challenge. The communicating parties must obtain a common secret key before any encryption can occur. Therefore, the security of any cryptographic system depends greatly on the security of the key management methods.<br>
+<br>
+Because of their speed, symmetric algorithms are frequently used for encryption services, with additional key management algorithms providing secure key exchange.<br>
+<br>
+<pre>
+<code>
+Note:
+Symmetric encryption algorithms are sometimes referred to as private-key encryption. Examples of symmetric encryption algorithms are DES, 3DES, AES, IDEA, RC2/4/5/6, and Blowfish.
+</code>
+</pre>
+<br>
+<b>Symmetric Encryption Key Lengths</b><br>
+Modern symmetric algorithms use key lengths that range from 40 to 256 bits. This range gives symmetric algorithms key spaces that range from 2^40 (1,099,511,627,776 possible keys) to 2^256 (1.5 x 1077) possible keys. Every additional bit in the key length doubles the number of possible key values. This large range is the difference between whether the algorithm is vulnerable to a brute-force attack or not. If you use a key length of 40 bits, then your encryption is likely to be broken relatively easily with a brute-force attack. In contrast, if your key length is 256 bits, it is not likely that a brute-force attack will be successful, because the key space is too large.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515543213.png" alt="" style="">
+<br>
+Key lengths greater than or equal to 80 bits can be trusted. Key lengths of less than 80 bits are considered obsolete, regardless of the strength of the algorithm.<br>
+<br>
+<b>Comparing Symmetric Encryption Algorithms</b><br>
+Symmetric encryption algorithms operate under the same framework, but they present considerable differences. Analyzing these algorithms requires comparing their key strength, complexity, and performance.<br>
+<br>
+Here are some of the most widely used symmetric encryption algorithms:<br>
+<br>
+<ul>
+<li>DES</li><br>
+<li>3DES</li><br>
+<li>AES</li><br>
+<li>RC4</li>
+</ul>
+<br>
+DES is a symmetric encryption algorithm that usually operates in block mode, in which it encrypts data in 64-bit blocks. The DES algorithm is essentially a sequence of permutations and substitutions of data bits combined with an encryption key. Because DES is based on very simple mathematical functions, it can easily be implemented and accelerated in hardware. DES has a fixed key length. The key is actually 64 bits long, but only 56 bits are used for encryption; the remaining 8 bits are used for parity. The least significant bit of each key byte is used to indicate odd parity.<br>
+<br>
+DES uses two standardized block cipher modes:<br>
+<br>
+<ul>
+<li><b>ECB:</b> In ECB (Electronic Code Book) mode, it serially encrypts each 64-bit plaintext block using the same 56-bit key. If two identical plaintext blocks are encrypted using the same key, their ciphertext blocks are the same.</li><br>
+<li><b>CBC:</b> In CBC (Cipher Block Chaining) mode, each 64-bit plaintext block is XORed bitwise with the previous ciphertext block and then is encrypted with the DES key. Because of this process, the encryption of each block depends on previous blocks. Encryption of the same 64-bit plaintext block can result in different ciphertext blocks.</li><br>
+</ul>
+<br>
+With advances in computer processing power, the original 56-bit DES key became too vulnerable to brute force attacks. One way to increase the DES effective key length, without changing the well-analyzed algorithm itself, is to use the same algorithm with different keys several times in a row. The technique of applying DES three times in a row to a plaintext block is called 3DES. Brute-force attacks on 3DES are considered unfeasible today. Because the basic algorithm has been well tested in the field for more than 35 years, it is considered very trustworthy.<br>
+<br>
+3DES uses a method that is called 3DES-Encrypt-Decrypt-Encrypt (3DES-EDE) to encrypt plaintext. 3DES-EDE includes the following steps:<br>
+<br>
+<ul>
+<li>The message is encrypted using the first 56-bit key, which is known as K1.</li><br>
+<li>The data is decrypted using the second 56-bit key, which is known as K2.</li><br>
+<li>The data is encrypted again, now using the third 56-bit key, which is known as K3.</li><br>
+</ul>
+<br>
+The 3DES-EDE procedure provides encryption with an effective key length of 168 bits. If the keys K1 and K3 are equal, as in some implementations, then a less secure encryption of 112 bits is achieved. To decrypt the message, the opposite of the 3DES-EDE method is used, using the keys in reverse order.<br>
+<br>
+<pre>
+<code>
+Note:
+Under certain circumstances, such as those required for a meet-in-the-middle attack, encrypting multiple times with different keys may provide less strength than the sum of the key lengths.
+</code>
+</pre>
+<br>
+For several years, it was recognized that DES would eventually reach the end of its usefulness. In 1997, the AES initiative was announced, and the public was invited to propose candidate encryption schemes, one of which could be chosen as the encryption standard to replace DES. The U.S. Secretary of Commerce approved the adoption of AES as an official U.S. government standard, effective May 26, 2002.<br>
+<br>
+AES is an iterated block cipher, which means that the initial input block and cipher key undergo multiple transformation cycles before producing output. It is based on the more general Rijndael cipher. Rijndael specifies variable block sizes and key sizes, but AES specifically uses keys with a length of 128, 192, or 256 bits to encrypt 128-bit blocks.<br>
+<br>
+AES was chosen to replace DES and 3DES, because the key length of AES is much stronger than DES, and AES runs faster than 3DES on comparable hardware. AES is more efficient than DES and 3DES on comparable hardware, usually by a factor of five when it is compared with DES. Also, AES is more suitable for high-throughput, low-latency environments, especially if pure software encryption is used.<br>
+<br>
+Ron Rivest has authored several encryption algorithms that are designated with an RC followed by an integer. Of them, RC4 is the most prevalent today. It is a stream cipher. It can be deployed in many ways, but is most well-known for its use to secure web traffic in SSL and TLS. The algorithm is a variable key-size Vernam stream cipher. It is not considered a one-time pad, because its key is not random. The cipher can be expected to run very quickly in software. It is considered secure, although it can be implemented insecurely, as in WEP, and new research has begun to expose some weakness in RC4.<br>
+<br>
+<pre>
+<code>
+Note:
+Many other symmetric algorithms are available, including SEAL, IDEA, Blowfish, Twofish, and Serpent.
+</code>
+</pre>
+<br>
+<a name="Asymmetric Encryption Algorithms"></a>
+<b>Asymmetric Encryption Algorithms</b><br>
+Asymmetric algorithms utilize a pair of keys for encryption and decryption. The paired keys are intimately related and are generated together. Most commonly, an entity with a key pair will share one of the keys (the public key) and it will keep the other key in complete secrecy (the private key). The private key cannot, in any reasonable amount of time, be calculated from the public key. Data that is encrypted with the private key requires the public key to decrypt. Conversely, data that is encrypted with the public key requires the private key to decrypt. Asymmetric encryption is also known as public key encryption.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515545509.png" alt="" style="">
+<br>
+The typical key length range for asymmetric algorithms is 512 to 4096 bits. You cannot directly compare the key length of asymmetric and symmetric algorithms, because the underlying design of the two algorithm families differs greatly.<br>
+<br>
+Examples of asymmetric cryptographic algorithms include RSA, DSA, ElGamal, and elliptic curve algorithms.<br>
+<br>
+RSA is one of the most common asymmetric algorithms. Ron Rivest, Adi Shamir, and Len Adleman invented the RSA algorithm in 1977. It was a patented public-key algorithm. The patent expired in September 2000, so the algorithm is now in the public domain. Of all the public-key algorithms that have been proposed over the years, RSA is by far the easiest to understand and implement.<br>
+<br>
+The RSA algorithm is very flexible, because it has a variable key length that allows speed to be traded for the security of the algorithm, if necessary. Current RSA keys are usually 1024 to 4096 bits long. Smaller keys require less computational overhead to use, large keys provide stronger security. Some systems have system-dependent maximum key sizes, so care must be taken when selecting key sizes to maintain compatibility.<br>
+<br>
+RSA has withstood years of extensive cryptanalysis, and although the security of RSA has been neither proved nor disproved, its longevity does suggest a confidence level in the algorithm. The security of RSA is based on the difficulty of factoring very large numbers, which means breaking large numbers into multiplicative factors. If an easy method of factoring these large numbers was discovered, the effectiveness of RSA would be destroyed.<br>
+<br>
+The RSA algorithm is based on the fact that each entity has two keys, a public key and a private key. The public key can be published and given away, but the private key must be kept secret. It is not possible to determine, using any computationally feasible algorithm, the private key from the public key, and vice versa. What one of the keys encrypts, the other key decrypts, and vice versa.<br>
+<br>
+RSA keys are long term and are usually changed or renewed after a few months.<br>
+<br>
+Asymmetric algorithms are substantially slower than symmetric algorithms. Their design is based on computational problems, such as factoring extremely large numbers or computing discrete logarithms of extremely large numbers. Because they lack speed, asymmetric algorithms are typically used in low-volume cryptographic mechanisms, such as digital signatures and key exchange. However, the key management of asymmetric algorithms tends to be simpler than symmetric algorithms, because usually one of the two encryption or decryption keys can be made public.<br>
+<br>
+The security services that are provided by asymmetric encryption can vary by scenario. Imagine that Bob has generated a public/private key pair. Bob keeps the private key totally secret but publishes the public key so it is available to everyone. Alice has a message that she wants to send to Bob in private. If Alice encrypts the message using Bob’s public key, only Bob has the private key that is required to decrypt the message, providing confidentiality. This scenario is depicted in the figure below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515545842.png" alt="" style="">
+<br>
+Now, imagine that Alice has an important message that she wants to send to Bob. Alice encrypts the message with her private key and sends it to Bob. Bob can use Alice’s public key to decrypt the message, but so can anyone else who has intercepted the message, which does not provide privacy, but there is a security benefit. If Bob can use Alice’s public key to decrypt the message, Bob then knows that the message was originally encrypted with Alice’s private key. Only Alice has that private key, so Bob knows that the message originates from Alice, which provides origin authentication. This scenario is depicted in the figure below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515545966.png" alt="" style="">
+<br>
+PGP (Pretty Good Privacy) provides a common encryption methodology for email. It requires both parties to generate public/private key pairs and to share their public keys with each other. The content of emails is encrypted twice, once with the sender’s private key, and again with the receiver’s public key. The receiver must reverse the process, decrypting the message with their private key and then decrypting again with the sender’s public key. This methodology provides both privacy and origin authentication. Understand, asymmetric encryption is computationally expensive. The scenario works well for email which does not require real-time transmission speeds. Protocols which do bulk data encryption in real time, such as SSH, SSL, and IPsec, will use symmetric encryption for the bulk data encryption. They often, however, use asymmetric algorithms in their key management procedures.<br>
+<br>
+<a name="Diffie-Hellman Key Agreement"></a>
+<b>Diffie-Hellman Key Agreement</b><br>
+The DH key agreement method allows two parties to share information over an untrusted network and mutually compute an identical shared secret that cannot be computed by eavesdroppers who intercept the shared information. The mathematical operations are relatively easy to describe, expensive to compute, and intractable to reverse.<br>
+<br>
+The DH key agreement method can be used in protocols such as SSL/TLS, SSH, and IKE.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515547522.png" alt="" style="">
+<br>
+The figure simplifies the concept of the DH key agreement process by using colors instead of using math with very large numbers:<br>
+<br>
+<ul>
+<li>The DH key exchange begins with two parties: Alice and Bob in the example.</li><br>
+<li>Alice and Bob agree on an arbitrary common color that does not need to be kept secret, which represents a large prime number p and a generator g that both parties agreed on.</li><br>
+<li>Each of them then selects a secret color that they keep secret to themselves. The secret color is never exchanged to the other party, which represents the chosen secret private key of each party.</li><br>
+<li>The crucial part of the process is that Alice and Bob now mix their secret color together with the shared common color, then publicly exchange their mixed colors to each other, which represents the public key that each party sends to the other party. Each party's public key is calculated using the generator g, the prime number p, and their own chosen secret private key.</li><br>
+<li>Finally, Bob and Alice each mix together the color they received from the partner with their own private color. The result is a final color mixture that is identical to the partner's final color mixture, which represents the resulting shared secret key between Bob and Alice. Each party calculates the shared secret using the other party's public key, each party's own chosen secret key, and the prime number p.</li><br>
+<li>If a third party (Eve, for example) had been listening in on the exchange, it would be computationally difficult for Eve to determine the final color mixture.</li>
+</ul>
+<br>
+The mathematical model in the DH key exchange process:<br>
+<br>
+<ul>
+<li>p = large prime number, can be known to Alice, Bob, and Eve.</li><br>
+<li>g = based or generator, can be known to Alice, Bob, and Eve.</li><br>
+<li>a = Alice's chosen private key, which is known only to Alice.</li><br>
+<li>b = Bob's chosen private key, which is known only to Bob.</li><br>
+<li>A = Alice's calculated public key using g, p, and a, can be known to Alice, Bob, and Eve. A = g^a mod p.</li><br>
+<li>B = Bob's calculated public key using g, p, and b, can be known to Alice, Bob, and Eve. B = g^b mod p.</li><br>
+<li>s = The shared secret key, which is calculated by using the other party's public key, each party's own chosen secret key, and the prime number p, is known to both Alice and Bob, but not to Eve.</li><br>
+<li>s = B^a mod p (calculated by Alice).</li><br>
+<li>s = A^b mod p (calculated by Bob).</li><br>
+<li>s can also be calculated using the formula s = g^ab mod p which requires knowledge of both parties chosen private key.</li><br>
+<li>After each party calculates the shared secret key s independently, each party will end up with the exact same value s. All three formulas for s will produce the same result. s = g^ab mod p = B^a mod p = A^b mod p.</li>
+</ul>
+<br>
+Diffie-Hellman used different DH groups to determine the strength of the key that is used in the key agreement process. The higher group numbers are more secure, but require additional time to compute the key. Each DH group specifies the values of p and g. DH groups are supported by Cisco IOS Software and the associated size of the value of the prime p:<br>
+<br>
+<ul>
+<li><b>DH Group 1:</b> 768 bits</li><br>
+<li><b>DH Group 2:</b> 1024 bits</li><br>
+<li><b>DH Group 5:</b> 1536 bits</li><br>
+<li><b>DH Group 14:</b> 2048 bits</li><br>
+<li><b>DH Group 15:</b> 3072 bits</li><br>
+<li><b>DH Group 16:</b> 4096 bits</li><br>
+<li>A DH key agreement can also be based on elliptic curve cryptography. Its use is included in the Suite B cryptographic suites. DH groups 19, 20, and 24, based on elliptic curve cryptography, are also supported by Cisco IOS Software.</li>
+</ul>
+<br>
+<pre>
+<code>
+Note:
+The DH key exchanges always use the same DH private key. Each time the same two parties perform a DH key exchange, they will end up with the same shared secret. With ephemeral Diffie-Hellman, a temporary private key is generated for every DH key exchange, and thus the same private key is never used twice. This enables PFS (Perfect Forward Secrecy), which means that if the private key is ever exposed, any past communications are still secured.
+</code>
+</pre>
+<br>
+<a name="Use Case: SSH"></a>
+<b>Use Case: SSH</b><br>
+The connection process of SSHv1 provides a use case to help solidify your understanding of both symmetric and asymmetric encryption. SSH is a remote console protocol, like Telnet. But unlike Telnet, SSH is designed to provide privacy, data integrity, and origin authentication. SSHv1 should be considered legacy, as SSHv2 was designed to overcome some security shortcomings in SSHv1. However, the key exchange methodology that is used by SSHv2 is more complex, using DH (Diffie-Hellman).<br>
+<br>
+SSHv1 makes clever use of asymmetric encryption to facilitate symmetric key exchange. Computationally expensive asymmetric encryption is only required for a small step in the negotiation process. After key exchange, much more computationally efficient symmetric encryption is used for bulk data encryption between the client and server.<br>
+<br>
+SSHv1 uses a connection process as follows:<br>
+<br>
+<ul>
+<li>The client connects to the server and the server presents the client with its public key.</li><br>
+<li>The client and server negotiate the security transforms. The two sides agree to a mutually supported symmetric encryption algorithm. This negotiation occurs in the clear. A party that intercepts the communication will be aware of the encryption algorithm that is agreed upon.</li><br>
+<li>The client constructs a session key of the appropriate length to support the agreed-upon encryption algorithm. The client encrypts the session key with the server’s public key. Only the server has the appropriate private key that can decrypt the session key.</li><br>
+<li>The client sends the encrypted session key to the server. The server decrypts the session key using its private key. At this point, both the client and the server have the shared session key. That key is not available to any other systems. From this point on, the session between the client and server is encrypted using a symmetric encryption algorithm.</li><br>
+<li>With privacy in place, user authentication ensues. The user’s credentials and all other data are protected.</li>
+</ul>
+<br>
+Not only does the use of asymmetric encryption facilitate symmetric key exchange, it also facilitates peer authentication. If the client is aware of the server’s public key, it would recognize if it connected to a nonauthentic system when the nonauthentic system provided a different public key. Understand that the nonauthentic system cannot provide the real server’s public key because it does not have the corresponding private key. While the ability to provide peer authentication is certainly a step in the right direction, the responsibility is generally on the user to have prior knowledge of the server’s public key. Generally, when the SSH client software connects to a new server for the first time, it will display the server’s public key (or a hash of the server’s public key) to the user. The client software will only continue if the user authorizes the server’s public key. But few users will take steps to verify that the public key is indeed authentic, which presents a challenge.<br>
 <br>
