@@ -12,16 +12,14 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#Asymmetric Encryption Algorithms">4.8 Asymmetric Encryption Algorithms</a><br>
 <a href="#Diffie-Hellman Key Agreement">4.9 Diffie-Hellman Key Agreement</a><br>
 <a href="#Use Case: SSH">4.10 Use Case: SSH</a><br>
-<a href="#">4.</a><br>
-<a href="#">4.</a><br>
+<a href="#Digital Signatures">4.11 Digital Signatures</a><br>
+<a href="#PKI Overview ">4.12 PKI Overview </a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -444,4 +442,88 @@ SSHv1 uses a connection process as follows:<br>
 </ul>
 <br>
 Not only does the use of asymmetric encryption facilitate symmetric key exchange, it also facilitates peer authentication. If the client is aware of the server’s public key, it would recognize if it connected to a nonauthentic system when the nonauthentic system provided a different public key. Understand that the nonauthentic system cannot provide the real server’s public key because it does not have the corresponding private key. While the ability to provide peer authentication is certainly a step in the right direction, the responsibility is generally on the user to have prior knowledge of the server’s public key. Generally, when the SSH client software connects to a new server for the first time, it will display the server’s public key (or a hash of the server’s public key) to the user. The client software will only continue if the user authorizes the server’s public key. But few users will take steps to verify that the public key is indeed authentic, which presents a challenge.<br>
+<br>
+<a name="Digital Signatures"></a>
+<b>Digital Signatures</b><br>
+Suppose that a customer sends transaction instructions via an email to a stockbroker, and the transaction turns out badly for the customer. It is conceivable that the customer could claim never to have sent the transaction order or that someone forged the email. The brokerage could protect itself by requiring the use of digital signatures before accepting instructions via email.<br>
+<br>
+Handwritten signatures have long been used as a proof of authorship of, or at least agreement with, the contents of a document. Digital signatures can provide the same functionality as handwritten signatures, and much more.<br>
+<br>
+The idea of encrypting a file with your private key is a step toward digital signatures. Anyone who decrypts the file with your public key knows that you were the one who encrypted it. But, since asymmetric encryption is computationally expensive, it is not optimal. Digital signatures leave the original data unencrypted. It does not require expensive decryption to simply read the signed documents. In contrast, digital signatures use a hash algorithm to produce a much smaller fingerprint of the original data. This fingerprint is then encrypted with the signer’s private key. The document and the signature are delivered together. The digital signature is validated by taking the document and running it through the hash algorithm to produce its fingerprint. The signature is then decrypted with the sender’s public key. If the decrypted signature and the computed hash match, then the document is identical to what was originally signed by the signer.<br>
+<br>
+Usually asymmetric algorithms, such as RSA and DSA, are used for digital signatures.<br>
+<br>
+<b>RSA Digital Signatures</b><br>
+The current signing procedures of digital signatures are not simply implemented by public key operations. In fact, a modern digital signature is based on a hash function and a public key algorithm, as illustrated below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515680806.png" alt="" style="">
+<br>
+The signature process is as follows:<br>
+<br>
+<ol>
+<li>The signer makes a hash, or fingerprint, of the document, which uniquely identifies the document and all its contents.</li><br>
+<li>The signer encrypts the hash with only the private key of the signer.</li><br>
+<li>The encrypted hash, which is known as the signature, is appended to the document.</li>
+</ol>
+<br>
+The verification process is as follows:<br>
+<br>
+<ol>
+<li>The verifier obtains the public key of the signer.</li><br>
+<li>The verifier decrypts the signature using the public key of the signer. This step unveils the assumed hash value of the signer.</li><br>
+<li>The verifier makes a hash of the received document, without its signature, and compares this hash to the decrypted signature hash. If the hashes match, the document is authentic. The match means that the document has been signed by the assumed signer and has not changed since it was signed.</li>
+</ol>
+<br>
+The example illustrates how the authenticity and integrity of the message is ensured, even though the actual text is public. Both encryption and digital signatures are required to ensure that the message is private and has not changed.<br>
+<br>
+<pre>
+<code>
+Note:
+The RSA algorithm is currently the most common method for signature generation, and is used widely in that role by e-commerce systems and interactive purchasing systems.
+</code>
+</pre>
+<br>
+Digital signatures provide three basic security services in secure communications:<br>
+<br>
+<ul>
+<li><b>Authenticity of digitally signed data:</b> Digital signatures authenticate a source, proving that a certain party has seen and has signed the data in question.</li><br>
+<li><b>Integrity of digitally signed data:</b> Digital signatures guarantee that the data has not changed from the time it was signed.</li><br>
+<li><b>Nonrepudiation of the transaction:</b> The recipient can take the data to a third party, and the third party accepts the digital signature as a proof that this data exchange did take place. The signing party cannot repudiate that it has signed the data.</li>
+</ul>
+<br>
+To achieve these goals, digital signatures have the following properties:<br>
+<br>
+<ul>
+<li><b>The signature is authentic:</b> The signature convinces the recipient of the document that the signer signed the document.</li><br>
+<li><b>The signature is not forgeable:</b> The signature is proof that the signer, and no one else, signed the document.</li><br>
+<li><b>The signature is not reusable:</b> The signature is a part of the document and cannot be moved to a different document.</li><br>
+<li><b>The signature is unalterable:</b> After a document is signed, it cannot be altered.</li><br>
+<li><b>The signature cannot be repudiated:</b> Signers cannot claim later that they did not sign it.</li>
+</ul>
+<br>
+<b>Practical Example: Digitally Signed Cisco Software</b><br>
+The Digitally Signed Cisco Software feature (added in Cisco IOS Software Release 15.0(1)M for the Cisco 1900, 2900, and 3900 Series routers) facilitates the use of Cisco IOS Software that is digitally signed, with the use of secure asymmetrical (public key) cryptography.<br>
+<br>
+Digitally signed Cisco IOS Software is identified by a three-character extension in the image name. The Cisco software build process creates a Cisco IOS image file that contains a file extension that is based on the signing key that was used to sign images. These file extensions are:<br>
+<br>
+<ul>
+<li>SPA</li><br>
+<li>SSA</li>
+</ul>
+<br>
+The first <b>S</b> indicates that the software is digitally signed. The second character specifies a production (<b>P</b>) or special (<b>S</b>) image. The third character indicates the key version that was used to sign the image. Currently, key version <b>A</b> is used. When a key is replaced, the key version will be incremented alphabetically to B, C, and so on.<br>
+<br>
+A digitally signed image carries an encrypted (with a private key) hash of itself. Upon check, the device decrypts the hash with the corresponding public key from the keys it has in its key store and also calculates its own hash of the image. If the decrypted hash matches the calculated image hash, the image has not been tampered with and can be trusted.<br>
+<br>
+Digitally signed Cisco software keys are identified by the type and version of the key. A key can be a special, production, or rollover key type. Production and special key types have an associated key version that increments alphabetically whenever the key is revoked and replaced. ROMMON and regular Cisco IOS images are both signed with a special or production key when you use the Digitally Signed Cisco Software feature. The ROMMON image is upgradable and must be signed with the same key as the special or production image that is loaded.<br>
+<br>
+The first command that is shown below is used by the router administrator to verify the integrity of the running IOS image. The second command is used to verify the integrity of the c2900-universalk9-mz.SPA.153-1.T.bin image that is stored in the flash memory.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515681998.png" alt="" style="">
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515682045.png" alt="" style="">
+<br>
+<a name="PKI Overview "></a>
+<b>PKI (Public Key Infrastructure) Overview</b><br>
+A substantial challenge with both asymmetric encryption and digital certificates is the secure distribution of public keys. How do you know that you have the real public key of the other system and not the public key of an attacker who is trying to deceive you? In this scenario, the public key infrastructure comes to play. Entities enroll with a PKI and receive identity certificates that are signed by a certificate authority. Among the identity information included in the certificate is the entity's public key. The certificate authority’s digital signature on the identity certificate validates that the included public key is the real public key belonging to the associated entity. A system will only accept the signed digital certificate if it trusts the CA (Certification Authority). The CA plays the role of a trusted third party.<br>
 <br>
