@@ -14,13 +14,12 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#Use Case: SSH">4.10 Use Case: SSH</a><br>
 <a href="#Digital Signatures">4.11 Digital Signatures</a><br>
 <a href="#PKI Overview ">4.12 PKI Overview </a><br>
-<a href="#">4.</a><br>
+<a href="#PKI Operations">4.13 PKI Operations</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -526,4 +525,100 @@ The first command that is shown below is used by the router administrator to ver
 <a name="PKI Overview "></a>
 <b>PKI (Public Key Infrastructure) Overview</b><br>
 A substantial challenge with both asymmetric encryption and digital certificates is the secure distribution of public keys. How do you know that you have the real public key of the other system and not the public key of an attacker who is trying to deceive you? In this scenario, the public key infrastructure comes to play. Entities enroll with a PKI and receive identity certificates that are signed by a certificate authority. Among the identity information included in the certificate is the entity's public key. The certificate authority’s digital signature on the identity certificate validates that the included public key is the real public key belonging to the associated entity. A system will only accept the signed digital certificate if it trusts the CA (Certification Authority). The CA plays the role of a trusted third party.<br>
+<br>
+<b>Trusted Third-Party Example</b><br>
+In the figure below, Alice applies for a driver’s license. As part of this process, Alice submits evidence of identity and qualifications to drive. Once the application is approved, a license is issued.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515682947.png" alt="" style="">
+<br>
+Later, Alice needs to cash a check at the bank. Upon presenting the check to the bank teller, the bank teller asks for ID. The bank, because it trusts the government agency that issued the driver’s license, verifies the identity with the license and cashes the check.<br>
+<br>
+<pre>
+<code>
+Note:
+Certificate authorities function like the driver’s license bureau in this example. The driver’s license is analogous to a certificate in a PKI or a technology that supports certificates.
+</code>
+</pre>
+<br>
+<b>PKI Terminology and Components</b><br>
+A PKI is the service framework that is used to support large-scale public key-based technologies. It provides the base for security services such as encryption, authentication, and nonrepudiation. A PKI allows for very scalable solutions which require the management of systems identities, user identities, or both, and is an important authentication solution for VPNs. A PKI uses specific terminology to name its components.<br>
+<br>
+Two very important terms must be defined when talking about a PKI:<br>
+<br>
+<ul>
+<li><b>CA (Certification Authority):</b> The trusted third party that signs the public keys of entities in a PKI-based system.</li><br>
+<li><b>Certificate:</b> A document, which in essence binds together the name of the entity and its public key, which has been signed by the CA.</li>
+</ul>
+<br>
+Many vendors offer CA servers as a managed service or as an end-user product: VeriSign, Entrust Technologies, and GoDaddy are some examples. Organizations may also implement private PKIs using Microsoft Server or Open SSL.<br>
+<br>
+PKI has been standardized to allow interoperability across a wide variety of applications and vendors. In the early 1990s, RSA Security Inc. devised and published a set of standards that are known as PKCS (Public-Key Cryptography Standard). While not true industry standards, as they were specified and maintained by a single organization, several of the standards have been accepted into the standards track processes of recognized standards organizations.<br>
+<br>
+Some of the PKCSs include:<br>
+<br>
+<ul>
+<li>PKCS #1: RSA Cryptography Standard</li><br>
+<li>PKCS #3: D-H Key Agreement Standard</li><br>
+<li>PKCS #5: Password-Based Cryptography Standard</li><br>
+<li>PKCS #6: Extended-Certificate Syntax Standard</li><br>
+<li>PKCS #7: Cryptographic Message Syntax Standard</li><br>
+<li>PKCS #8: Private-Key Information Syntax Standard</li><br>
+<li>PKCS #10: Certification Request Syntax Standard</li><br>
+<li>PKCS #12: Personal Information Exchange Syntax Standard</li><br>
+<li>PKCS #13: Elliptic Curve Cryptography Standard</li><br>
+<li>PKCS #15: Cryptographic Token Information Format Standard</li><br>
+</ul>
+<br>
+X.509 is an ITU-T standard for PKI which specifies, among other things, the formats for identity certificates and certificate validation algorithms. The IETF (Internet Engineering Task Force) formed the PKIX working group to support standards development of X.509.<br>
+<br>
+Currently, digital identity certificates use the X.509 version 3 structure:<br>
+<br>
+<ul>
+<li>Version</li><br>
+<li>Serial number</li><br>
+<li>Algorithm ID</li><br>
+<li>Issuer</li><br>
+<li>Validity<br>
+ - Not before<br>
+ - Not after</li><br>
+<li>Subject</li><br>
+<li>Subject public key info<br>
+ - Public key algorithm<br>
+ - Subject public key</li><br>
+<li>Issuer unique identifier (optional)</li><br>
+<li>Subject unique identifier (optional)</li><br>
+<li>Extensions (optional)</li><br>
+<li>Certificate signature algorithm</li><br>
+<li>Certificate signature</li>
+</ul>
+<br>
+As you can see, digital identity certificates contain a set of identity information about an entity, including that entity's public key. The last element in the certificate is a signature. The CA signs the certificate. It takes all the certificate data and runs it through the specified hash algorithm to compute a fingerprint of the certificate data. It then encrypts the hash using its private key. The encrypted hash is the signature and it is appended to the certificate. Any system can then validate a certificate using the CA’s public key. The system takes the certificate data and runs it through the specified hash algorithm to produce a fingerprint of the certificate which it received. It then decrypts the certificate signature using the CA’s public key. If the computed hash and the decrypted signature match, then the signature is valid.<br>
+<br>
+<a name="PKI Operations"></a>
+<b>PKI Operations</b><br>
+A PKI facilitates highly scalable trust relationships. PKIs can be further scaled using a hierarchy of CAs with a root CA signing the identity certificates of subordinate CAs. For simplicity, this discussion will present a single CA PKI.<br>
+<br>
+The PKI is an example of a trusted third-party system. The basis of the trust is the CA’s public key. All systems that leverage the PKI must have the CA’s public key, from the CA’s own identity certificate. The CA’s own identity certificate is unique as it is self-signed. For many systems, the distribution of CA certificates is handled automatically. For example, commercial web browsers come with a set of public CA root certificates pre-installed, and organizations push their private CA root certificate to clients through various software distribution methods. But in some instances, particularly when a system needs to enroll with a PKI to obtain an identity certificate for itself, the CA certificate must be requested and installed manually. Then, it is advisable to use an out-of-band method to validate the certificate. For example, the CA administrator can be contacted via the phone to obtain the fingerprint of the valid CA identity certificate. The goal is to verify that the CA certificate that was received was the authentic CA certificate containing the authentic CA public key and not a certificate that is provided by an attacker containing the attacker’s public key.<br>
+<br>
+<b>Certificate Enrollment</b><br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515684726.png" alt="" style="">
+<br>
+To obtain an identity certificate, a system administrator will enroll with the PKI. The first step is to obtain the CA’s identity certificate. The next step is to create a CSR (Certificate Signing Request (PKCS #10)). The CSR contains the identity information that is associated with the enrolling system, which can include data such as the system name, the organization to which the system belongs, and location information. Most importantly, the enrolling system’s public key is included with the CSR. Depending on the circumstance, the CA administrator may need to contact the enroller and verify the data before the request can be approved. If the request is approved, the CA will take the identity data from the CSR, and add in the CA-specified data, such as the certificate serial number, the validity dates, and the signature algorithm, to complete the X.509v3 certificate structure. It will then sign the certificate by hashing the certificate data and encrypting the hash with its private key. The signed certificate is then made available to the enrolling system.<br>
+<br>
+<b>Authentication Using Certificates</b><br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515684897.png" alt="" style="">
+<br>
+It is important to understand that the CA is not involved in the certificate validation process. Systems that need to validate the identity certificate of other systems will have the root CA certificate. They will use the CA’s public key to validate the signature on any certificate they receive. It is also important to understand that the certificate does not so much identify the entity of the peer. It only identifies the valid public key of the peer. To be sure that the peer is actually the entity that is identified in the certificate, a system must challenge the peer to prove that it has the private key that is associated with the validated public key. For example, a message can be encrypted with the validated public key and sent to the peer. If the peer can successfully decrypt the message, then the peer must have the associated private key and is therefore the system that is identified by the digital certificate.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515685064.png" alt="" style="">
+<br>
+Digital certificates can be revoked if keys are thought to be compromised, or if the business use of the certificate calls for revocation (for example, VPN access privileges have been terminated). If keys are thought to be compromised, generating new keys forces the creation of a new digital certificate, rendering the old certificate invalid and a candidate for revocation. On the other hand, a consultant might obtain a digital certificate for VPN access into the corporate network only during the contract.<br>
+<br>
+Certificate revocation is also a centralized function, providing “push” and “pull” methods to obtain a list of revoked certificates—frequently or on-demand—from a centralized entity. In some instances, the CA server acts as the issuer of certificate revocation information.<br>
+<br>
+<b>Certificate Revocation Check Methods</b><br>
+Several methods can be used to check for certificate revocation. Currently, the most prevalent methods are CRLs (Certificate Revocation List) and OCSP (Online Certificate Status Protocol). The table lists benefits and limitations of each protocol:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515685251.png" alt="" style="">
 <br>
