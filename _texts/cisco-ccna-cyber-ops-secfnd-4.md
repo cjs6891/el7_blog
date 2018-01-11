@@ -13,7 +13,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#Diffie-Hellman Key Agreement">4.9 Diffie-Hellman Key Agreement</a><br>
 <a href="#Use Case: SSH">4.10 Use Case: SSH</a><br>
 <a href="#Digital Signatures">4.11 Digital Signatures</a><br>
-<a href="#PKI Overview ">4.12 PKI Overview </a><br>
+<a href="#PKI Overview">4.12 PKI Overview </a><br>
 <a href="#PKI Operations">4.13 PKI Operations</a><br>
 <a href="#Use Case: SSL/TLS">4.14 Use Case: SSL/TLS</a><br>
 <a href="#Cipher Suite">4.15 Cipher Suite</a><br>
@@ -520,7 +520,7 @@ The first command that is shown below is used by the router administrator to ver
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1515682045.png" alt="" style="">
 <br>
-<a name="PKI Overview "></a>
+<a name="PKI Overview"></a>
 <b>PKI (Public Key Infrastructure) Overview</b><br>
 A substantial challenge with both asymmetric encryption and digital certificates is the secure distribution of public keys. How do you know that you have the real public key of the other system and not the public key of an attacker who is trying to deceive you? In this scenario, the public key infrastructure comes to play. Entities enroll with a PKI and receive identity certificates that are signed by a certificate authority. Among the identity information included in the certificate is the entity's public key. The certificate authority’s digital signature on the identity certificate validates that the included public key is the real public key belonging to the associated entity. A system will only accept the signed digital certificate if it trusts the CA (Certification Authority). The CA plays the role of a trusted third party.<br>
 <br>
@@ -740,7 +740,6 @@ Many legacy cipher suites available in TLS are insecure (for example, cipher sui
 <br>
 <pre>
 <code>
-Note:
 Reference:
 http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r1.pdf
 </code>
