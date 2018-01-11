@@ -15,13 +15,11 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#Digital Signatures">4.11 Digital Signatures</a><br>
 <a href="#PKI Overview ">4.12 PKI Overview </a><br>
 <a href="#PKI Operations">4.13 PKI Operations</a><br>
-<a href="#">4.</a><br>
-<a href="#">4.</a><br>
+<a href="#Use Case: SSL/TLS">4.14 Use Case: SSL/TLS</a><br>
+<a href="#Cipher Suite">4.15 Cipher Suite</a><br>
 <a href="#">4.</a><br>
 <a href="#">4.</a><br>
 
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 
@@ -621,4 +619,134 @@ Certificate revocation is also a centralized function, providing “push” and 
 Several methods can be used to check for certificate revocation. Currently, the most prevalent methods are CRLs (Certificate Revocation List) and OCSP (Online Certificate Status Protocol). The table lists benefits and limitations of each protocol:<br>
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1515685251.png" alt="" style="">
+<br>
+<a name="Use Case: SSL/TLS"></a>
+<b>Use Case: SSL/TLS</b><br>
+SSL (Secure Socket Layer)/TLS (Transport Layer Security) is the most widely visible use of certificate-based peer authentication. SSL was developed by Netscape in the 1990s to provide secure transactions between web browsers and web servers in support of commerce over the Internet. SSL became a de facto standard, but it has since been made obsolete by TLS which is standardized by the IETF. TLS version 1.0 was defined in RFC 2246 in 1999 and provided a standards-based upgrade to SSL version 3.0. TLS continues to evolve with TLS 1.3 in draft as of February 2015. Modern systems implement TLS, but the term SSL is often used interchangeably by IT professionals.<br>
+<br>
+TLS uses PKI to authenticate peer systems and public key cryptography to facilitate the exchange of session keys that are used to encrypt the SSL session. Many applications use TLS to provide authentication and encryption. The most widely used application is HTTPS. Other well-known applications that were using poor authentication and no encryption were modified to be transported within TLS. Examples include SMTP, LDAP, and POP3.<br>
+<br>
+The figure below depicts the steps that are taken in the negotiation of a new TLS connection between a web browser and a web server. SSL and TLS support a combination of cryptographic algorithms to provide the same services at various levels of risk. The figure illustrates the cryptographic architecture of SSL and TLS, based on the negotiation process of the protocol.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515687522.png" alt="" style="">
+<br>
+SSL and TLS are open enough to allow multiple cipher suites, and they are flexible enough to support more in the future, provided they adhere to protocol specifications. The structure and use of the cipher suite concept are defined in the documents that define the protocol (RFC 5246 for TLS version 1.2). This RFC defines mandatory cipher suites that must be implemented by all TLS-compliant applications. The only mandatory cipher suite is TLS_RSA_WITH_AES_128_CBC_SHA, including RSA for authentication and key exchange, AES for confidentiality (encryption), and SHA for integrity (Hashed Message Authentication Code).<br>
+<br>
+In order to scale and support future protocols, TLS 1.2 defines a Cipher Suite Registry in RFC 2434, maintained by the IANA.<br>
+<br>
+<b>SSL/TLS Certificate Example</b><br>
+Web browsers, using a built-in store of root CA certificates, hide the details of validating TLS sessions from the user, unless there is an issue with the validation process. But even with successful validation, users can drill down into the details of the connection. Here are the certificate details that can be examined within a web browser.<br>
+<br>
+<ol>
+<li>When the connection to the server is first initialized, the server provides its PKI certificate to the client, which contains the public key of the server and is signed with the private key of the CA that the owner of the server has used.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515687867.png" alt="" style="">
+<br>
+</li><br>
+<li>To verify that the PKI certificate can be trusted, the signature of the CA that is in the certificate is checked. If the signature can be traced back to a public key that already is known to the client, the connection is considered to be trusted.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515687947.png" alt="" style="">
+<br>
+</li><br>
+<li>Now that the connection is trusted, the client can send encrypted packets to the server. To encrypt the data traffic, the public key of the server is used.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515688058.png" alt="" style="">
+<br>
+</li><br>
+<li>As public/private-key encryption is one-way encryption, only the server is capable of decrypting the traffic, by using its private key.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515688058.png" alt="" style="">
+<br>
+</li>
+</ol>
+<br>
+Using the <b>Certification Path</b> tab, you can view the path from the selected certificate to the CAs that issue the certificate. In order for the recipient of a certificate to trust the certificate, the recipient must verify that the certificate comes from a trusted source. This verification process is called path validation. Path validation involves processing public key certificates and their issuer certificates in a hierarchical fashion until the certification path terminates at a trusted, self-signed certificate, which is typically a root CA certificate. If there is a problem with one of the certificates in the path, or if the recipient cannot find a certificate, the certification path is considered a nontrusted certification path. A typical certification path includes a root certificate and one or more intermediate certificates. By clicking <b>View Certificate</b>, you can also learn more about the certificates for each CA in the path.<br>
+<br>
+<b>Web Browser Security Warnings</b><br>
+If there are any issues that are associated with validating the certificate of a web server, web browsers will display a security warning to the user. Unfortunately, many users will ignore the security warnings and blindly proceed with the connection under potentially hazardous conditions. The three most common issues that are associated with security warnings are as follows:<br>
+<br>
+<ul>
+<li><b>Hostname/identity mismatch:</b> URLs specify a web server name. If the name specified in the URL does not match the name that is specified in the server’s identity certificate, the browser will display a security warning. Hence, DNS is critical to support the use of PKI in web browsing, which may be benign under certain circumstances: for example, if the user knows the IP address of the server and specifies the IP address instead of the hostname. But attackers may register domain names that look very similar to authentic domain names. The browser will detect the mismatch, but the user may look at the certificate and think that it is acceptable.</li><br>
+<li><b>Validity date range:</b> X.509v3 certificates specify two dates, not before and not after. If the current date is within those two values, there will be no warning. If it is outside the range, the web browser displays a message. The validity date range specifies the amount of time that the PKI will provide certificate revocation information for the certificate. When certificates expire, it facilitates the periodic changing of public/private key pairs on web servers. Expired certificates may simply be the result of administrator oversight, but they may also reflect more serious conditions.</li><br>
+<li><b>Signature validation error:</b> If the browser cannot validate the signature on the certificate, there is no assurance that the public key in the certificate is authentic. Signature validation will fail if the root certificate of the CA hierarchy is not available in the browser’s certificate store. A common reason may be that the server uses a self-signed certificate. Many systems allow the creation of self-signed certificates to avoid the complexity or expense of joining a PKI. The use of self-signed certificates, however, puts the responsibility of certificate verification on the user, which is not optimal from a security perspective. Another possible cause of a signature verification error is that the certificate has been tampered with—for example, if an attacker has replaced the server’s real public key with the attacker’s public key.
+</li>
+</ul>
+<br>
+<a name="Cipher Suite"></a>
+<b>Cipher Suite</b><br>
+As computational horsepower increases and cryptanalysis reveal weakness in the current crypto algorithms, the current crypto algorithms will constantly evolve and new crypto algorithms will be developed to improve security.<br>
+<br>
+For example, DES, the data encryption standard which was approved by the U.S. National Bureau of Standards (NBS) in 1977, is now considered insecure. The NIST, successor to the NBS, officially withdrew DES as an approved option for federal government encryption in 2005. Whereas decrypting DES encrypted data in 1977 was cost-prohibitive, hardware and software to crack DES encryption efficiently is now available at a very reasonable price. Instead of the weaker DES, the AES was adopted by the NIST in 2001.<br>
+<br>
+The SSL/TLS protocols were extensible and modular, allowing the server/client encryption, key exchange, and message authentication code algorithms to be changed without replacing the entire SSL/TLS protocol. For example, TLS version 1.2 added support for authenticated encryption modes, and support for the SHA-256 and SHA-384 hash algorithms, which are not supported in prior versions of TLS.<br>
+<br>
+An SSL/TLS cipher suite is used to define a set of cryptographic algorithms including the authentication and key exchange algorithms (such as RSA), encryption algorithm (such as AES), message authentication code algorithm (such as SHA), and the PRF (Pseudorandom Function). The cipher suites are described in RFC 5288 and RFC 5289.<br>
+<br>
+The figure below depicts part of a PCAP with a TLS client that is presenting the set of cipher suites that it is capable of doing to the server.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515689691.png" alt="" style="">
+<br>
+When a TLS connection is established, a TLS handshake occurs. Within the TLS handshake, a client hello and a server hello message are passed. First, the client sends a list of the cipher suites that it supports, in order of preference. Then the server replies with the cipher suite that it has selected from the client's list.<br>
+The following lists three different TLS cipher suite examples that are using the ECDH (Elliptic Curve Diffie-Hellman) exchange (ECDHE) and ECDSAs (Elliptic Curve Digital Signature Algorithm) for authentication and key exchange, instead of using RSA (as shown in the previous topic).<br>
+<br>
+<ol>
+<li><b>TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384</b><br>
+ - ECDHE_ECDSA is the authentication and key exchange algorithms. ECDHE_ECDSA is used to determine how the client and server will authenticate and establish the pre-master key during the TLS handshake. In this case, both the client and the server will derive the identical pre-master key using the DH parameters (sent in the additional ServerKeyExchange message). The pre-master key is then used to derive the master key and the session-specific keys. With DH key exchanges, in order for the client to authenticate the server, the server will sign the DH parameters that are contained in ServerKeyExchange message with the server’s private key. The client verifies the signature with the server's public key in the server's certificate. Only if the signature is valid, the client will proceed with the TLS handshake.<br>
+<br>
+ - AES_256_GCM is the bulk encryption algorithm.<br>
+<br>
+<ul>
+<li>GCM (Galois Counter Mode) is a mode of operation for an authenticated symmetric key cryptographic block ciphers that has been widely adopted because of its efficiency and performance. GCM is an authenticated encryption algorithm that is designed to provide both data authenticity and confidentiality.</li>
+</ul>
+<br>
+ - SHA-384 is used for the pseudorandom function. Since an authenticated encryption mode (GCM) is used, the messages neither have nor require a message authentication code.<br>
+<br>
+ - The pseudorandom function is used to generate the keying materials that are used during the TLS session.
+</li><br>
+<li><b>TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256</b><br>
+<br>
+ - ECDHE_ECDSA is the authentication and key exchange algorithms.<br>
+<br>
+ - AES_128_CBC is the bulk encryption algorithm. Unlike AES GCM, AES CBC (Cipher Block Chaining) mode does not provide data authenticity (integrity). Therefore, a message authentication code algorithm is required for data authenticity (integrity).<br>
+<br>
+ - SHA-256 is the hashed message authentication code algorithm.<br>
+<br>
+ - SHA-256 is also used for the pseudorandom function.<br>
+ <br>
+<ul>
+<li>For TLS 1.2, the default pseudorandom function is SHA-256, unless otherwise stated.</li>
+</ul>
+</li><br>
+<li><b>TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA256_P384</b><br>
+<br>
+ - ECDHE_ECDSA is the authentication and key exchange algorithms.<br>
+<br>
+ - AES_256_CBC is the bulk encryption algorithm. Unlike AES GCM, AES CBC mode does not provide data authenticity (integrity). Therefore, a message authentication code algorithm is required for data authenticity (integrity).<br>
+<br>
+ - SHA-256 is the hashed message authentication code algorithm.<br>
+<br>
+ - SHA-384 is specified to be used for the pseudorandom function.<br>
+</li>
+</ol>
+<br>
+<pre>
+<code>
+Note:
+The NULL cipher (eNULL) does not perform any encryption and should only be used for testing or debugging.
+</code>
+</pre>
+<br>
+Many legacy cipher suites available in TLS are insecure (for example, cipher suites using DES or RC4 encryption or MD5 message authentication code algorithm). While these legacy cipher suites may still be supported by the browser, their use is not recommended.<br>
+<br>
+<pre>
+<code>
+Note:
+Reference:
+http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r1.pdf
+</code>
+</pre>
+<br>
+The latest TLS version is v1.3, which is a working IETF draft (reference: https://tools.ietf.org/html/draft-ietf-tls-tls13-15). Major differences from TLS v1.2 include removing support of RSA for authentication and key exchange, removing support of MD5 for integrity, removing support for weak and lesser used elliptic curves algorithms, and so on. Removing features that are no longer needed will help reduce the attack surface.<br>
+<br>
+For example, cipher suites that use RSA for authentication and key exchange are protected solely by the server's RSA private key. If the server's private key is compromised now or in the future, all handshakes using these cipher suites will be compromised. RSA certificates will still be allowed in TLS v1.3, but key establishment will be done using DH or ECDH, ensuring PFS (Perfect Forward Secrecy) because a new key is negotiated for each TLS handshake.<br>
 <br>
