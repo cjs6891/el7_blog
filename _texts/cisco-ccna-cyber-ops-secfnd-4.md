@@ -17,11 +17,8 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 4: Understanding Basic Cryp
 <a href="#PKI Operations">4.13 PKI Operations</a><br>
 <a href="#Use Case: SSL/TLS">4.14 Use Case: SSL/TLS</a><br>
 <a href="#Cipher Suite">4.15 Cipher Suite</a><br>
-<a href="#">4.</a><br>
-<a href="#">4.</a><br>
-
-<a name=""></a>
-<a name=""></a>
+<a href="#Key Management">4.16 Key Management</a><br>
+<a href="#NSA Suite B">4.17 NSA Suite B</a><br>
 
 <a name="Impact of Cryptography on Security Investigations"></a>
 <b>Impact of Cryptography on Security Investigations</b><br>
@@ -748,4 +745,52 @@ http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r1.pdf
 The latest TLS version is v1.3, which is a working IETF draft (reference: https://tools.ietf.org/html/draft-ietf-tls-tls13-15). Major differences from TLS v1.2 include removing support of RSA for authentication and key exchange, removing support of MD5 for integrity, removing support for weak and lesser used elliptic curves algorithms, and so on. Removing features that are no longer needed will help reduce the attack surface.<br>
 <br>
 For example, cipher suites that use RSA for authentication and key exchange are protected solely by the server's RSA private key. If the server's private key is compromised now or in the future, all handshakes using these cipher suites will be compromised. RSA certificates will still be allowed in TLS v1.3, but key establishment will be done using DH or ECDH, ensuring PFS (Perfect Forward Secrecy) because a new key is negotiated for each TLS handshake.<br>
+<br>
+<a name="Key Management"></a>
+<b>Key Management</b><br>
+Key management deals with the secure generation, verification, exchange, storage, and destruction of keys. It is extremely important to have secure methods of key management.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515714791.png" alt="" style="">
+<br>
+Key management is often considered the most difficult part of designing a cryptosystem. Many cryptosystems have failed because of mistakes in their key management, and all modern cryptographic algorithms require the services of key management procedures. In practice, most attacks on cryptographic systems are aimed at the key management level rather than at the cryptographic algorithm itself.<br>
+<br>
+<b>Key Management Components</b><br>
+In a modern cryptographic system, key generation is usually automated and not left to the end user. The use of effective randomization is needed to ensure that all keys are equally likely to be generated, so that the attacker cannot predict which keys are more likely to be used. Almost all cryptographic algorithms have some weak keys that should not be used. With the help of key verification procedures, the system can reject weak keys when they occur and repeat the key generation process.<br>
+<br>
+Another important component in key management is key storage. For example, on a modern multiuser operating system that uses cryptography, a key can be stored in memory, which presents a possible problem when that memory is swapped to the disk, because a Trojan horse program that is installed on the PC of a user could then have access to the private keys of that user.<br>
+<br>
+The key management procedures should also provide a secure key exchange mechanism, which allows secure agreement on the keying material with the other party, probably over an untrusted medium.<br>
+<br>
+The last elements of good key management are key revocation and key destruction. Key revocation notifies all interested parties that a certain key has been compromised and should no longer be used. Key destruction erases old keys in such a manner that malicious attackers cannot recover them.<br>
+<br>
+<b>Key Spaces</b><br>
+The key space of an algorithm is the set of all possible key values. A key that is n bits in size produces a key space that has 2n possible key values. Almost every algorithm has weak keys. The implementation should prevent the usage of weak keys. There can be problems when manually defining keys.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515715061.png" alt="" style="">
+<br>
+<b>Key Length Issues</b><br>
+If the cryptographic system is trustworthy, the only way to break it is with a brute-force attack. A brute-force attack is a search through an entire key space, trying all the possible keys, to find a key that decrypts the data. If the key space is large enough, the search requires an enormous amount of time, making such an exhaustive effort unfeasible. On average, an attacker has to search through half of the key space before the correct key is found. The time that is needed to accomplish this search depends on the computer power that is available to the attacker. However, current key lengths can easily make any attempt irrelevant, because it would take many millions or billions of years to complete the search, when a sufficiently long key is used.<br>
+<br>
+With modern algorithms that are trusted, the strength of protection depends solely on the length of the key. You should choose the key length so that it protects data confidentiality or integrity for an adequate time. Data that is more sensitive and needs to be kept secret longer must use longer keys.<br>
+<br>
+Performance is another issue that can influence the choice of key length. You must find a good balance between the speed and protection strength of an algorithm, because some algorithms, such as RSA, run slower with larger key sizes. You should strive for adequate protection, while enabling unhindered communication over untrusted networks.<br>
+<br>
+Because of the rapid advances in technology and cryptanalytic methods, the key size that is needed for a particular application is constantly increasing.<br>
+<br>
+<a name="NSA Suite B"></a>
+<b>NSA Suite B</b><br>
+In 2005, the NSA specified a set of cryptographic algorithms that devices must support to meet federal standards for cryptographic strength. Collectively, these algorithms are defined as the NSA Suite B. The NSA Suite B cryptography specification is rapidly becoming a de facto standard for cryptographic algorithm support.<br>
+<br>
+As described in RFC 6379, Suite B cryptography secures information traveling over networks using four well-established, public-domain cryptographic algorithms:<br>
+<br>
+<ul>
+<li>Encryption using the AES with128- or 256-bit keys in the GCM mode. The block cipher modes of operation include CTR mode and GCM mode, in which case, GCM is the most common. GCM is an authenticated encryption algorithm that is designed to provide both data authenticity and confidentiality.</li><br>
+<li>Digital signatures using the ECDSA with 256 and 384-bit prime moduli.</li><br>
+<li>Key agreement using the ECDH method.</li><br>
+<li>Message digest using the SHA-2 method (SHA-256 and SHA-384).</li>
+</ul>
+<br>
+The NSA has stated that these four algorithms in combination provide adequate information assurance for classified information. NSA Suite B cryptography for IPsec has been published as standard in RFC 6379, and has gained acceptance in the industry.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515716098.png" alt="" style="">
 <br>
