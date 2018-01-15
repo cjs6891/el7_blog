@@ -8,15 +8,10 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 5: Describing Information S
 <a href="#Risk">5.4 Risk</a><br>
 <a href="#Vulnerability Assessment">5.5 Vulnerability Assessment</a><br>
 <a href="#CVSS v3.0">5.6 CVSS v3.0</a><br>
-<a href="#">5.</a><br>
-<a href="#">5.</a><br>
-<a href="#">5.</a><br>
-
-
-
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
+<a href="#Access Control Models">5.7 Access Control Models</a><br>
+<a href="#Regulatory Compliance">5.8 Regulatory Compliance</a><br>
+<a href="#Information Security Management">5.9 Information Security Management</a><br>
+<a href="#Security Operations Center">5.10 Security Operations Center</a><br>
 
 <a name="Information Security Confidentiality, Integrity, and Availability"></a>
 <b>Information Security Confidentiality, Integrity, and Availability</b><br>
@@ -165,4 +160,154 @@ Example: MySQL Stored SQL Injection (CVE-2013-0375) computed to a CVSS v3.0 base
 <img src="https://cjs6891.github.io/el7_blog/public/img/1515895254.png" alt="" style="">
 <br>
 For more information on CVSS v3.0, refer to the CVSS v3.0 User Guide at https://www.first.org/cvss/cvss-v30-user_guide_v1.4.pdf<br>
+<br>
+<a name="Access Control Models"></a>
+<b>Access Control Models</b><br>
+Access control includes control over access to the network resources, information system resources, and information. It is crucial for an organization to implement the proper access controls to protect the organization's resources and information. A security analyst should understand the different basic models for implementing access controls in order to better understand how attackers can break the access controls.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515972907.png" alt="" style="">
+<br>
+<ul>
+<li><b>Mandatory access control:</b> MAC is the strictest control. The design of MAC was defined, and is primarily used by the government and military. MAC enforces system administrator-defined access controls to all controlled resources. MAC assigns a security label to each of the resources containing a classification (such as top secret, secret, and confidential) and a category (such as the department number and project name). Similarly, each user account on the system also includes the same classification and category properties. When a user attempts to access a resource, the system checks the user's classification and categories and compares them to the properties of the requested resource's security label. Access is only allowed if the user's two credentials match. For example, a user with a secret classification cannot access a resource with the top secret label. MAC requires high system management overhead due to the need to update the labels to accommodate new data, new users, and changes in the categorization and classification.</li><br>
+<li><b>Discretionary access control:</b> DAC allows each user to control access to their own data. Instead of a security label as in the case of MAC, each resource in a DAC-based system has an ACL associated with it. An ACL contains a list of users and groups to which the user has permitted access together with the level of access for each user or group. DAC provides a much more flexible environment than MAC but also increases the risk that data will be made accessible to unauthorized users. An example of DAC method is file system permissions. On the file system, each file and folder has an owner. The owner can use ACL and decide which users or group of users have access to the file or folder.</li><br>
+<li><b>Non-discretionary access control:</b> Also known as RBAC (role-based access control), access controls using RBAC are based on a user's job function within the organization, and access is allowed or denied based on a set of rules that are defined by a system administrator. In many organizations in industry and civilian government, the end users do not "own" the information for which they are allowed access. For these organizations, the corporation or agency is the actual owner of system objects, and discretionary access control may not be appropriate. RBAC allows and promotes the central administration of an organizational specific security policy. An example of using RBAC is allowing an analyst to be able to only read the firewall logs, but not be able to change any of the firewall configurations.</li>
+</ul>
+<br>
+In addition to the access models above, other basic access control principles include the following:<br>
+<br>
+<ul>
+<li>The principle of least privilege specifies a limited, as-needed approach to granting user and process access rights to specific information and tools. Access rights should be time-based in order to limit the resource's access to only the time that is needed to complete necessary tasks. Granting access beyond this scope increases the potential for malicious manipulation of sensitive data or processes by unauthorized actors. The assigning of access rights limits system-damaging attacks from users, regardless of whether they are intentional. All users must be authenticated and authorized, and should only be authorized at the lowest privilege level required to perform their functions.</li><br>
+<li>Separation of duties is the concept of having more than one person who is required to complete a task. Separation of duties is an internal control to prevent fraud and error.</li>
+</ul>
+<br>
+<a name="Regulatory Compliance"></a>
+<b>Regulatory Compliance</b><br>
+Compliance regulations are a major driver for security in organizations of all kinds. They define not only the scope and parameters for the risk and security architectures of an organization, but also the liability for those organizations that fail to comply.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515973918.png" alt="" style="">
+<br>
+Current trends in regulatory compliance include the following:<br>
+<br>
+<ul>
+<li>Strengthened enforcement</li><br>
+<li>Global spread of data breach notification laws</li><br>
+<li>More prescriptive regulations</li><br>
+<li>Growing requirements regarding third parties (business partners)</li><br>
+<li>Risk-based compliance on the rise</li><br>
+<li>Compliance process streamlined and automated</li>
+</ul>
+<br>
+The following list describes several examples of compliance regulations. The list has a United States bias. Other jurisdictions may have similar regulations, and the list is not intended to be comprehensive.<br>
+<br>
+<ul>
+<li><b>Payment Card Industry Data Security Standard:</b> The PCI DSS is a proprietary information security standard for organizations that handle branded credit cards from the major card brands including Visa, MasterCard, American Express, Discover, and JCB. Private label cards, which are without a logo from a major card brand, are not included in the scope of the PCI DSS.</li><br>
+<li><b>Health Insurance Portability and Accountability Act:</b> On the healthcare side, the HIPAA legislation, which was enacted in 1996, required the U.S. Department of Health and Human Services to develop a set of national standards for healthcare transactions. These standards provide assurance that the electronic transfer of confidential patient information will be as safe as, or safer than, paper-based patient records.</li><br>
+<li><b>Sarbanes-Oxley Act:</b> The SOX Act of 2002 is legislation that was passed by the U.S. Congress to protect shareholders and the general public from accounting errors and fraudulent practices in the enterprise, as well as improve the accuracy of corporate disclosures. The law was created in response to several major corporate and accounting scandals, including those affecting Enron, Tyco International, Peregrine Systems, and WorldCom. These scandals resulted in a decline of public trust in accounting and reporting practices.</li><br>
+<li><b>Federal Information Security Management Act:</b> The FISMA of 2002 was intended to bolster computer and network security within the U.S. government and affiliated parties by requiring yearly audits. FISMA also brought attention within the U.S. government to cybersecurity, which the U.S. government had previously largely neglected.</li><br>
+<li><b>Gramm-Leach-Bliley Act:</b> The GLBA of 1999 erased longstanding antitrust laws that prohibited banks, insurance companies, and securities firms from merging and sharing information with one another. The idea was that smaller firms would then be able to pursue acquisitions or alliances, or both, that would help encourage competition against many of the larger financial institutions. Included in the GLBA were several consumer privacy protections. Namely, companies must tell their customers what kinds of data they plan to share and with whom, and they must give their customers a chance to opt out of that data sharing.</li><br>
+<li><b>Personal Information Protection and Electronic Documents Act:</b> The PIPEDA or the PIPED Act is a Canadian law relating to data privacy. It governs how private sector organizations collect, use, and disclose personal information while conducting commercial business.</li><br>
+<li><b>Data Protection Directive (95/46/EC):</b> The Directive 95/46/EC (on the protection of individuals regarding the processing of personal data and on the free movement of such data) is a European Union directive that was adopted in 1995 which regulates the processing of personal data within the European Union.</li><br>
+<li><b>Basel II:</b> Basel II is the second of the Basel Accords, which are recommendations on banking laws and regulations that are issued by the Basel Committee on Banking Supervision. Basel II, initially published in June 2004, was intended to create an international standard for banking regulators to control how much capital banks need to put aside to guard against the types of financial and operational risks banks face.</li><br>
+<li><b>Digital Millennium Copyright Act:</b> The DMCA is a United States copyright law that implements two 1996 treaties of the World Intellectual Property Organization (WIPO). It criminalizes production and dissemination of technology, devices, or services that are intended to circumvent measures (commonly known as digital rights management or DRM) that control access to copyrighted works. It also criminalizes the act of circumventing an access control, regardless of actual infringement of copyright itself. In addition, the DMCA heightens the penalties for copyright infringement on the Internet.</li><br>
+<li><b>Safe Harbor Act:</b> Related to the Organization for Economic Co-operation and Development (OECD) principles and their impact on international trade is the regulatory framework of a Safe Harbor Agreement. From the EU perspective, data transfer can happen only if there is a determination of adequate privacy processes and safeguards in place. The EU does not automatically grant that assurance of adequacy for non-EU member nations, like the United States or Canada does. To facilitate data transfer, to enable international trade, and to bridge any privacy differences, the EU, and United States, through the Department of Commerce, have developed a Safe Harbor framework that satisfies the adequacy requirement.</li>
+</ul>
+<br>
+<a name="Information Security Management"></a>
+<b>Information Security Management</b><br>
+Information security management is the identification of an organization's assets, followed by the development, documentation, and implementation of policies and procedures for protecting these assets. Security management is often challenging to accomplish in the changing landscape of mobile workers and virtual data centers; cloud computing-based services add more complexity.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515974957.png" alt="" style="">
+<br>
+Security analysts should be familiar with the information security management system and processes being implemented inside their organization. As with all management processes, the information security management system and processes must remain effective and efficient in the long term, and adapt to changes in the internal organization and external environment.<br>
+<br>
+Plan–do–check–act is an iterative four-step management method that is used in business for the control and continual improvement of processes and products. It is also known as the Deming circle/cycle/wheel:<br>
+<br>
+<ul>
+<li>The <b>Plan</b> phase is about designing the ISMS (Information Security Management System), assessing information security risks and selecting appropriate controls.</li><br>
+<li>The <b>Do</b> phase involves implementing and operating the controls.</li><br>
+<li>The <b>Check</b> phase is to review and evaluate the performance (efficiency and effectiveness) of the ISMS.</li><br>
+<li>In the <b>Act</b> phase, changes are made where necessary to bring the ISMS to peak performance.</li>
+</ul>
+<br>
+The list below details some of the common security management systems/processes:<br>
+<br>
+<ul>
+<li>IT asset management entails collecting inventory, financial, and contractual data to manage the IT asset throughout its life cycle. IT asset management depends on robust processes, with tools to automate manual processes.</li><br>
+<li>Configuration management is the process for establishing and maintaining consistency of a product's performance, functional requirements, and design throughout the product's life cycle.</li><br>
+<li>Patch management involves acquiring, testing, and the installing of patches or code changes to the IT systems.</li><br>
+<li>Vulnerability management is the practice of identifying, classifying, remediating, and mitigating vulnerabilities in software, firmware, and hardware.</li><br>
+<li>MDM (Mobile Device Management) is a type of security management software that is utilized by IT to monitor, manage, and secure employees' mobile devices.</li>
+</ul>
+<br>
+The best way to manage security risk and compliance requirements is through a systematic and comprehensive approach that is based on industry best practices.<br>
+<br>
+There are two widely recognized and widely deployed IT security control frameworks:<br>
+<br>
+<ul>
+<li>Control Objectives for Information and Related Technologies (COBIT) is a good-practice framework. The framework was created by international professional association ISACA for IT management and IT governance. COBIT provides an implementable set of controls over information technology and organizes them around a logical framework of IT-related processes and enablers.</li><br>
+<li>ISO/IEC 27002:2013 provides guidelines for organizational information, security standards, and information security management practices, including the selection, implementation, and management of controls, taking into consideration the organization's information security risk environment.<br>
+<br>
+It is designed to be used by organizations that intend to:<br>
+<br>
+<ul>
+<li>Select controls within the process of implementing an information security management system that is based on ISO/IEC 27001</li><br>
+<li>Implement commonly accepted information security controls</li><br>
+<li>Develop their own information security management guidelines</li>
+</ul>
+</li>
+</ul>
+<br>
+These two IT governance frameworks can be used together to help manage IT-related risk and network security compliance audit requirements, as well as the needs of current corporate governance and internal control requirements.<br>
+<br>
+<a name="Security Operations Center"></a>
+<b>Security Operations Center</b><br>
+The Verizon 2015 Data Breach Investigation Report showed that the time it took to breach 60 percent of the businesses that were covered in their report was merely minutes. Breaches tend to happen very quickly and on average take a long time to be detected by the targeted organization. These numbers demonstrate the importance of having an effective SOC (Security Operations Center).<br>
+<br>
+The SOC is the facility where enterprise information systems (web sites, applications, databases, data centers and servers, networks, desktops, other endpoints, and so on) are monitored, assessed, and defended.<br>
+<br>
+The SOC and the NOC complement each other and work in tandem. The NOC is usually responsible for monitoring and maintaining the overall network infrastructure—its primary function is to ensure uninterrupted network service.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1515976068.png" alt="" style="">
+<br>
+A SOC is related to the people, processes, and technologies involved in providing situational awareness through the detection, containment, and remediation of information security threats. Using a measured, consistent, and creative approach to security incident response and security monitoring delivers the most effective and efficient results for the organization. This approach makes human analysts the most critical component of any SOC. SOC staffing may include different tiers/levels of security analysts, SOC managers, specialists focusing on malware reverse engineering, computer and mobile device forensics, penetration and vulnerability testing, and so on.<br>
+<br>
+SOC operations typically are based around an SIEM system, which aggregates and correlates data from security feeds, such as network discovery and vulnerability assessment systems, risk and compliance systems, log management systems, penetration testing tools, firewalls, IPS, NetFlow analysis systems, threat intelligence feeds, host antivirus systems, web security appliances, and email security appliances. The SIEM technology creates a "single pane of glass" for the security analysts to monitor the enterprise.<br>
+<br>
+There are three general types of security operations centers as follows:<br>
+<br>
+<ul>
+<li>The <b>threat-centric SOC</b> proactively hunts for threats on the network. Most threat-centric SOCs employ 24×7 hunting through all the collected security data to discover active exploitation. Upon discovery, security investigators will typically provide guidance to safely mitigate the attacks.</li><br>
+<li>The <b>compliance-based SOC</b> focuses on the state of the company’s overall security posture as it relates to compliancy testing, penetration testing, and vulnerability testing.</li><br>
+<li>The <b>operational-based SOC</b> focuses on maintaining the operational integrity and functionality of the different security controls.</li>
+</ul>
+<br>
+The present state of cybercrime calls for organizations’ defense-in-depth strategy to shift from the current “detect and prevent” approach, to a “threat-focused" paradigm. Being threat-focused means thinking like an attacker, applying visibility and context to understand and adapt to changes in the environment and then evolving the protections to take action and stop threats.<br>
+<br>
+Normal tasks for a security analyst working at a threat-focused SOC includes seeking out malicious activity that was not identified by traditional alerting mechanisms, and documenting the malicious activity hunting process in a living play-book that is continuously updated as threats and malicious campaigns evolve.<br>
+<br>
+<pre>
+<code>
+Note:
+Companies that do not have their own managed SOC can out-source their security services to a managed security services provider. Managed security services can be CPE-based, cloud-based, or can be a hybrid CPE/cloud-based solution.
+</code>
+</pre>
+<br>
+<b>Big Data Analytics</b><br>
+According to the Breach Level Index, between July and September of 2014, an average of 23 data records were lost or stolen every second—close to 2 million records every day. This data loss will continue as attackers become increasingly sophisticated in their attacks. Given this reality, traditional means of threat detection can no longer be relied upon. Technically advanced attackers often leave behind clue-based evidence of their activities, but uncovering them usually involves filtering through mountains of logs and telemetry data. The application of big data analytics to this problem has become a necessity.<br>
+<br>
+To help organizations leverage big data in their security strategy, Cisco prototyped the open source security analytics framework: OpenSOC in September 2013. By December 2013, Hortonworks joined, then took over, the OpenSOC project. In September 2014, OpenSOC became generally available.<br>
+<br>
+The following are the goals of OpenSOC:<br>
+<br>
+<ul>
+<li>To provide a collaborative open source community for development of an extensible and scalable advanced security analytics tool.</li><br>
+<li>To encourage open communication for additional features and identification of deficiencies for a stable and functionally usable tool.</li><br>
+<li>To identify key feature enhancements to drive technology efforts around efficient security analytics.</li>
+</ul>
+<br>
+By integrating numerous elements of the Hadoop ecosystem, such as Storm, Kafka, and Elasticsearch, the OpenSOC framework helps organizations make big data part of their technical security strategy by providing a platform for the application of anomaly detection and incident forensics to the data loss problem. Hadoop is an open-source software framework for distributed storage, and distributed processing of very large data sets.<br>
+<br>
+OpenSOC provides a scalable platform incorporating capabilities such as full-packet capture indexing, storage, data enrichment, stream processing, batch processing, real-time search, and telemetry aggregation. It also provides a centralized platform to effectively enable security analysts to rapidly detect and respond to advanced security threats.<br>
+<br>
+OpenSOC welcomes participation from all people and organizations for development, enhancements, and/or implementation support. For more information and to contribute to the OpenSOC community, visit the OpenSOC community website at http://opensoc.github.io/<br>
 <br>
