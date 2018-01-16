@@ -1,18 +1,17 @@
 ---
 layout: page
-title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 5: Understanding Network Applications"
+title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 6: Understanding Network Applications"
 ---
 
 <a href="#DNS Operations">6.2 DNS Operations</a><br>
 <a href="#Recursive DNS Query">6.3 Recursive DNS Query</a><br>
-<a href="#">6.</a><br>
+<a href="#Dynamic DNS">6.4 Dynamic DNS</a><br>
 <a href="#">6.</a><br>
 <a href="#">6.</a><br>
 <a href="#">6.</a><br>
 <a href="#">6.</a><br>
 <a href="#">6.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -114,5 +113,43 @@ The DNS recursive resolver may also have knowledge about the requested informati
 The above figure illustrates the recursive DNS process (assuming that nothing has been cached in the DNS recursor local DNS cache yet):<br>
 <br>
 <ol>
-
+<li>The DNS resolver (DNS client) sends a query message to the DNS recursor (DNS recursive resolver) asking for the address of http://www.cisco.com</li><br>
+<li>The DNS recursor sends a query message to the root name servers looking for the .com domain name space.</li><br>
+<li>The root name servers send a DNS referral response message to the DNS recursor informing it to ask the gTLD (Generic Top-Level Domain) name servers for the .com domain name space.</li><br>
+<li>The DNS recursor sends a query message to the gTLD name servers looking for the .cisco.com domain name space.</li><br>
+<li>The gTLD name servers send a DNS referral response message to the DNS recursor informing it to ask the .cisco.com name servers, ns1.cisco.com or ns2.cisco.com, about this domain name space.</li><br>
+<li>The DNS recursor sends a query to ns1.cisco.com or ns2.cisco.com, asking for http://www.cisco.com</li><br>
+<li>The .cisco.com name servers, ns1.cisco.com or ns2.cisco.com, send an authoritative DNS query response message to the DNS recursor with the A (address) RR information for http://www.cisco.com</li><br>
+<li>The DNS recursor sends a DNS query response message to the DNS resolver with the A (address) RR information for http://www.cisco.com</li>
 </ol>
+<br>
+<a name="Dynamic DNS"></a>
+<b>Dynamic DNS</b><br>
+DDNS allows the automated discovery and registration of the client system's public IP addresses. The DDNS client program on the end user device in the private network connects to the DDNS provider's with a unique log in name, then the DDNS provider uses the name to link the discovered public IP address with a hostname in the domain name system.<br>
+<br>
+Often, DDNS services use HTTP or HTTPS as the communication protocol between the client and the DDNS provider, since most environments usually allow HTTP or HTTPS traffic outbound.<br>
+<br>
+DDNS is discussed in RFC 2136. DDNS can be used by Microsoft DNS servers for internal clients to register themselves to the Microsoft DNS servers, and it can be used in BIND 8 and above DNS servers, if configured to support DDNS.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516122802.png" alt="" style="">
+<br>
+The figure above illustrates the basic DDNS operations:<br>
+<br>
+<ol>
+<li>After the end-user host received a new dynamic IP address from the ISP, the DDNS client program on end-user host connects to the DDNS provider to inform the DDNS provider its new IP address, the DDNS provider links the end-user host new IP address to the end-used hostname in the domain name system.</li><br>
+<li>Another user queries for the IP address of the end-user hostname. In this example, the end-user hostname is example.ddns-provider.com.</li><br>
+<li>The other user receives the IP address of example.ddns-provider.com, and connects to example.ddns-provider.com using the IP address.</li>
+</ol>
+<br>
+If the end-user host dynamic IP address is changed by the ISP, the end-user host informs the DDNS provider of its new IP address.<br>
+<br>
+There are many DDNS providers that offer free and fee-based DDNS service. DDNS is a useful service with numerous legitimate applications. One of the primary DDNS use cases involves enabling connections to networks that rely on dynamic IP address ranges. Dynamic IP addressing tends to be more ubiquitous on residential networks, so that when home Internet users wish to host a website or connect to their home VPN, they often rely on a DDNS service. The DDNS provider maps a new subdomain (based on a list of existing domains that are owned by the DDNS provider) to the DDNS client's dynamic IP address that is currently provisioned by the ISP.<br>
+<br>
+Like all good and useful Internet services, threat actors have used DDNS for malicious purposes. In order to launch an attack that involves malicious intent while maintaining a persistent connection to a CnC server, or for data exfiltration from a victim network, an attacker must first configure the networking infrastructure. DNS is a primary consideration in the attacker’s larger decision process. One decision the attacker must make is whether to use domain names or IP addresses.<br>
+<br>
+Obviously, not using domain names and hard-coding the CnC traffic to an IP address reduces the attack flexibility, since the command and control server may be quickly identified and disabled.<br>
+<br>
+To use domain names, attackers can register their domains with a stolen credit card, compromise a legitimate registrar account and create new DNS records, or use a DDNS service. Registering a domain with a stolen credit card is not optimal for longer duration attacks, because the registrar will disable the domain and account once the fraud is discovered. Compromising an existing registrar customer account is resource-intensive and will not scale well for attacks requiring multiple domains.<br>
+<br>
+Attackers now frequently choose to use a DDNS service, where the subdomains can be quickly and easily generated. Data that has been obtained by the Cisco Cloud Web Security research team shows that the block rate for DDNS-based domain web traffic is nearly 20%, while the average block rate for all other web traffic is less than 1%. There are also quite a few DDNS-based domains that are blocked with almost 100% frequency.<br>
+<br>
