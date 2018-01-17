@@ -10,9 +10,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 6: Understanding Network Ap
 <a href="#HTTPS Operations">6.6 HTTPS Operations</a><br>
 <a href="#Web Scripting">6.7 Web Scripting</a><br>
 <a href="#SQL Operations">6.8 SQL Operations</a><br>
-<a href="#">6.</a><br>
-
-<a name=""></a>
+<a href="#SMTP Operations">6.9 SMTP Operations</a><br>
 
 <a name="DNS Operations"></a>
 <b>DNS Operations</b><br>
@@ -377,3 +375,42 @@ Web scripting is used to create dynamic content on a web page in addition to the
 <br>
 <a name="SQL Operations"></a>
 <b>SQL Operations</b><br>
+SQL is used to query, operate, and administer relational database management systems such as Microsoft SQL server, Oracle, or MySQL. The general use of SQL is consistent across all database systems that support it; however, there are intricacies that are particular to each system. Database systems are commonly used to provide backend functionality to many types of web applications. In support of web applications, user-supplied web input data is often used to dynamically build SQL statements that interact directly with a database.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516221467.png" alt="" style="">
+<br>
+An analyst should understand how SQL is used to be able to recognize SQL based attacks such as the SQL injection attack. A SQL injection attack involves the alteration of SQL statements that are used within a web application by using attacker-supplied data. Insufficient input validation in web applications can expose them to SQL injection attacks. The effects of a successful SQL injection attack vary based on the targeted application and how that application processes the user-supplied data.<br>
+<br>
+SQL functions include the following:<br>
+<br>
+<ul>
+<li>Create databases and tables. The data in a database is stored in the tables. The table is a collection of related data entries and it consists of columns and rows. Columns contain the column name, data type, and any other attributes for the column. Rows contain the records or data for the columns.</li><br>
+<li>Define the data in the database and manipulate that data.</li><br>
+<li>Access the data in the database.</li><br>
+<li>Set the database permissions.</li>
+</ul>
+<br>
+The following SQL commands are grouped according to the attacker's goals:<br>
+<br>
+<ul>
+<li>Exfiltrating data<br>
+ - <code>SELECT [fields] FROM [table] [...]</code>
+</li><br>
+<li>Modifying data<br>
+ - <code>UPDATE [table] SET [field] = [value] WHERE [condition]</code><br>
+ - <code>INSERT INTO [table] VALUES [...]</code><br>
+ - <code>TRUNCATE TABLE [table]</code>
+</li><br>
+<li>Modifying database structure<br>
+ - <code>DROP TABLE [table]</code><br>
+ - <code>ALTER TABLE [table] [...]</code><br>
+ - <code>DROP DATABASE</code>
+</li>
+</ul>
+<br>
+When dealing with data exfiltration, the analyst should respond quickly to prevent data from being sent out to the attacker. The analyst should determine the result of the SQL operation and search for abnormal traffic leaving the database/web servers, back to the attacker.<br>
+<br>
+When dealing with data or database structure modification, the analyst should recognize that the data has been compromised, possibly deleted or modified. This comparison likely requires a comparison with an offline backup and restoration from a backup created prior to the attack.<br>
+<br>
+<a name="SMTP Operations"></a>
+<b>SMTP Operations</b><br>
