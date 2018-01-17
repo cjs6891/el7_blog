@@ -281,51 +281,23 @@ Cookies are passed between the web server and web browser using the <b>Set-Cooki
 <br>
 The web server sends the following to the web browser in the HTTP response header to create a cookie on the web browser:<br>
 <br>
-<pre>
-<code>
-Set-Cookie: <name>=<value>[; <name>=<value>]...
-[; expires=<date>][; domain=<domain_name>]
-[; path=<some_path>][; secure][; httponly]
-</code>
-</pre>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516216959.png" alt="" style="">
 <br>
 The web browser sends the cookie information back to the web server in the HTTP request header:<br>
 <br>
-<pre>
-<code>
-Cookie: <name>=<value> [;<name>=<value>]...
-</code>
-</pre>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516217002.png" alt="" style="">
 <br>
 For example, the web browser sends its first HTTP request to <b>www.example.org</b>:<br>
 <br>
-<pre>
-<code>
-GET /index.html HTTP/1.1
-Host: http://www.example.org
-</code>
-</pre>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516217065.png" alt="" style="">
 <br>
 The web server responds with two <b>Set-Cookie</b> headers:<br>
 <br>
-<pre>
-<code>
-HTTP/1.0 200 OK
-Content-type: text/html
-Set-Cookie: theme=light
-Set-Cookie: sessionToken=abc123; Expires=Wed, 01 Jun 2020 10:00:00 GMT
-</code>
-</pre>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516217120.png" alt="" style="">
 <br>
 The web browser sends another HTTP request to visit the <b>ccna.html</b> page on the website. This HTTP request contains the two cookies that the web server instructed the web browser to set:
 <br>
-<pre>
-<code>
-GET /ccna.html HTTP/1.1
-Host: http://www.example.org
-Cookie: theme=light; sessionToken=abc123
-</code>
-</pre>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516221288.png" alt="" style="">
 <br>
 The <b>sessionToken</b> cookie is a piece of data that can be used by the web server to identify a particular session. By examining the <b>sessionToken</b> cookie, the web server knows that this second HTTP request is related to the previous HTTP request. The web server answers by sending the requested web page, and possibly including more <b>Set-Cookie</b> headers in the HTTP response header in order to add new cookies, modify existing cookies, or delete cookies.<br>
 <br>
