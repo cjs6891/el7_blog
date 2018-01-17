@@ -6,15 +6,12 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 6: Understanding Network Ap
 <a href="#DNS Operations">6.2 DNS Operations</a><br>
 <a href="#Recursive DNS Query">6.3 Recursive DNS Query</a><br>
 <a href="#Dynamic DNS">6.4 Dynamic DNS</a><br>
-<a href="#">6.</a><br>
-<a href="#">6.</a><br>
-<a href="#">6.</a><br>
+<a href="#HTTP Operations">6.5 HTTP Operations</a><br>
+<a href="#HTTPS Operations">6.6 HTTPS Operations</a><br>
+<a href="#Web Scripting">6.7 Web Scripting</a><br>
 <a href="#">6.</a><br>
 <a href="#">6.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 
@@ -152,4 +149,342 @@ Obviously, not using domain names and hard-coding the CnC traffic to an IP addre
 To use domain names, attackers can register their domains with a stolen credit card, compromise a legitimate registrar account and create new DNS records, or use a DDNS service. Registering a domain with a stolen credit card is not optimal for longer duration attacks, because the registrar will disable the domain and account once the fraud is discovered. Compromising an existing registrar customer account is resource-intensive and will not scale well for attacks requiring multiple domains.<br>
 <br>
 Attackers now frequently choose to use a DDNS service, where the subdomains can be quickly and easily generated. Data that has been obtained by the Cisco Cloud Web Security research team shows that the block rate for DDNS-based domain web traffic is nearly 20%, while the average block rate for all other web traffic is less than 1%. There are also quite a few DDNS-based domains that are blocked with almost 100% frequency.<br>
+<br>
+<a name="HTTP Operations"></a>
+<b>HTTP Operations</b><br>
+From the 2016 Cisco Annual Security Report, Cisco analyzed web traffic and determined that HTTPS requests have been gradually (but significantly) increasing since January 2015. For example, 24% of the web requests in January 2015 used the HTTPS protocol; the rest of them still used HTTP.<br>
+<br>
+Security analysts should have a good understanding of the HTTP protocol operations since many attacks involve using HTTP. Security analysts should be able to analyze traffic captures that contain HTTP traffic to identify anomalies in the HTTP traffic.<br>
+<br>
+<b>HTTP Protocol Fundamentals</b><br>
+HTTP is a client/server protocol where the web browser is the client and the web server is the server. HTTP is a stateless application layer protocol. The default port for HTTP is TCP port 80, but other ports can be used.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516200676.png" alt="" style="">
+<br>
+A client's web browser sends an HTTP request to the web server. An HTTP request has three parts:<br>
+<br>
+<ul>
+<li>The HTTP request method, URI, and the HTTP protocol name and version</li><br>
+<li>The HTTP request headers are used to define the operating parameters of the HTTP transaction, and to provide information about the client.</li><br>
+<li>The HTTP request body</li>
+</ul>
+<br>
+The web server sends an HTTP response to the client’s web browser. An HTTP response has three parts:<br>
+<br>
+<ul>
+<li>HTTP protocol name and version, and the status code. For example, a status code of 200 means the processing of the HTTP request was successful.</li><br>
+<li>The HTTP response headers are used to define the operating parameters of the HTTP transaction, and to provide information about the web server.</li><br>
+<li>The HTTP response body</li>
+</ul>
+<br>
+<b>URI and URL</b><br>
+The URI identifies a resource either by location, or a name, or both. The official register of URI scheme names is maintained by IANA, at http://www.iana.org/assignments/uri-schemes. For each scheme, the RFC that defines the scheme is listed, for example "http:" is defined in RFC 2616.<br>
+<br>
+A URL is a subset of a URI that defines the location of a specific resource and how to retrieve it. The part that makes a URI a URL is inclusion of the “access mechanism/protocol” or “network location,” such as <b>http://</b>, <b>https://</b>, and <b>ftp://</b><br>
+<br>
+For example, the <b>http://www.example.com/index.html</b> URL will request the file that is named <b>index.html</b> in the root directory of the <b>www.example.com</b> web server.<br>
+<br>
+Below is an example of a URL and descriptions of each part of the URL.<br>
+<br>
+http://www.example.cisco.com:80/video?docid=96673783583808&hl=en#00h01m15s<br>
+<br>
+<ul>
+<li><b>Protocol:</b> http (can also be https, ftp, and so on)</li><br>
+<li><b>Host:</b> www.example.cisco.com<br>
+ - <b>Host (or Prefix)</b> = www. <b>Subdomain</b> = example.cisco.com. <b>Domain</b> = cisco.com. <b>Top-Level Domain</b> = .com.
+</li><br>
+<li><b>Port:</b> If the port is not specified, port 80 is assumed.</li><br>
+<li><b>Path:</b> /video. Path typically refers to a file or location on the web server. You can think of a path as a directory structure.</li><br>
+<li><b>Parameters:</b> ?docid=96673783583808&hl=en. The docid=96673783583808 parameter in this example reference a specific video file in the path. The hl=en parameter specify the language, for example, setting the video subtitle to English.<br>
+<br>
+ - URL parameters are also referred to as “query strings," which contain extra information in the form of key-value pairs called parameters. URLs can have many parameters. Parameters start with a question mark (?) and are separated with an ampersand (&).<br>
+<br>
+ - <b>Fragment or named anchor:</b> #00h01m15s. Typically the fragment is used to refer to an internal section within a web document. In this case, the fragment means skip to 1 minute and 15 seconds into the video.
+</li>
+</ul>
+<br>
+Some characters cannot be part of a URL (for example, a space), and some other characters have a special meaning in a URL. URL encoding is used to deal with this problem, for example, a space can be encoded as a "+" sign or as "%20". "%20" is the percent encoding for the binary octet "00100000", which in ASCII corresponds to the space character.<br>
+<br>
+<b>HTTP Request Methods</b><br>
+HTTP defines different request methods to indicate the desired action to be performed on the identified resource. The common HTTP request methods include GET, HEAD, POST, PUT, and DELETE, to name a few.<br>
+<br>
+<ul>
+<li>The GET method retrieves data from the specified resource.</li><br>
+<li>The HEAD method asks for a response identical to that of a GET request, but without the response body</li><br>
+<li>The POST method creates data on the specified resource.</li><br>
+<li>The PUT method request is used to update data on the specified resource.</li><br>
+<li>The DELETE method deletes the specified resource.</li>
+</ul>
+<br>
+<b>HTTP Request and Response Packets Capture Example</b><br>
+The figure below shows a screenshot from Wireshark showing details of HTTP packets. The client's HTTP GET requests are shown in red, and the web server's responses are shown in blue. In this example, the client generated the HTTP GET request using the <code>wget</code> command from a Linux host.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516202287.png" alt="" style="">
+<br>
+HTTP GET requests contain user agent information to help the web server identify the web browser and configuration of the client. In this example, the user agent is <b>wget/1.13-4(linux-gnu)</b>. The user agent information that is sent by the web browser is used by the web server to identify the browser, the browser version, and the OS that the host is running on. The user agent is one of the fields in the HTTP header section of HTTP request. HTTP header fields are used to define the operating parameters of an HTTP transaction. A core set of the HTTP header fields is standardized in RFCs 7230, 7231, 7232, 7233, 7234, and 7235.<br>
+<br>
+Web sites often include code to detect the web browser version and adjust the web page design according to the user agent information that is received. Various web browsers have a feature to spoof their identification to force certain server-side content. For example, the Firefox user agent changer add-on extension can be used to change the Firefox user agent. Attackers often manipulate the user agents in their attacks, such as embedding a malicious script in the user agent string.<br>
+<br>
+In the user agent string example that is shown below, the browser is Firefox version 48.0 running on Windows 7:<br>
+<br>
+<pre>
+<code>
+Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0
+</code>
+</pre>
+<br>
+The user agent is one of the HTTP headers in the HTTP request. The other request headers in this example are Accept (content-types that are acceptable for the response), Host (identifies the web server), and Connection (control option for the connection). A core set of the HTTP header fields is standardized in RFCs 7230, 7231, 7232, 7233, 7234, and 7235. In this HTTP request example, there is no HTTP request body, the request body is optional in the HTTP request.<br>
+<br>
+Examining the web server's HTTP response in blue from the Wireshark screenshot, 200 is the OK status code. The HTTP response headers include information about the web server and version (Apache/2.2.22), the content type (text/HTML), and so on. The HTTP response body contains the requested web page:<br>
+<br>
+<pre>
+<code>
+It works!
+This is the default web page for this server.
+The web server software is running but no content has been added, yet.
+</code>
+</pre>
+<br>
+The figure below shows the actual web page that is being requested in this example.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516202553.png" alt="" style="">
+<br>
+<b>HTTP Status Codes</b><br>
+The HTTP server responses are classified by a numerical status code. Status codes indicate the reasons behind successful and failed HTTP requests. The IANA maintains the official registry of the HTTP status codes.<br>
+<br>
+Status codes starting with 1xx are Informational, 2xx are Success, 3xx are Redirection, 4xx are Client Error, and 5xx are Server Error.<br>
+<br>
+Common status codes include the following:<br>
+<br>
+<ul>
+<li><b>100 = Continue:</b> The server has received the request headers and the client should proceed to send the request body (in the case of a request for which a body needs to be sent; for example, a POST request).</li><br>
+<li><b>200 = OK:</b> The processing of the request that was sent by the client was successful.</li><br>
+<li><b>301 = Moved Permanently:</b> The resource has permanently moved to a different URI.</li><br>
+<li><b>302 = Found:</b> The requested resource resides temporarily under a different URI. The client is invited by a response with this code to make a second, otherwise identical, request to the new URL specified in the location field. However, many web browsers implemented the 302 status code in a manner that violates the HTTP/1.0 specification, changing the request type of the new request. Therefore, one of the other status codes that was added with the HTTP/1.1 specification is status code 307.</li><br>
+<li><b>307 = Temporarily Moved:</b> The request should be repeated with another URI; however, future requests should still use the original URI. The 307 status code indicates to client that the request method should not be changed when reissuing the original request. For example, a POST request should be repeated using another POST request.</li><br>
+<li><b>401 = Unauthorized (Authentication Required):</b> The request first requires authentication with the server.</li><br>
+<li><b>403 = Forbidden:</b> Access is denied.</li><br>
+<li><b>404 = Not Found:</b> The server cannot find the requested URI.</li><br>
+<li><b>407 = Proxy Authentication Required:</b> The request first requires authentication with the proxy.</li><br>
+<li><b>500 = Internal Server Error:</b> This generic web server error message is given when an unexpected condition is encountered and no more specific message is suitable.</li>
+</ul>
+<br>
+<b>HTTP Cookies</b><br>
+Another important HTTP feature an analyst needs to be aware of is the use of the HTTP cookies. Once an attacker has access to the web browser cookies for a particular web site, the attacker has access to all the information that is stored in the cookies.<br>
+<br>
+An HTTP cookie is a small piece of data that is sent from the web server and stored in the user's web browser while the user is browsing. Cookies are used by the web server to remember stateful information (such as items added in the shopping cart in an online store) or to record the user's browsing activity (including clicking particular buttons, logging in, or recording which pages were visited in the past). Cookies can also be used to remember arbitrary pieces of information that were previously entered by the user in form fields such as name and address.<br>
+<br>
+A web browser add-on, such as the Cookies Manager for Firefox (shown below), can be used to manage the Firefox browser's cookies. In this example, one of the cookies for the cisco.com domain is the language preference, where it is currently set to en (English).<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516202991.png" alt="" style="">
+<br>
+Cookies are passed between the web server and web browser using the <b>Set-Cookie</b> HTTP header field in the HTTP response, and the <b>Cookie</b> HTTP header in the HTTP request.<br>
+<br>
+The web server sends the following to the web browser in the HTTP response header to create a cookie on the web browser:<br>
+<br>
+<pre>
+<code>
+Set-Cookie: <name>=<value>[; <name>=<value>]...
+[; expires=<date>][; domain=<domain_name>]
+[; path=<some_path>][; secure][; httponly]
+</code>
+</pre>
+<br>
+The web browser sends the cookie information back to the web server in the HTTP request header:<br>
+<br>
+<pre>
+<code>
+Cookie: <name>=<value> [;<name>=<value>]...
+</code>
+</pre>
+<br>
+For example, the web browser sends its first HTTP request to <b>www.example.org</b>:<br>
+<br>
+<pre>
+<code>
+GET /index.html HTTP/1.1
+Host: http://www.example.org
+</code>
+</pre>
+<br>
+The web server responds with two <b>Set-Cookie</b> headers:<br>
+<br>
+<pre>
+<code>
+HTTP/1.0 200 OK
+Content-type: text/html
+Set-Cookie: theme=light
+Set-Cookie: sessionToken=abc123; Expires=Wed, 01 Jun 2020 10:00:00 GMT
+</code>
+</pre>
+<br>
+The web browser sends another HTTP request to visit the <b>ccna.html</b> page on the website. This HTTP request contains the two cookies that the web server instructed the web browser to set:
+<br>
+<pre>
+<code>
+GET /ccna.html HTTP/1.1
+Host: http://www.example.org
+Cookie: theme=light; sessionToken=abc123
+</code>
+</pre>
+<br>
+The <b>sessionToken</b> cookie is a piece of data that can be used by the web server to identify a particular session. By examining the <b>sessionToken</b> cookie, the web server knows that this second HTTP request is related to the previous HTTP request. The web server answers by sending the requested web page, and possibly including more <b>Set-Cookie</b> headers in the HTTP response header in order to add new cookies, modify existing cookies, or delete cookies.<br>
+<br>
+Many websites use cookies as identifiers for the user sessions. If a web site uses cookies as session identifiers, attackers can impersonate users' requests by stealing, then using, the victims' cookies. From the web server's point of view, a request from the attacker then has the same authentication as the victim's requests; thus the request is performed on behalf of the victim's session.<br>
+<br>
+For example, if the unencrypted HTTP traffic including the cookies on a network are intercepted by an attacker using a man-in-the-middle type attack, the attacker can use the intercepted cookies to impersonate a user and perform malicious tasks. This problem can be resolved by securing the web server and web browser communications by using the HTTPS protocol (HTTP over SSL/TLS) to encrypt the connection. The web server can specify a Secure flag while setting the cookies, which will cause the web browser to send the cookies only over an encrypted connection.<br>
+<br>
+<b>HTTP Referer</b><br>
+Referer is another HTTP request header. The referer is the address of the previous web page from which a link to the currently requested page was followed. For example, when a user clicks a link in a web page, the web browser sends an HTTP request to the web server that is serving the destination web page. The HTTP request headers include the referer header, which indicates the last page that the user was on (the page where the user clicked the link).<br>
+<br>
+<pre>
+<code>
+Note:
+The word “referer” has been misspelled in the RFC and in most implementations, so that it has become standard usage and is now considered correct terminology.
+</code>
+</pre>
+<br>
+The figure below shows an example of an HTTP GET request where the referer is http://www.cisco.com. In this example, the user clicked a link from the www.cisco.com home page to access another web page.<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516203609.png" alt="" style="">
+<br>
+<a name="HTTPS Operations"></a>
+<b>HTTPS Operations</b><br>
+As a protocol, HTTP is unencrypted, and therefore does not protect user data from interception or alteration. All data that is sent over HTTP is in plain text and can be read by anyone that manages to break into the connection between the browser and the web server. Unencrypted HTTP connections create a privacy vulnerability and expose potentially sensitive information.<br>
+<br>
+In designing web applications, HTTPS should be used instead of HTTP whenever private data is being transmitted, such as passwords and credit card numbers. HTTPS is a combination of HTTP and TLS or its predecessor, SSL where HTTP runs on top of the TLS or SSL protocol. TLS or SSL is the network protocol that is used by HTTP to establish an encrypted connection to an authenticated peer over an untrusted network.<br>
+<br>
+SSL is an older protocol which has weaknesses, such as the POODLE vulnerability, that has shown that SSL v3.0 is insecure. As a result of the POODLE vulnerability, SSL v3.0 is being disabled on web sites all over the world and for many other services as well. TLS v1.0 is based on SSL v3.0. TLS v1.1 and v1.2 are more secure and fixed many vulnerabilities present in SSL v3.0<br>
+<br>
+Security analysts should understand HTTPS operations because attackers often hide their CnC traffic or exfiltrate data using HTTPS.<br>
+<br>
+HTTPS basic operations include the following:<br>
+<br>
+<ul>
+<li>HTTPS URLs begin with https:// and use TCP port 443 by default.</li><br>
+<li>The TLS or SSL connection between a client and server is set up by the TLS or SSL handshake. Once the TLS or SSL handshake is established, both parties use the agreed cryptographic algorithms to securely send messages to each other.</li><br>
+<li>HTTPS provides authentication of the web server. The web server's digital certificate allows the browser to identify the web server and to trust the web server it is communicating with, if the web server's digital certificate was signed by a certificate authority that is trusted by the web browser. Web browsers and/or the operating systems come with a pre-installed list of the certificate authority's digital certificates that are used to check the validity of the digital certificates of the web servers the browser connects to.</li><br>
+<li>HTTPS can also provide mutual authentication. If client authentication is also required, the web server can also authenticate the client using the client’s digital certificate. Most of the common web browsers support client side digital certificate. Client authentication is not typically implemented since most web sites do not really care who is connected to it. Most web sites are meant to be accessible by anyone.</li><br>
+<li>HTTPS provides HTTP headers and HTTP data traffic encryption between the client and the web server, which protects against eavesdropping. HTTP cookies, user agent, URL paths, form submissions, query parameters, and so on, are all encrypted.</li>
+</ul>
+<br>
+Web browsers and other HTTPS clients are configured to trust a set of certificate authorities that can issue cryptographically signed digital certificates on behalf of the web service owners. These digital certificates communicate to the client that the web service host demonstrated ownership of the domain to the certificate authority at the time of the digital certificate issuance, preventing unknown or untrusted web sites from masquerading as the trusted secured web site.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516212828.png" alt="" style="">
+<br>
+The figure above shows the http://www.cisco.com web server digital certificate that was used to validate the server identity to the web browser. Web browsers such as Internet Explorer commonly indicate that the connection is using HTTPS by showing the lock icon in the browser address bar. Users can click the lock icon to get information about the server digital certificate. In this example, the server digital certificate was signed by the HydrantID public certificate authority, and its validity will expire on 6/3/2018.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516212896.png" alt="" style="">
+<br>
+The figure above shows where the web server digital certificate that is presented to the browser was not issued by a trusted certificate authority. In this case, it is up to the user to accept the risk and continue or not. If the user ignores the certificate warning and continues to a malicious web site, that would break the HTTPS security instantly. The attacker can send any digital certificate of his own to impersonate the secured web server and have the victims connect to the attack's web server.<br>
+<br>
+Today's cybercriminals often use HTTPS to obfuscate their outbound traffic to prevent eavesdropping or from being detected. One of the ways that organizations inspect HTTPS traffic is to deploy a next-generation firewall or web proxy that can act as an MITM to decrypt, inspect, and re-encrypt the SSL/TLS traffic. As a security analyst investigating security incidents with HTTPS traffic, one would often need to inspect next-generation firewall or web proxy logs to investigate the SSL/TLS decryption events.<br>
+<br>
+Organizations performing SSL/TLS decryptions need to make sure that any government regulations around data confidentiality will not be violated by their SSL/TLS decryption actions.<br>
+<br>
+<pre>
+<code>
+Note:
+Reference RFC 2818 for HTTP over TLS operations.
+</code>
+</pre>
+<br>
+<a name="Web Scripting"></a>
+<b>Web Scripting</b><br>
+Cybercriminals often deliver malware via the web and newly infected web sites are constantly being discovered. Security analysts should be aware of the dangers of web scripting. For example, malicious JavaScript allows cybercriminals to silently redirect the victim's browser to load malware from a remote server, a technique that is known as "drive by" download.” Though entry-level security analysts do not require in-depth scripting knowledge, a basic understanding of some of the markup languages and scripts will help the security analyst to more efficiently analyze web-based attacks that use malicious scripts.<br>
+<br>
+Web page content can be static and dynamic. Static content is generally created using a markup language such as HTML and XML. An HTML document filename usually ends in the .html extension. An HTML document is a text document that is read in by a web browser, and then rendered in the client's web browser screen. The HTML document that is rendered in the web browser is human readable. XML defines a set of rules for encoding documents in a format that is both human-readable and machine-readable. CSS is used to specify the presentation of a document that was created using a markup language such as HTML or XML.<br>
+<br>
+A markup language is a set of markup tags. HTML documents are described by the HTML tags.<br>
+<br>
+HTML documents must start with the <pre><code><!DOCTYPE html></code></pre> document type declaration. The HTML document itself begins with the <pre><code><html></code></pre> tag and ends with the <pre><code></html></code></pre> tag. The visible part of the HTML document is between the <pre><code><body></pre></code> tag and the <pre><code></body></pre></code> tag.<br>
+<br>
+<pre>
+<code>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+</body>
+</html> 
+</code>
+</pre>
+<br>
+The figure below shows the resulting web page that was rendered using the above HTML document:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516213745.png" alt="" style="">
+<br>
+CSS is a style sheet language that can be used to describe the style of an HTML document or how the HTML elements should be displayed. For example as shown below, the code <code>background-color: lightblue;</code> is used to display a light blue background color on the web page:<br>
+<br>
+<pre>
+<code>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    background-color: lightblue;
+}
+</style>
+</head>
+<body>
+
+<h1>Hello Cisco!</h1>
+
+<p>This page has a light blue background color!</p>
+
+</body>
+</html>
+</code>
+</pre>
+<br>
+CSS can also be used to indicate the text alignment, font size, and so on.<br>
+<br>
+<b>Server-Side and Client-Side Scripting</b><br>
+Web scripting is used to create dynamic content on a web page in addition to the static content. There are two approaches to implement the web scriptings:<br>
+<br>
+<ul>
+<li><b>Server-side</b> scripting is used in web applications development which involves using scripts on a web server to produce a response that is customized for each user's request to the website. The scripts may be written in any programming language, such as PERL, Python, PHP, and so on.</li><br>
+<li><b>Client-side</b> scripting uses a language that is designed for the script to be executed by the client's web browser. Examples of client-side scripting languages include JavaScript, Visual Basic Script, and so on.</li>
+</ul>
+<br>
+A common way to implement a JavaScript is to define the JavaScript in a separate file, then link to the JavaScript file using the <code>src</code> attribute of the script tag. In the example that is shown below, the scriptname.js file contains the JavaScript. The JavaScript is embedded in a web page using the <pre><code><script type="text/javascript"></pre></code> and <pre><code></script></pre></code> tags.<br>
+<br>
+<pre>
+<code>
+<!DOCTYPE html>
+<html>
+<body>
+<script type="text/javascript" src="scriptname.js"></script>
+</body>
+</html>
+</code>
+</pre>
+<br>
+Instead of specifying the JavaScript file with the <code>src</code> attribute, the actual JavaScript can be written between the <pre><code><script type="text/javascript"></pre></code> and <pre><code></script></pre></code> tags, as shown below:<br>
+<br>
+<pre>
+<code>
+<script type="text/javascript">
+document.write('Hello Cisco')
+</script>
+</code>
+</pre>
+<br>
+The above JavaScript will render the "Hello Cisco" output on the client's web browser.<br>
+<br>
+The <pre><code><script></pre></code> tag can also be used to tag the JavaScript instead of <pre><code><script type="text/javascript"></pre></code> as shown below. The <pre><code><script type="text/javascript"></pre></code> tag is required in HTML 4, but optional in HTML 5. In HTML 5, the script type defaults to text/javascript.<br>
+<br>
+<pre>
+<code>
+<script>
+document.write('Hello HTML 5')
+</script>
+</code>
+</pre>
 <br>
