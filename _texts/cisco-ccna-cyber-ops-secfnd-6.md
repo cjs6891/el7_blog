@@ -9,10 +9,9 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 6: Understanding Network Ap
 <a href="#HTTP Operations">6.5 HTTP Operations</a><br>
 <a href="#HTTPS Operations">6.6 HTTPS Operations</a><br>
 <a href="#Web Scripting">6.7 Web Scripting</a><br>
-<a href="#">6.</a><br>
+<a href="#SQL Operations">6.8 SQL Operations</a><br>
 <a href="#">6.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 
 <a name="DNS Operations"></a>
@@ -394,56 +393,7 @@ Cybercriminals often deliver malware via the web and newly infected web sites ar
 <br>
 Web page content can be static and dynamic. Static content is generally created using a markup language such as HTML and XML. An HTML document filename usually ends in the .html extension. An HTML document is a text document that is read in by a web browser, and then rendered in the client's web browser screen. The HTML document that is rendered in the web browser is human readable. XML defines a set of rules for encoding documents in a format that is both human-readable and machine-readable. CSS is used to specify the presentation of a document that was created using a markup language such as HTML or XML.<br>
 <br>
-A markup language is a set of markup tags. HTML documents are described by the HTML tags.<br>
-<br>
-HTML documents must start with the <pre><code><!DOCTYPE html></code></pre> document type declaration. The HTML document itself begins with the <pre><code><html></code></pre> tag and ends with the <pre><code></html></code></pre> tag. The visible part of the HTML document is between the <pre><code><body></pre></code> tag and the <pre><code></body></pre></code> tag.<br>
-<br>
-<pre>
-<code>
-<!DOCTYPE html>
-<html>
-<head>
-<title>Page Title</title>
-</head>
-<body>
-
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-
-</body>
-</html> 
-</code>
-</pre>
-<br>
-The figure below shows the resulting web page that was rendered using the above HTML document:<br>
-<br>
-<img src="https://cjs6891.github.io/el7_blog/public/img/1516213745.png" alt="" style="">
-<br>
-CSS is a style sheet language that can be used to describe the style of an HTML document or how the HTML elements should be displayed. For example as shown below, the code <code>background-color: lightblue;</code> is used to display a light blue background color on the web page:<br>
-<br>
-<pre>
-<code>
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-body {
-    background-color: lightblue;
-}
-</style>
-</head>
-<body>
-
-<h1>Hello Cisco!</h1>
-
-<p>This page has a light blue background color!</p>
-
-</body>
-</html>
-</code>
-</pre>
-<br>
-CSS can also be used to indicate the text alignment, font size, and so on.<br>
+CSS is a style sheet language that can be used to describe the style of an HTML document or how the HTML elements should be displayed.<br>
 <br>
 <b>Server-Side and Client-Side Scripting</b><br>
 Web scripting is used to create dynamic content on a web page in addition to the static content. There are two approaches to implement the web scriptings:<br>
@@ -453,38 +403,5 @@ Web scripting is used to create dynamic content on a web page in addition to the
 <li><b>Client-side</b> scripting uses a language that is designed for the script to be executed by the client's web browser. Examples of client-side scripting languages include JavaScript, Visual Basic Script, and so on.</li>
 </ul>
 <br>
-A common way to implement a JavaScript is to define the JavaScript in a separate file, then link to the JavaScript file using the <code>src</code> attribute of the script tag. In the example that is shown below, the scriptname.js file contains the JavaScript. The JavaScript is embedded in a web page using the <pre><code><script type="text/javascript"></pre></code> and <pre><code></script></pre></code> tags.<br>
-<br>
-<pre>
-<code>
-<!DOCTYPE html>
-<html>
-<body>
-<script type="text/javascript" src="scriptname.js"></script>
-</body>
-</html>
-</code>
-</pre>
-<br>
-Instead of specifying the JavaScript file with the <code>src</code> attribute, the actual JavaScript can be written between the <pre><code><script type="text/javascript"></pre></code> and <pre><code></script></pre></code> tags, as shown below:<br>
-<br>
-<pre>
-<code>
-<script type="text/javascript">
-document.write('Hello Cisco')
-</script>
-</code>
-</pre>
-<br>
-The above JavaScript will render the "Hello Cisco" output on the client's web browser.<br>
-<br>
-The <pre><code><script></pre></code> tag can also be used to tag the JavaScript instead of <pre><code><script type="text/javascript"></pre></code> as shown below. The <pre><code><script type="text/javascript"></pre></code> tag is required in HTML 4, but optional in HTML 5. In HTML 5, the script type defaults to text/javascript.<br>
-<br>
-<pre>
-<code>
-<script>
-document.write('Hello HTML 5')
-</script>
-</code>
-</pre>
-<br>
+<a name="SQL Operations"></a>
+<b>SQL Operations</b><br>
