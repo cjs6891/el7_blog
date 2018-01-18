@@ -414,3 +414,60 @@ When dealing with data or database structure modification, the analyst should re
 <br>
 <a name="SMTP Operations"></a>
 <b>SMTP Operations</b><br>
+Since the early 1990s, email has become the backbone of corporate communications. Each day, more than 100 billion corporate email messages are exchanged. As the level of email use rises, security becomes a greater priority. Mass spam campaigns are no longer the only concern. Today spam and malware are just part of a complex picture that includes inbound threats and outbound risks. Two of the major threats to an organization's email system are:<br>
+<br>
+<ol>
+<li>A flood of unsolicited and unwanted email, called spam, which wastes employee time through sheer volume and uses valuable resources like bandwidth and storage</li><br>
+<li>Malicious email, which comes in two basic forms of attacks: embedded attacks and targeted attacks<br>
+ - Embedded attacks come in the form of viruses and malware that perform actions on the end device when clicked.<br>
+ - Targeted attacks might direct employees to inadvertently browse malicious websites that distribute malware to computer endpoints and can mislead employees into releasing sensitive information like credit card numbers, social security numbers, or intellectual property. Targeted attacks are also known as directed attacks or phishing attacks.
+</li>
+</ol>
+<br>
+In order to effectively mitigate email-based attacks, security analysts should understand how the mail delivery process works, and the contents of an SMTP conversation.<br>
+<b>SMTP Terminology</b><br>
+These terms are necessary for a discussion involving mail transfer:<br>
+<br>
+<ul>
+<li><b>MTA:</b> The MTA (mail transfer agent), also called SMTP daemon, is a computer program or software agent that transfers electronic mail messages from one computer to another. Since personal computers do not send mail between themselves directly, they use client applications like MS Outlook which send mail to a groupware server, which then relay their mail through the MTA to some other mail domain. Another name for an MTA is an email gateway. The Cisco Email Security Appliance occupies this position in the network.</li><br>
+<li><b>DNS MX record:</b> An MX record, or mail exchanger record, is a type of resource record that specifies the mail server (MTA) responsible for accepting email for that domain. MX records include a preference value that prioritizes which mail server should be used if there are multiple mail servers.</li><br>
+<li><b>DNS A record:</b> Used to locate the IP address of the MTA specified by the MX record.</li><br>
+<li><b>Groupware server:</b> A server that accepts, forwards, delivers, and stores messages on behalf of users who only need to connect to the email infrastructure. It also manages collaborative schedules, maintains calendars, and performs other related services to members interacting within a group.</li><br>
+<li><b>SMTP client:</b> Will initiate the connection request to an SMTP server that is located within the same enterprise or out on the Internet.</li><br>
+<li><b>SMTP server:</b> Will receive the connection request from the SMTP client. The transferring of mail from a groupware server to an MTA and then on to another MTA represents an exchange of roles between SMTP client to SMTP server.</li><br>
+<li><b>Mail user agent:</b> The MUA is a software client application like Outlook that accesses a groupware server, for example, an exchange server, to send or receive mail.</li><br>
+<li><b>POP:</b> The POP is an application-layer protocol that is used by the MUA to retrieve email from a mail server. A POP server listens on TCP port 110. POP has been developed through several versions, with POP3 being the last standard in common use. POP works by downloading all new messages from the mail server. Once the messages are downloaded, they are deleted from the email server.</li><br>
+<li><b>IMAP:</b> The IMAP is also an application-layer protocol that is used by the MUA to retrieve email from a mail server. An IMAP server typically listens on TCP port 143. Virtually all modern email clients (mail user agent) support IMAP. IMAP allows you to access your email wherever you are, from any device. IMAP and the POP3 are the two most prevalent standard protocols for email retrieval.</li><br>
+<li><b>MAPI:</b> The MAPI is also an application-layer protocol that is used by the MUA to retrieve email from a mail server and is primarily associated with Microsoft Exchange and Microsoft Outlook. It performs the services similar to IMAP but also provides other groupware functions that are associated with Outlook and Exchange.</li>
+</ul>
+<br>
+<b>SMTP Flow</b><br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516235919.png" alt="" style="">
+<br>
+The above figure illustrates the stages of mail delivery:<br>
+<br>
+<ol>
+<li>The MTA that is located at secure-x.public receives an email from Alejandro@secure-x.public to Emily@cisco.com. This MTA is known as the sending MTA.</li><br>
+<li>The sending MTA needs to determine the destination MTA IP address to send the email to, so it examines the domain portion of the recipient email address (the part that follows the @) and performs a query of the DNS MX record for cisco.com. The MX record points to the FQDN of the MTA at Cisco. The sending MTA then performs a DNS query for the A record for mx.cisco.com (192.0.2.2 in this example).</li><br>
+<li>The sending MTA sends the email to mx.cisco.com (which is the receiving MTA).</li><br>
+<li>Assuming that the reputation of smtp.secure-x.public is good, the receiving MTA performs an LDAP lookup to determine if the Emily user exists, then forwards the email to the mail server.</li><br>
+<li>The exchange mail server then sends the email to the mail user agent on Emily's computer through protocols such as POP, IMAP, or MAPI, and so on. Here, MAPI is the protocol that is used by the MUA.</li>
+</ol>
+<br>
+The figure below shows the mail delivery process when Emily replies to the received email. Here, IMAP is used by Alejandro to retrieve the email from the exchange mail server instead of MAPI.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516236948.png" alt="" style="">
+<br>
+<b>SMTP Conversation</b><br>
+The figure shows the three parts of the SMTP conversation.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516237038.png" alt="" style="">
+<br>
+The events occur sequentially:<br>
+<br>
+<ol>
+<li><b>Envelope:</b> The SMTP envelope specifies the recipient and the sender</li><br>
+<li><b>Headers:</b> The headers are sent after receiving a 354 (go ahead) SMTP reply code from the SMTP server. The headers contain the following information: sender's display name and email, the recipient's display name and email, and the subject and date. A blank line separates headers from any message content.</li><br>
+<li><b>Body:</b> The body is an optional text region between the header and the one line containing a period (.). The terms "body," "message content," and "mail data" are used interchangeably. They all refer to the material that is transmitted after the DATA command is accepted and before the end of data indication is transmitted. A period (.) on one line indicates the end of data transmission.</li>
+</ol>
+<br>
