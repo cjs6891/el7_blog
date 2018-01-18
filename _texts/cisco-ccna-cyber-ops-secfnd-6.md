@@ -471,3 +471,47 @@ The events occur sequentially:<br>
 <li><b>Body:</b> The body is an optional text region between the header and the one line containing a period (.). The terms "body," "message content," and "mail data" are used interchangeably. They all refer to the material that is transmitted after the DATA command is accepted and before the end of data indication is transmitted. A period (.) on one line indicates the end of data transmission.</li>
 </ol>
 <br>
+<b>SMTP Commands</b><br>
+SMTP commands transfer requests from the client to the SMTP server. Here are the most common commands:<br>
+<br>
+<ul>
+<li>The <b>HELLO (HELO)</b> or <b>EHLO (Extended HELLO)</b> commands are used to identify the SMTP client to the SMTP server. The FQDN or the IP address of the SMTP client is usually sent as an argument together with HELO or EHLO commands. The HELO command is used to establish an SMTP session with another host. The EHLO command is used to establish an ESMTP session with another host. ESMTP specifies extensions to the SMTP standard to support additional commands. For example, ESMTP supports the SIZE command, which allows the receiving host to tell the sending host the maximum message size before the message is transmitted. Both the sending host and the receiving host must support the ESMTP protocol for the extended ESMTP capabilities to be utilized.</li><br>
+<li>The <b>MAIL FROM</b> command is used to initiate a mail transaction in which the mail data is delivered to an SMTP server which may, in turn, deliver it to one or more mailboxes. The MAIL FROM command specifies who the mail originator is.</li><br>
+<li>The <b>RCPT TO</b> command is used to identify an individual recipient of the mail data. Use multiples of this command to specify multiple recipients.</li><br>
+<li>The <b>DATA</b> command signifies that the email message body will follow. The receiver normally sends a 354 go ahead response, then treats the lines (strings ending in <CRLF> sequences) as mail data from the sender.</li><br>
+<li>The <b>QUIT</b> command specifies that the receiver must send an OK reply, and then close the transmission channel. The receiver must not intentionally close the transmission channel until it receives and replies to a QUIT command (even if there was an error). The sender must not intentionally close the transmission channel until it sends a QUIT command and should wait until it receives the reply (even if there was an error response to a previous command).</li>
+</ul>
+<br>
+<b>SMTP Reply Codes</b><br>
+The three-digit SMTP reply codes define the server response to the SMTP client:<br>
+<br>
+<ul>
+<li>The first digit denotes the success or failure of the SMTP command:<br>
+ - 1 = command accepted but pending confirmation (example, 101 can’t open connection)<br>
+ - 2 = success (example, 250 OK)<br>
+ - 3 = okay so far (example, 354 go ahead, also called start mail input)<br>
+ - 4 = temporary failure (example, 452 mailbox full)<br>
+ - 5 = permanent failure (example, 550 user unknown)
+</li><br>
+<li>The second digit categorizes the result:<br>
+ - 0 = syntax<br>
+ - 1 = information<br>
+ - 2 = connection<br>
+ - 3 = unspecified<br>
+ - 4 = unspecified<br>
+ - 5 = mail system
+</li><br>
+<li>The third digit adds finer detail.</li>
+</ul>
+<br>
+The following are a few more SMTP reply code examples:<br>
+<br>
+<ul>
+<li>211 = system status, or system help reply</li><br>
+<li>220 (FQDN of server) = service ready</li><br>
+<li>421 (FQDN of server) = service not available</li><br>
+<li>451 = local error in processing</li><br>
+<li>500 = command not recognized</li><br>
+<li>502 = command not implemented</li>
+</ul>
+<br>
