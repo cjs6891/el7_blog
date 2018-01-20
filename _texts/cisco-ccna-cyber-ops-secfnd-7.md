@@ -7,19 +7,15 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 7: Understanding Common Net
 <a href="#Pass-the-Hash Attacks">7.3 Pass-the-Hash Attacks</a><br>
 <a href="#DNS-Based Attacks">7.4 DNS-Based Attacks</a><br>
 <a href="#DNS Tunneling">7.5 DNS Tunneling</a><br>
-<a href="#">7.</a><br>
-<a href="#">7.</a><br>
-<a href="#">7.</a><br>
-<a href="#">7.</a><br>
+<a href="#Web-Based Attacks">7.6 Web-Based Attacks</a><br>
+<a href="#Malicious iFrames">7.7 Malicious iFrames</a><br>
+<a href="#HTTP 302 Cushioning">7.8 HTTP 302 Cushioning</a><br>
+<a href="#Domain Shadowing">7.9 Domain Shadowing</a><br>
 <a href="#">7.</a><br>
 <a href="#">7.</a><br>
 <a href="#">7.</a><br>
 <a href="#">7.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -207,5 +203,142 @@ Countermeasures to attacks that are based on DNS tunneling include the following
 <ul>
 <li>Monitor the DNS log for suspicious activities such as DNS queries with usually long and suspicious domain name.</li><br>
 <li>Deploy a solution such as Cisco OpenDNS to block the DNS tunneling traffic from going out to the malicious domains.</li>
+</ul>
+<br>
+<a name="Web-Based Attacks"></a>
+<b>Web-Based Attacks</b><br>
+Today, employees are expected to do business anywhere and with any device, challenging traditional security and deployment models. The uncontrolled use of social media and Web 2.0 applications by employees opens the door to web malware, data security risk, and productivity loss. Blocking web browsing completely is not an option because businesses need to harness the power of the web, without undermining business agility or web security. To intelligently investigate web-based attacks, security analysts should have a good understanding of how a typical web-based attack works.<br>
+<br>
+The following are the stages of a typical web attack:<br>
+<br>
+<ol>
+<li>The victim visits a legitimate web site that has been compromised. The compromised web site redirects the victim to another site that is running malicious code that is controlled by the attacker. The redirection may go through various intermediary servers first.</li><br>
+<li>Exploit kits are commonly used for widespread malware distribution. Exploit kits use a process that is known as "drive-by" download, which invisibly (done in the background where the users are not aware that it is happening) redirects a user’s browser to a malicious website that hosts an exploit kit. The term "drive-by downloads" describes malware that infects a victim's machine simply when the victim visits a website that is running malicious code. A landing page is the web page that contains the exploit kit. When the victim is redirected to the web site hosting an exploit kit, the exploit kit scans the victim's machine software such as the operating system, browser, Flash player, PDF player, or Java to find a security vulnerability that it can exploit. A web-based exploit kit typically uses a PHP script, and provides a management console to enable the cybercriminals to manage the attacks. Exploit kits continue to remain such a formidable threat because they are able to quickly exploit vulnerabilities which have not yet been patched by vendors, or for which patches have not yet been applied.</li><br>
+<li>Once the exploit kit has identified a vulnerable software, it sends a request to the exploit kit server to download the exploit code that will compromise the vulnerable software, in order to secretly run the malicious code on the victim's machine.</li><br>
+<li>The malicious code then connects the victim’s machine to the malware download server to download the payload. The payload may be a file downloader that retrieves other malware, or it could be the final malware. With more advanced exploits, the payload is sent as an encrypted file.</li><br>
+<li>The encrypted final malware is then decrypted and executed on the victim’s machine.</li>
+</ol>
+<br>
+According to the Cisco 2016 Annual Security Report, pressure from the industry to remove Adobe Flash from the browsing experience is leading to a decrease in the amount of Flash content on the web, similar to what has been seen with Java content in recent years, and which has, in turn, led to a steady downward trend in the volume of Java malware. Meanwhile, the volume of PDF malware has remained fairly steady.<br>
+<br>
+The Angler exploit kit was one of the largest and most effective exploit kits on the market. It has been linked to several high-profile ransomware campaigns.<br>
+<br>
+Cisco security researchers observed that popular websites were redirecting users to the Angler exploit kit through malvertising. Malvertising is when false ads with malicious content are placed on hundreds of major news, real estate, and popular culture web sites to spread malware.<br>
+<br>
+With malvertising, the victim's machine can become infected pre- or post-click. It is a misconception that infection only happens when the victim clicks a malvertisement. Examples of pre-click malware include malware being embedded in the web page or drive-by downloads. An example of post-click malvertisement is where the user clicks the ad to visit the advertised site, and instead is directly infected, or redirected to a malicious site.<br>
+<br>
+Cybercriminals who are attempting to spread malware through malvertising might first use clean advertisements on trustworthy sites to gain a good reputation, then later insert the malicious code in the advertisement. After a mass infection has occurred, the malicious code in the advertisement is then removed to avoid detection, therefore infecting all visitors to the site only during a specific time period.<br>
+<br>
+Many web attacks make use of compromised legitimate web sites, created by the popular web development platform WordPress, to stage their cybercriminal activities. Compromised WordPress web sites were often not running the latest version of WordPress, had weak admin passwords, and used plugins that were missing security patches.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516460247.png" alt="" style="">
+<br>
+The figure above shows how attackers are using WordPress servers as their ransomware infrastructure:<br>
+<br>
+<ul>
+<li>The victim browses to a compromised web site with malvertising (banner ads) and is exposed to the exploit kit.</li><br>
+<li>The exploit kit finds a vulnerability in the Flash player that the victim is running. The Flash exploit code is downloaded from the exploit kit landing page to the victim's machine. The Flash player is compromised, and the victim’s machine is now running malicious code.</li><br>
+<li>The malicious code downloads the cryptowall malware to the victim’s machine from the malware downloader server, which is usually a different server than the server which is hosting the exploit kit landing page.</li><br>
+<li>The cryptowall malware that is executed on the victim’s machine connects to the CnC server to get the encryption key.</li><br>
+<li>The cryptowall malware encrypts the data with the retrieved encryption key on the victim’s machine and reports the encryption status back to the CnC server.</li><br>
+<li>The CnC server sends the victim the ransom notice and payment site information.</li>
+</ul>
+<br>
+The risk for the cybercriminals using compromised systems to run their malware operation is that one of the hacked servers may be taken down when the compromise is discovered. If the server goes down in the middle of an attack campaign, the malware downloader may fail to retrieve its payload, or the malware may be unable to communicate with its CnC servers. Security researchers noticed that malware developers overcame the problems by using more than one WordPress web site server to act as the CnC servers. Security researchers also identified malware downloaders to contain a list of WordPress web sites storing the malware payloads. If one of the malware download sites was not working, the malware went to the next one, and downloaded malicious payloads from the working WordPress web site server.<br>
+<br>
+Countermeasures to web-based attacks include the following:<br>
+<br>
+<ul>
+<li>To help defend against today's web-based attacks, web application developers must follow the best security practices in developing their web applications, for example, referencing the best practices recommended by OWASP (Open Web Application Security Project).</li><br>
+<li>Keep the operating system and web browser versions up-to-date.</li><br>
+<li>Deploy services such as Cisco OpenDNS to block the users from accessing malicious web sites.</li><br>
+<li>Deploy a web proxy security solution, such as the Cisco Web Security Appliance or Cisco Cloud Web Security, to block users from accessing malicious web sites.</li><br>
+<li>Educate end users on how web-based attacks occur.</li>
+</ul>
+<br>
+<a name="Malicious iFrames"></a>
+<b>Malicious iFrames</b><br>
+In today's Internet, some of the most sophisticated web-based threats are designed to hide in plain sight on legitimate web sites. Most web malware consists of malicious scripts that are hidden inside inline frames, which are known as iFrames. Security analysts should be able to detect any iFrames within the HTTP packet payload during incident investigations.<br>
+<br>
+An iFrame is an HTML element which allows website developers to load another web page. The iFrame HTML element is often used to insert content such as advertisements from another source into a web page.<br>
+<br>
+Injecting malicious HTML iFrames into legitimate websites has become a common attack vector that is used in web-based attacks. Sometimes, not only the legitimate website's home page is infected, but all the other pages on the website can be infected as well. This can indicate that the attacker used SQL injection to inject the malicious iFrame into the backend database from which the webpages are dynamically generated. SQL injection attack is covered in a later topic in this section.<br>
+<br>
+The loaded malicious web page using iFrame can be made to be invisible with so few pixels that the victim cannot see that it is there. The malicious web page can be used to deliver the exploit that will run automatically in the victim's machine.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516461765.png" alt="" style="">
+<br>
+In this example, the malware was the Neutrino exploit kit that was delivered from the compromised 212.83.135.167 eesheshi.ontowess.com host to the 192.168.204.162 victim's host.<br>
+<br>
+The Neutrino exploit kit infected the 192.168.204.162 victim's host, the 192.168.204.162 victim's host then started communications with the compromised 89.191.150.230 www.gimalubiewo.pl host which is acting as the CnC server as shown in the Wireshark screenshot below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516461856.png" alt="" style="">
+<br>
+Countermeasures to malicious iFrames include the following:<br>
+<br>
+<ul>
+<li>Web developers to not use any iFrames to embed, and isolate third-party content from their web site. Attackers often implement iFrame attacks by simply changing the source of the iFrame in a compromised web site.</li><br>
+<li>Deploy service such as Cisco OpenDNS to block the users from accessing malicious web sites.</li><br>
+<li>Deploy a web proxy security solution, such as the Cisco Web Security Appliance or Cisco Cloud Web Security, to block users from accessing malicious web sites.</li><br>
+<li>Educate end users that injecting malicious HTML iFrames into legitimate web sites has become a common attack vector in web-based attacks.</li>
+</ul>
+<br>
+<a name="HTTP 302 Cushioning"></a>
+<b>HTTP 302 Cushioning</b><br>
+A web site can change the path that is used to reach a resource by issuing an HTTP redirect to direct the user's web browser to the new location. The 302 Found HTTP response status code can be used for this purpose. The HTTP response status code 302 Found is a common way of performing URL redirection. Attackers often use legitimate HTTP functions such as HTTP redirects to carry out their attacks. Therefore, security analysts should understand how a function such as HTTP redirection works and how it can be used during attacks.<br>
+<br>
+An HTTP response with the 302 Found status code will also provide a URL in the location header field. The browser interprets the 302 HTTP response status code to mean that the requested resource has been temporarily relocated to the new location provided in the response. The browser is invited to make an identical request to the new URL that is specified in the location field. The HTTP/1.0 specification (RFC 1945) gives the 302 HTTP response status code the description "Moved Temporarily."<br>
+<br>
+A common technique that is used by the attackers to avoid detection, is to obfuscate the source from where the malware was downloaded by using a series of web redirections. Attackers can use the legitimate "302 Found" response to create a series of web redirections before the victim’s browser is finally redirected to the page that delivers the exploit to the victim's machine. These intermediate web sites are also known as gates. The URL of these gates changes frequently, like every half-hour or so, to deprive security researchers the time to gather enough information to come up with meaningful attack analysis. The use of the gates also adds extra layers which makes it harder to determine the source of the malware. Using HTTP 302 redirections also eliminates the need for iFrames or external scripts because HTTP 302 redirections are less likely to raise suspicions as compared to hidden iFrames or external scripts.<br>
+<br>
+Shown below is an example where an attacker has compromised a legitimate web site (example.com), causing the web site to respond to the victim's HTTP request to compromise.example.com/index.php with the 302 Found HTTP response status code. This creates a series of HTTP 302 redirects through the attacker's proxies, before the victim's browser is finally redirected to the attacker's web page that spreads the malicious exploit to the victim.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516465677.png" alt="" style="">
+<br>
+Whether using an iFrame or HTTP 302 cushioning, the main goal of the attacker is to ensure the victim’s web browser ends up on the attacker's web page which serves out the malicious exploit to the victim.<br>
+<br>
+The partial Wireshark output below shows the HTTP 302 response where a compromised website is used to redirect the victim.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516465766.png" alt="" style="">
+<br>
+Countermeasures to attacks using HTTP 302 cushioning include the following:<br>
+<br>
+<ul>
+<li>Use a service such as Cisco OpenDNS to block the users from accessing malicious web sites.</li><br>
+<li>Deploy a web proxy security solution, such as the Cisco Web Security Appliance or Cisco Cloud Web Security, to block users from accessing malicious web sites.</li><br>
+<li>Educate end users on how the browser is redirected to a malicious web page that delivers the exploit to the victim's machine through a series of HTTP 302 redirections.</li>
+</ul>
+<br>
+<a name="Domain Shadowing"></a>
+<b>Domain Shadowing</b><br>
+Domain shadowing involves the attacker compromising a parent domain and creating multiple subdomains to be used during the attacks. Domain shadowing is the process of using hijacked users' domain registration logins to create many subdomains to be used by the cybercriminals.<br>
+<br>
+The Cisco security research team, Talos Intelligence Group, found evidence of domain shadowing behavior in September 2011 when they observed a group of related domains creating many subdomains. In the span of 45 days, approximately 15% of the total identified subdomains were created. Most of the subdomains were active for less than a day and saw fewer than ten hits. The subdomains were constructed using randomly generated strings.<br>
+<br>
+In the figure below, the hijacked domain registrant account is example.com with a list of subdomains that have been created by the cybercriminals.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516466661.png" alt="" style="">
+<br>
+This is an increasingly effective attack vector since most individuals do not monitor their domain registrant accounts regularly. These accounts are typically compromised through phishing. Cybercriminals then log in with their credentials and create large amounts of subdomains. Many users have multiple domains, which can provide a nearly endless supply of domains, providing the cybercriminals a huge number of URLs that they can cycle through and discard after use.<br>
+<br>
+The Talos Intelligence Group has found several hundred accounts that have been compromised that have control of thousands of unique domains. The group identified close to 10,000 unique subdomains being utilized. This behavior has proven to be an effective way to avoid typical detection techniques, such as blacklisting of web sites or IP addresses.<br>
+<br>
+HTTP 302 cushioning and domain shadowing are often used together by threat actors. For example, an exploit attack cycle typically follows this sequence:<br>
+<br>
+<ol>
+<li>Compromised websites</li><br>
+<li>HTTP 302 cushioning</li><br>
+<li>Domain shadowing</li><br>
+<li>Exploit kit landing page</li><br>
+<li>Malware payload</li>
+</ol>
+<br>
+Countermeasures to domain shadowing attacks include the following:<br>
+<br>
+<ul>
+<li>Ensure that all the domain registrants’ accounts are secured. Strong authentication, preferably two-factor authentication, must be required in order to access these accounts to prevent them from being compromised.</li><br>
+<li>Require domain owners to periodically verify their domain registrant accounts, and check for any fraudulent subdomains created.</li><br>
+<li>Use a service such as Cisco OpenDNS to block the users from accessing malicious web sites.</li><br>
+<li>Deploy a web proxy security solution, such as the Cisco Web Security Appliance or the Cisco Cloud Web Security, to block users from accessing malicious web sites.</li>
 </ul>
 <br>
