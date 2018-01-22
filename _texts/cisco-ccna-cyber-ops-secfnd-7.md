@@ -11,15 +11,10 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 7: Understanding Common Net
 <a href="#Malicious iFrames">7.7 Malicious iFrames</a><br>
 <a href="#HTTP 302 Cushioning">7.8 HTTP 302 Cushioning</a><br>
 <a href="#Domain Shadowing">7.9 Domain Shadowing</a><br>
-<a href="#">7.</a><br>
-<a href="#">7.</a><br>
-<a href="#">7.</a><br>
-<a href="#">7.</a><br>
-
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
+<a href="#Command Injections">7.10 Command Injections</a><br>
+<a href="#SQL Injections">7.11 SQL Injections</a><br>
+<a href="#Cross-Site Scripting and Request Forgery">7.12 Cross-Site Scripting and Request Forgery</a><br>
+<a href="#Email-Based Attacks">7.13 Email-Based Attacks</a><br>
 
 <a name="Password Attacks"></a>
 <b>Password Attacks</b><br>
@@ -342,3 +337,242 @@ Countermeasures to domain shadowing attacks include the following:<br>
 <li>Deploy a web proxy security solution, such as the Cisco Web Security Appliance or the Cisco Cloud Web Security, to block users from accessing malicious web sites.</li>
 </ul>
 <br>
+<a name="Command Injections"></a>
+<b>Command Injections</b>><br>
+Command injection is an attack whereby an attacker's goal is to execute arbitrary commands on the web server's OS via a vulnerable web application. Command injection vulnerability occurs when the web application supplies vulnerable, unsafe input fields to the malicious users to input malicious data.<br>
+<br>
+During a command injection attack, attacker-supplied OS commands are usually executed with the privileges of the vulnerable web application. Command injection attacks are possible largely due to insufficient input validation. SQL injection and XSS are two specific forms of command injection attacks.<br>
+<br>
+Injection attacks, such as SQL and OS injection, occur when untrusted data is sent to an interpreter as part of a command or query. The attacker’s hostile data can trick the interpreter into executing unintended commands or accessing data without proper authorization.<br>
+<br>
+OWASP a worldwide not-for-profit resource that offers free and open software focused on improving the software security, lists the injection attack in the 2013 OWASP top 10 web application vulnerabilities list: https://www.owasp.org/index.php/Top_10_2013-Top_10.<br>
+<br>
+The Linux shell allows multiple commands to be entered on a single command line by separating them with semi-colons. Below is an example of using command injection on a Linux host. (Source: https://www.owasp.org/index.php/Command_Injection.)<br>
+<br>
+Used normally, the catWrapper script will output only the contents of the requested Story.txt file:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516578086.png" alt="" style="">
+<br>
+By adding a semicolon, followed by another command (like ls in this example), the ls command is executed by the catWrapper script with no complaint:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516578151.png" alt="" style="">
+<br>
+<pre>
+<code>
+Note:
+If catWrapper had been set to have a higher privilege level than the standard user, arbitrary commands could be executed with that higher privilege.
+</code>
+</pre>
+<br>
+In terms of web exploitation, command injection is usually possible when a web site allows added strings of characters or arguments without any input validation. The user inputs are used as arguments for executing the command in the web site’s hosting server.<br>
+<br>
+Certain characters are of special significance when inserted into web pages or URL content. These characters are based on the HTML specifications, context, and browser interpretation.<br>
+<br>
+The following example illustrates the use of command injection in an HTTP request:<br>
+<br>
+<ul>
+<li>When viewing a file in a web application, the file name is often shown in the URL. Normal URL:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516578290.png" alt="" style="">
+<br></li><br>
+<li>The attacker modified the above URL with the command injection that will execute the /bin/ls command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516578358.png" alt="" style="">
+<br></li>
+</ul>
+<br>
+Another example, which is shown below, appends a semicolon to the end of a URL for a .php page, followed by the cat command, to display the /etc/passwd file content. PHP is a powerful scripting language that can be used for building dynamic web pages. PHP is especially suited for server-side web development, where PHP generally runs on a web server.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516578447.png" alt="" style="">
+<br>
+%3B and %20 are unicode representations of the actual character. %3B is the unicode that represents a semicolon, and %20 represents a space. Unicode is a computing industry standard for the consistent encoding, representation, and handling of text that is expressed in most of the world's writing systems. Unicode provides a unique number for every character (unicode chart reference: http://unicode.org/charts/PDF/U0000.pdf).<br>
+<br>
+Attackers often obfuscate the text strings in their attacks using unicode. Therefore, analysts should understand how to convert the unicode.<br>
+<br>
+The PHP code can be embedded in the HTML code that makes up the web page. When the end-user browser goes to a web page that contains the PHP code, the web server executes the PHP code. The end user's browser does not need any special plug-ins or anything else to see the PHP in action.<br>
+<br>
+Below is an example of the PHP script. When this PHP script is called by a web browser, the web server will execute the PHP script and display “CCNA Rules” in the web browser. The <?php and ?> tags start and end the PHP script, and the actual content of the PHP script goes in the middle.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516578690.png" alt="" style="">
+<br>
+Countermeasures to command injection attacks include the following:<br>
+<br>
+<ul>
+<li>Command injection attacks can occur when unsanitized, user input is passed and processed. To prevent command injection attacks, application developers should follow the best practices to perform proper user input validation.</li><br>
+<li>Deploy an IPS solution to detect and prevent malicious command injections.</li>
+</ul>
+<br>
+<a name="SQL Injections"></a>
+<b>SQL Injections</b><br>
+SQL attacks are very common because databases, which often contain sensitive and valuable information, are attractive targets. One of the most common SQL attacks is the SQL injection attack.<br>
+<br>
+The first public discussions of SQL injection started appearing around 1998. In 2013, SQL injection was rated the number one attack on the OWASP top 10 list.<br>
+<br>
+In 2012, a hacking group that bills itself as "D33DS Company" leaked what it said were email addresses and passwords for 450,000 Yahoo accounts. D33DS said it obtained the data by executing a SQL injection attack against an unnamed Yahoo subdomain, which security experts have identified as being Yahoo Voices. (Source: Yahoo News)<br>
+<br>
+Security analysts should be able to recognize suspicious SQL queries in order to detect if the relational database has been subjected to SQL injection attacks.<br>
+<br>
+An SQL injection attack consists of inserting a SQL query via the input data from the client to the application. A successful SQL injection exploit can read sensitive data from the database, modify database data, execute administration operations on the database, and, sometimes, issue commands to the operating system.<br>
+<br>
+Unless an application uses strict input data validation, it will be vulnerable to the SQL injection attack. If an application accepts and processes user-supplied data without any input data validation, an attacker could submit a maliciously crafted input string to trigger the SQL injection attack.<br>
+<br>
+Below is a simple example of a web server with a login page and an SQL backend. A normal SQL query might look like the following:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516580335.png" alt="" style="">
+<br>
+The admin and i<3Cisco fields were provided by the user when they logged in. The SQL server searches the users table to find the first entry that matches those credentials. If it fails, nothing will be returned and the user will not be allowed to log in. If it succeeds, the user ID will be returned and the login process will continue.<br>
+<br>
+The following is the same query with SQL injection:<br>
+<br>
+<pre>
+<code>
+SELECT UserID FROM users WHERE username = 'anything' OR 1=1 -- AND password = 'hacktheplanet'
+</code>
+</pre>
+<br>
+The first part of the query, SELECT UserID FROM users WHERE username =, is hardcoded, which the attacker has no control over.<br>
+<br>
+The attacker provides the other parts, where the username here is anything. It will not matter whether that user actually exists or not, because OR 1=1 overrides the username check. Because it uses OR, the first part can fail (for example, username is invalid), but the query will still succeed (because 1 is always equal to 1).<br>
+<br>
+The last part of the query is password, but since the attacker provided two dashes and a space (--<space>), it has just been commented out. Even though the attacker typed hacktheplanet into the password field, the password won't be interpreted by the SQL server. Note that there must be a space after the double dash (--).<br>
+<br>
+The result is that the query will succeed, even though it should have failed, given the invalid user name and password. The problem is that the attacker will get logged in as the first user that matches, which is not a good thing because the first user in the database is generally an administrator. The attack could be modified to target a specific user name, but the attacker would have to know (or guess) that user name.<br>
+<br>
+<pre>
+<code>
+Note:
+There are many variations on this attack, depending on the exact SQL server. The comment may need to be a pound sign (#) instead of a double-dash (--). The single-quote (') may need to be a double-quote ("). In short, this depends on the SQL that the vendor used, and the syntax of the SQL statement that the vulnerable web server is using. An analyst should watch out for stray single-quotes, double-quotes, and semicolons, which can be used to escape and append new SQL commands.
+</code>
+</pre>
+<br>
+As an analyst, if you encounter such a SQL query, you need to determine which user ID was used by the attacker to log in, then identify any information or further access the attacker could have leveraged after a successful login.<br>
+<br>
+The following example shows the result of the SQL query after entering ' or 1=1 --<space> in the name field (again, the trailing space is important), and Blah in the password field:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516580670.png" alt="" style="">
+<br>
+In this case, using this SQL query, all the account data for all the accounts in the SQL database was successfully extracted.<br>
+<br>
+Countermeasures include the following:<br>
+<br>
+<ul>
+<li>Application developers should follow the best practices to perform proper user input validation, constrain, and sanitize the user input data.<br>
+<pre>
+<code>
+Note:
+Reference the OWASP SQL Injection Prevention Cheat Sheet: https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet.
+</code>
+</pre></li><br>
+<li>Deploy an IPS solution to detect and prevent malicious SQL injections.</li>
+</ul>
+<br>
+<a name="Cross-Site Scripting and Request Forgery"></a>
+<b>Cross-Site Scripting and Request Forgery</b><br>
+Both XSS and CSRF are prevalent threats to the security of web applications. Security analysts should understand how these attacks work. XSS and CSRF are in the 2013 OWASP top 10 web application vulnerabilities list: https://www.owasp.org/index.php/Top_10_2013-Top_10. Understanding how these web-based attacks work will help the security analyst investigate and prevent these attacks from spreading across the secured network.<br>
+<br>
+XSS is a type of command injection web-based attack which uses malicious scripts that are injected into otherwise benign and trusted web sites. The malicious scripts are then served to other victims who are visiting the infected web sites. For example, the malicious script may steal all the sensitive data from the user's cookies that are stored in the browser.<br>
+<br>
+CSRF is a type of attack that occurs when a malicious web site, email, blog, instant message, and so on, causes a user's web browser to perform an unwanted action on a trusted web site for which the user is currently authenticated. For example, the attacker compromises a web site (or creates an email) with a link that includes the malicious script. When the victim clicks the link, the malicious script accesses a third-party web site (for example, the victim's bank) that trusts the victim’s browser credentials (for example, the authentication cookie), resulting in the transfer of money from the bank account out to the attacker.<br>
+<br>
+Security analysts need to beware that XSS and CSRF can also be used in combination during attacks, for example the attacks can use XSS to automatically submit the CSRF HTTP request (so that victims don't have to click a link), but XSS or CSRF do not depend on each other.<br>
+<br>
+<b>Cross-Site Scripting</b><br>
+XSS involves the injection of malicious scripts into web pages that are executed on the client-side in the user’s web browser. Malicious scripts can be used to gain access to users' systems or sensitive information, such as the session cookies. XSS can use JavaScript, Visual Basic script, and other types of code to implement the attack script. XSS is a threat that is caused by security weakness in client-side scripting languages.<br>
+<br>
+XSS attacks may occur when malicious user is allowed to post content to a trusted web site without any input validations. Any other users visiting that trusted web site will then be exposed to the content posted by the malicious user.<br>
+<br>
+For example, if the web application doesn't validate the input data, the attacker can easily steal a cookie from an authenticated user. The attacker only needs to place the following code in any posted input (message boards, private messages, user profiles, and so on). (Source: https://www.owasp.org/index.php/Cross-site_Scripting_(XSS).)<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516581505.png" alt="" style="">
+<br>
+The above cookie grabber JavaScript will pass the content of the cookie to the evil.php script in the victimcookies variable when anyone opens the infected web page with the attacker's post. The attacker can then impersonate the victim by using the victim's cookies. Besides stealing cookies, XSS can be used to spread malware, deface a web site, and so on.<br>
+<br>
+Types of XSS attacks include:<br>
+<br>
+<ul>
+<li>Stored (persistent): Stored XSS is the most damaging type because it is permanently stored in the XSS-infected server. The victim receives the malicious script from the server whenever they visit the infected web page.</li><br>
+<li>Reflected (non-persistent): Reflected XSS is the most common type of XSS attack. Unlike the stored XSS, where the attacker must find a web site that allows for permanent injection of the malicious scripts, reflected XSS attacks only require that the malicious script is embedded in a link. In order for the attack to succeed, the victim needs to click the infected link. Reflected XSS attacks are typically delivered to the victims via an email message, or through some other web site. When the victim is tricked into clicking the infected link, the malicious script is reflected back to the victim's browser, where it is executed. Vigilant users can avoid reflected attacks.</li>
+</ul>
+<br>
+OWASP provides example testing procedures to check for XSS vulnerability on web applications. (Reference: https://www.owasp.org/index.php/Testing_for_Reflected_Cross_site_scripting_(OTG-INPVAL-001.)<br>
+<br>
+Countermeasures include the following:<br>
+<br>
+<ul>
+<li>Primary defenses against XSS are described in the OWASP XSS prevention cheat sheet for the web application developers to follow: https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet.</li><br>
+<li>Deploy a service such as Cisco OpenDNS to block the users from accessing malicious web sites.</li><br>
+<li>Deploy a web proxy security solution, such as the Cisco Web Security Appliance or Cisco Cloud Web Security, to block users from accessing malicious web sites.</li><br>
+<li>Deploy an IPS solution to detect and prevent malicious XSS or CSRF.</li><br>
+<li>Educate end users—for example, how to recognize phishing attacks.</li>
+</ul>
+<br>
+<b>Cross-Site Request Forgery</b><br>
+Another common web-based attack is the CSRF attack. CSRF attacks can include unauthorized changes of user information, or extraction of user sensitive data from a web application. CSRF exploits utilize social engineering to convince a user to open a link that, when processed by the affected web application, could result in arbitrary code execution. When processed, the CSRF link could allow the attacker to submit arbitrary requests via the affected web application with the privileges of the already authenticated user. The attacker's identity is concealed because the targeted web server is treating the request as a legitimate request from the victim.<br>
+<br>
+In effect, CSRF attacks are used by an attacker to make a target system perform a function via the target's browser without their knowledge, at least until the unauthorized transaction has been committed. Examples of CSRF attacks are numerous but the most common involves bank account fund transfers.<br>
+<br>
+For example, the CSRF malicious link that is shown below may cause the web server to accept the input from the user, and process it as if the user intended to submit the password change:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516581944.png" alt="" style="">
+<br>
+Looking at another CSRF example, assume that the human resources department of company X is leveraging a web portal that updates the salary information of the company’s employees. To execute that process, the human resources department needs to complete the following: authenticate to the web application, proceed to the raise salary area of the portal, and complete a form with the name of the employee and the amount of the raise. Once the preceding steps are completed, the user is required to press the submit button to process the form and complete the change. Assume that the submitted form was for an employee who was named John Doe and who is to be given a raise of $1000. The following HTTP POST request will be generated:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516582024.png" alt="" style="">
+<br>
+Depending on the application, a case could exist where the browser already has a valid authenticated session using the authentication cookie. Remember that whenever the user sends a request for a specific domain, the browser also sends the cookies that are associated to that domain to the web server. If the human resources web application has a valid authentication session, then the same action (for example, a salary raise) can be executed with the following HTTP GET request also:<br>
+<br>
+<pre>
+<code>
+GET http://hr.companyX-internal.com/raisesalary.do?user=JohnDoe&amount=1000 HTTP/1.1
+</code>
+</pre>
+<br>
+The above request can be made by visiting a link and executing the HTTP GET request. The browser does not require a form submission. The human resources web application, as described in the above example, is susceptible to CSRF attacks. A malicious user could attempt to increase John Doe's salary by $5000 dollars instead, without having access to the web application, but could convince an employee in the human resources department to open a link or load an HTTP iFrame that is redirected to a malicious link (for example, http://hr.companyX-internal.com/raisesalary.do?user=JohnDoe&amount=5000). Once the employee in the human resources department has been authenticated by the human resources application, the only requirement is to persuade the human resources employee to visit the malicious link using social engineering.<br>
+<br>
+Countermeasures include the following:<br>
+<br>
+<ul>
+<li>The primary defenses against CSRF are described in the OWASP CSRF prevention cheat sheet for the web application developers to follow: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet.</li><br>
+<li>Educate end users—for example, how to recognize phishing attacks.</li>
+</ul>
+<br>
+<a name="Email-Based Attacks"></a>
+<b>Email-Based Attacks</b><br>
+With email at the heart of businesses today, security is a top priority. Mass spam campaigns are no longer the only security concern. Today, both spam and malware are part of a complex picture that includes inbound threats and outbound risks.<br>
+<br>
+Attacks have become significantly more targeted as well. By scouring social media web sites, criminals find information on intended victims and socially engineer spear phishing emails. These relevant emails, targeted to individuals or population segments, contain links to web sites hosting exploit kits. A few years ago, a financial controller of a small fuel supplier in the U.S.A clicked an image-embedded link in an email appearing to come from the U.S. Postal Service. The email passed basic spam filters and contained no malware attachments, but clicking the embedded link loaded content from a site hosting the BlackHole exploit kit. The financial controller’s PC got infected with the Zeus Trojan. The attackers were able to access all the user names and passwords, and transferred over $300,000 out of the company’s bank accounts. Indirect expenses and reputation damage also add to the total cost.<br>
+<br>
+Earlier, employees accessed their text-based email from a workstation defended by the corporate firewall. Now they interact with rich HTML messages from multiple devices that, at times, are not secured by a corporate firewall. HTML provides more avenues for blended attacks because the ubiquitous access creates new network entry points, which at times bypass segmented security layers.<br>
+<br>
+The increasing amount of business-sensitive data and PII that is sent via email means that the risk for outbound leakage is high. In many countries, compliance requires any email with PII to be encrypted. If any unauthorized person can read unencrypted emails, an organization is not in compliance with PCI DSS, HIPAA, GLBA, or SOX, depending on the industry.<br>
+<br>
+The following are examples of email threats:<br>
+<br>
+<ul>
+<li>Attachment-based attacks continue to plague end users. Embedding malicious content in business appropriate files is most common for attachment-based attacks. Criminals have many options to leverage these attacks, from inexpensive malware that can be used in mass attacks, to specifically crafted payloads that target a business vertical or single company. Specifically crafted attacks come in targeted messages that include such malicious attachments.</li><br>
+<li>Email spoofing is the creation of email messages with a forged sender address that is meant to fool the recipient into providing money or sensitive information. For example: a sender 401k_Services@yourcompany.com sends a message to your business email address stating that you have one day to log in to your account to take advantage of new stock investments. The message uses your company’s letterhead, looks as legitimate as the 401k notices that you have received before, and includes a link to log in.</li><br>
+<li>Spam is unsolicited email or "junk" mail that you receive in your inbox. Spam generally contains advertisements, but it can also contain malicious files. In limited quantities, spam can drain employee productivity. In larger quantities, spam can cause employees to overlook valid emails that are lost in the sea of spam, and can even lead to DoS when inboxes and server storage reach capacity.</li><br>
+<li>An open mail relay is an SMTP server that is configured to allow anyone—not just known corporate users—on the Internet to send email. In the past, open mail relay was the default configuration on many corporate mail servers. Now, open mail relays have become unpopular because they are vulnerable to spammers and worms. Spammers and hackers can send large volume of spam or malware through an open mail relay to the unsuspecting users. Usually, open mail relays on corporate networks are contributing factors in the large volume of spam e-mail. Therefore, it is important for the companies to ensure that their SMTP server (such as their exchange) is not set up as an open mail relay.</li><br>
+<li>Homoglyphs are text characters that have shapes which are identical or similar to each other. With the advanced phishing attacks today, phishing emails may contain homoglyphs.<br>
+<br>
+For example, a homoglyph of the letter a of the unicode format. If you look closely, you can see that the first a in paypal is actually different than the second letter a. In this case, www.pɑypal.com points to the attacker's site, and not the real PayPal web site.</li>
+</ul>
+<br>
+<pre>
+<code>
+Note:
+Domain names were originally designed only to support ASCII characters. In 2003, the IDN specification was released that allows most unicode characters to be used in domain names. IDNs are supported by all modern browsers and email programs, so people can use links in their native languages, such as http://Bücher.de
+</code>
+</pre>
+<br>
+Email attacks have become increasingly complex and sophisticated. Skilled criminals now form enterprises to create malware, discover exploits, build kits to install malware, and sell botnet spam networks and DDoS services. To improve deliverability of payloads and malicious links, criminals offer programs that test spam against open-source spam filters, and low-volume spam-bot networks that stay under the radar of many blacklisted services.<br>
+<br>
+Given the widespread level of basic protection against unsolicited and malicious email, companies may think they are adequately protected. But new attack methods are constantly being developed to elude this level of defense. Analysts should be aware of the latest attack methods in order to detect them.<br>
+<br>
+As with any software service that is listening for incoming connections, vulnerabilities can exist in the server application. Over the years, vulnerabilities have been reported for almost every commercial and open-source SMTP server. It is important for IT staff to promptly patch the SMTP servers when vendors publish the security updates.<br>
+<br>
+Countermeasures include the following:<br>
+<ul>
+<li>Deploy an email security appliance/proxy, such as the Cisco Email Security Appliance, to detect and block a wide variety of email threats, such as malware, spam, phishing attempts, and so on.</li><br>
+<li>Educate end users—for example, how to recognize phishing attacks, and to never open any suspicious email attachment.</li>
+</ul>
