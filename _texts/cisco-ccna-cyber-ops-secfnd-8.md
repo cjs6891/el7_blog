@@ -6,7 +6,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Windows Operating System History">8.2 Windows Operating System History</a><br>
 <a href="#Windows Operating System Architecture">8.3 Windows Operating System Architecture</a><br>
 <a href="#Windows Processes, Threads, and Handles">8.4 Windows Processes, Threads, and Handles</a><br>
-<a href="#">8.</a><br>
+<a href="#Windows Virtual Memory Address Space">8.5 Windows Virtual Memory Address Space</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
@@ -30,7 +30,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -157,4 +156,16 @@ The Windows Task Manager can be used to view the running applications and proces
 <li>Right-click the taskbar and choose the Start Task Manager option.</li><br>
 <li>Run the taskmgr command from the Windows command line.</li>
 </ul>
+<br>
+<a name="Windows Virtual Memory Address Space"></a>
+<b>Windows Virtual Memory Address Space</b><br>
+In modern computing systems, temporary data instructions that are processed by the CPU are stored in the computer’s RAM. Virtual memory is a memory management technique that helps the system execute programs when the environment is running low on RAM memory. Virtual memory temporarily transfers content directly from RAM into the disk storage system. This process helps to compensate for a shortage of RAM.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516801621.png" alt="" style="">
+<br>
+A process is allocated specific memory addresses from the available virtual address space. The address space for each process is private and cannot be accessed by other processes unless it has permission to open the process for read or write access. All Windows applications and processes have to be granted specific access to various kernel system resources or objects, such as TCP ports and Windows sockets. By design, processes are not allowed direct access to kernel level functions. A process “handle” provides the process with access to a specific kernel level resource. Typically, the process has to release the “handle” in order for other processes to be able to access the same kernel level resource. However, if the process has kernel level access to a function and the handle has granted PROCESS_VM_READ (function) access, other processes can be granted read access to the same kernel level function’s memory space via the ReadProcessMemory function. In addition, if the process has kernel level access to a function and the handle has granted PROCESS_VM_WRITE (function) access, other processes can write to the same kernel level function’s memory space via the WriteProcessMemory function. It should be noted that processes need SeDebugPrivilege in order to open such handles. This potential violation of the process's memory privacy is very common when dealing with malware, and is a technique that is used to insert malicious code with the intent of gaining access to a system.<br>
+<br>
+A virtual address space does not represent the actual physical location of an object in memory; instead, the system maintains a page table for each process. The page table is an internal data structure used to translate virtual addresses into corresponding physical addresses. Each time a thread references an address, the system translates the virtual address to a physical address.<br>
+<br>
+Each process on 32-bit Microsoft Windows supports a virtual address space that enables addressing up to 4 gigabytes of memory. Each process on 64-bit Windows supports a virtual address space of 8 terabytes.<br>
 <br>
