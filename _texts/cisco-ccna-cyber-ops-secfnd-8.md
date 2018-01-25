@@ -10,12 +10,12 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Windows Services">8.6 Windows Services</a><br>
 <a href="#Windows File System Overview">8.7 Windows File System Overview</a><br>
 <a href="#Windows File System Structure">8.8 Windows File System Structure</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
+<a href="#Windows Domains and Local User Accounts">8.9 Windows Domains and Local User Accounts</a><br>
+<a href="#Windows Graphical User Interface">8.10 Windows Graphical User Interface</a><br>
+<a href="#Run as Administrator">8.11 Run as Administrator</a><br>
+<a href="#Windows Command Line Interface">8.12 Windows Command Line Interface</a><br>
+<a href="#Windows PowerShell">8.13 Windows PowerShell</a><br>
+<a href="#Windows net Command">8.14 Windows net Command</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
@@ -30,12 +30,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
+
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -395,3 +390,247 @@ Not all the attributes are available for viewing or change with this command bec
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1516842157.png" alt="" style="">
 <br>
+<a name="Windows Domains and Local User Accounts"></a>
+<b>Windows Domains and Local User Accounts</b><br>
+Windows systems can act as stand-alone hosts, or they can be members of domains. Domains are groups of Windows hosts that are managed by a centralized authority, which is known as a domain controller. One administrative aspect of system management that is handled at the domain level is users and user groups. Stand-alone systems are capable of hosting multiple user accounts; however, each account is managed locally on the host.<br>
+<br>
+<b>Windows Domains</b><br>
+Windows domains represent a closed system of users and computers that can share resources and adhere to one centrally controlled management structure. Each user and machine belonging to that domain must authenticate with a domain controller in order to access the system. A domain controller is a server that is running a version of the Windows Server OS and has AD domain services installed.<br>
+<br>
+A small organization might need only one domain with two domain controllers for high availability and fault tolerance. A larger organization with many network locations will need one or more domain controllers in each site to provide high availability and fault tolerance.<br>
+<br>
+One of the greatest advantages of Windows domain setup is the ability to use group policy to control all the settings of each workstation in granular detail. AD is based on the LDAP which is designed to store information about virtually any type of object in a network that anyone may need to locate. Objects can be users, hosts, devices, or virtually any type of resource. Objects are grouped in structures that are known as containers. Containers can be nested with sub-containers to create a hierarchy structure. Domains are the entities in which containers are stored, and an organization may have one or more domains that can be organized by department or geographic location, for example.<br>
+<br>
+<b>Local Users and User Groups</b><br>
+A default Windows system ships with two default user accounts and several user groups. The default user accounts are guest and administrator. Recent versions of Windows no longer enable the administrator account because it runs with elevated privileges. At system initialization time, the system prompts you to create a custom user account so that you can access the system without the administrator account. The administrator account can be enabled at any time but the best practice is not to do so. If an an administrator account or an account with administrator privileges is compromised, malicious code has greater access to critical system resources. Users that need to perform a task with administrator-level access can always select the “Run as Administrator” option when they select the object to act on, such as a file or connected device.<br>
+<br>
+The second default user account is called guest. This account is disabled by default and for most installations it should remain this way. It is intended for situations where a Windows host may be deployed in a public space or a location where it is likely to be accessed by many people that do not necessarily have accounts on the host. It grants a limited amount of privilege and is not protected with a password. Normally, customizations that a guest user makes during a session are erased when the guest user exits. When a new guest accesses the host, they are presented with a default desktop environment from which the user can launch authorized applications and access authorized system resources.<br>
+<br>
+User groups determine the level of privilege that users have on the system. For example, placing a user in the administrator’s group grants that user administrator privilege. Several user groups are present on a standard Windows installation that grant specific rights to the users that belong to the group. For example, a user can belong to the backup operator’s group, to perform backup and restore operations. Most users will be assigned to the users group, allowing them to perform common tasks, run applications, use resources such as network printers, or lock and shutdown the system.<br>
+<br>
+Starting with the release of Windows 8, Windows products have been gaining greater integration with Microsoft cloud services. To support these features, you could log in to a Windows system with a Microsoft account rather than a local account. This allows user data to get synchronized between multiple desktop devices and mobile devices. For example, your files that are stored in the Microsoft cloud drive are automatically available at login time. And your desktop profile migrates to whatever host you log in to with your Microsoft account. A Microsoft account is available to any user that subscribes to a public Microsoft service, such as Hotmail or its web-based applications. Users of these versions of Windows can still create and use a local account on the host, but they lose cloud functionality unless they sign in to these applications manually.<br>
+<br>
+<b>Creating a Local User Account</b><br>
+There are several ways to access the application to manage user accounts on a Windows system, but the most common method is through the control panel. The exact method for accessing the control panel depends on the version of Windows, but, usually you can get to it from the Start menu in the lower-left portion of the screen. From there, you will either see an option to navigate to the control panel or, in recent versions of Windows, you will see a Settings option that opens a tablet-friendly version of the control panel. With the control panel or settings window open, you can navigate to the user accounts selection, where you can create or manage local user accounts.<br>
+<br>
+When you create an account, you are prompted for the user name and domain. If you are creating a local account, you can leave the domain field blank. Next, you are prompted to provide the level of access to grant to the user. Choose standard user access, administrator access, or other, which lets you specify the privilege level from a drop-down list of options.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516905501.png" alt="" style="">
+<br>
+After making your selections, click the Finish button to complete the process. When the user attempts to log in with the new account, they are prompted to create a password for the account. Note that to create an account, you must either be logged in as the administrator or be a member of the administrator group.<br>
+<br>
+User accounts can also be created through the net user menu from the command shell.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516905603.png" alt="" style="">
+<br>
+<a name="Windows Graphical User Interface"></a>
+<b>Windows Graphical User Interface</b><br>
+One distinguishing feature of the Windows OS is that it is operated primarily from the graphical interface. It has a command line from which you can execute commands and navigate the file system, but usually a Windows-based host is operated from the graphical interface. The following figure shows a typical Windows 7 desktop.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516908532.png" alt="" style="">
+<br>
+The main panel of the screen is known as the desktop. Each user is given a desktop, which is an environment that the user can customize in various ways, such as using an image for the desktop background or changing the color scheme. The desktop can also be used to store files, folders, or application icons. The recycle bin icon in the upper-left portion of the desktop is reserved for deleted files. Rather than making files unavailable immediately after deleting them, Windows stores deleted files in the recycle bin. Files are not fully deleted until you empty the recycle bin.<br>
+<br>
+The lower portion of the screen contains the task bar which is further divided into three primary areas:<br>
+<br>
+<ul>
+<li>Start menu: The icon that is at the far left portion of the task bar is the Start menu. The start menu gives you access to all your applications and other special features of the system such as the control panel. It also contains a field that you can type in to search for items or run commands.</li><br>
+<li>Quick launch icons: The middle portion of the task bar contains a series of quick launch icons, which act as launch buttons for applications that you place in the task bar. It also creates an icon for each application that is currently running. Clicking the icon of a running application brings it to the foreground so you can use it. You can also pin application icons to the task bar for easy access to frequently used applications.</li><br>
+<li>Notification area: This area contains several features for viewing notifications and controlling applications or processes that run in the background. The arrow icon opens the system tray which is where you can access options for controlling background applications. The flag icon lets you view system notifications and the icon to its right lets you view and control networking status. The shape of this icon will change depending upon how you are connected to the network. If you are wired to the network over an Ethernet connection, the icon will appear as a computer terminal; if you are connected over a wireless adapter, you will see the wireless icon here instead. This area also contains a clock so you can view the date and time. Lastly, there is a rectangular button in the far right portion of the task bar that is used to minimize all the running applications and show you the desktop.</li>
+</ul>
+<br>
+<b>Windows Context Menu</b><br>
+Another feature of the Windows desktop is the ability to bring up a context menu in virtually any part of the graphical interface. Right-click an item to open a context menu. Windows keyboards also contain a context menu key that exposes a context menu at the location of the mouse pointer. The context menu presents menu options that are relevant to where you opened it. Also, some third-party applications add items to the context menu.<br>
+<br>
+<b>Windows File Explorer</b><br>
+Windows provides a tool for managing files and navigating the file system, which is known as the Windows File Explorer and is sometimes referred to as Windows Explorer. It is a utility that runs in the graphical environment and can leverage many of the features of the graphical environment, such as drag-and-drop and the context menu.<br>
+<br>
+The Windows OS is known for its rich graphical interface which makes for an intuitive and easy-to-use end user platform. Though it does provide a command line interface which is also quite robust, most users choose to operate the system using the graphical interface.<br>
+<br>
+<a name="Run as Administrator"></a>
+<b>Run as Administrator</b><br>
+Certain tasks that you need to perform to administer a Windows system may require administrator privileges. Normally, the command interpreter runs with the permissions that are configured for the user who is operating the command line. However, you can elevate your permissions to administrator level using the following methods:<br>
+<br>
+<ul>
+<li>Right-click a command icon: If there is a command you need to run as administrator, you can use the Windows File Explorer to find the command and right-click it to bring up its context menu. From there, you can Run as administrator, as seen in the figure. This technique can be useful in situations where you need to install an application with the administrator context. In the figure, the user is installing an AMP for endpoints connector which requires administrator privilege</li><br>
+<li>Open the command interpreter as administrator: Right-click the icon for the command line to see that the same option, Run as administrator, is also available. The difference is that all the commands that you execute from the command line will run with the administrator context.</li>
+</ul>
+<br>
+<a name="Windows Command Line Interface"></a>
+<b>Windows Command Line Interface</b><br>
+In addition to the rich graphical environment, Windows includes a robust command line interface that you can use to execute applications, manage files, and navigate the file system. You can also store commands in a text file and execute them, just as you would a shell script in Linux environments.<br>
+<br>
+When using the Windows command line interface, consider the following:<br>
+<br>
+<ul>
+<li>Case sensitivity: By default, Windows commands, file paths, and file names are not case-sensitive. However, the case-sensitivity of the text is preserved when creating a file or directory. Windows will not take case-sensitivity into account when expressing an item in the command line. However, Windows can be configured to support case-sensitivity.</li><br>
+<li>Directory references: Directory structures in a Windows installation are referenced with a starting point of the storage media on which the file you need to reference is located. Storage media is assigned a drive letter. After the drive is identified, you list the directories that the system must traverse to access the file. Drives, directories, and files are delimited with a backslash (\) character. For example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516909655.png" alt="" style="">
+<br>
+</li><br>
+<li>Commands and command options: You can execute commands from the command line. Often, the commands you execute will accept options. Command options are preceded with a forward slash (/) character. In the example that follows, a ping command is shown with an option to send a specific number of echo request messages:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516909730.png" alt="" style="">
+<br>
+</li><br>
+<li>Accounting for spaces in file names: The Windows file system allows for file names to contain spaces, which can cause problems in the command line because a space is typically used to separate a command from its arguments. To ensure that a space in the file name is interpreted correctly, enclose the file name in double quotation marks (“).<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516909804.png" alt="" style="">
+<br>
+In the example, the user is copying the Class Files.zip file to the D: drive. Note that the file name contains a space and that the user enclosed the file name in double quotation marks (") to prevent the command line from misinterpreting the command.
+</li><br>
+<li>Auto-complete: A useful feature of the command line is the ability to automatically complete commands that reference directories or files. This is accomplished by pressing the Tab key as you enter file or directory references in the command line.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516909875.png" alt="" style="">
+<br>
+In the example, the user entered the copy command followed by a portion of the file name. Then the user pressed the Tab key to autocomplete the file name reference. If the command interpreter can determine the remaining portion of the file, it will complete the file name automatically. If the file does not exist in the location that was specified by the user, the command interpreter does nothing. In this case, check your syntax or spelling. Also note that the command interpreter recognized that the file contained a space character in the name and correctly enclosed the file name in double quote characters.
+</li><br>
+<li>Command line history: The Windows command line maintains a history of the commands you used throughout the command line session. Once you exit the session, the command history is erased. A new command history is created the next time that you open the command line. To access recently used commands, use the up or down arrow keys. You can list the command history with the following command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516909953.png" alt="" style="">
+<br>
+Another option is to press the F7 key while you are in the command line window. This opens a box in your command line session that lists the command history. Navigate the box with the up and down arrow keys or use the Home and End keys to go to the beginning and end of the command history list. You can also use the Page Up and Page Down keys to move a page at a time if the list spans multiple pages. When you highlight the command that you wish to use from the list, press the Enter key to execute it. The figure shows an example of the command history box after opening it using the F7 key:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516910009.png" alt="" style="">
+<br>
+The Windows command line history provides another feature that you may find useful if you are entering a lot of long commands that you don't want to type. Type a portion of a command and press F8 to have the command interpreter fetch the most recent command that begins with the string that you typed. If the command that is presented is not the one you want, press F8 again and it will search the history for the next most recent instance of the string. 
+</li>
+</ul>
+<br>
+<b>File and Directory References from the Command Line</b><br>
+The Windows OS designates all storage media as unique entities with their own file systems. Therefore, referencing a file or directory location will always begin with a specific drive letter. A user can easily switch from one drive to another by simply specifying the drive letter followed by a colon.<br>
+<br>
+With the drive that you wish to use selected, you can begin to navigate its directory structure, manage files, or execute commands from the command prompt.<br>
+<br>
+The Windows command prompt allows you to reference files and directory locations in one of two ways:<br>
+<br>
+<ul>
+<li>Fully qualified reference: Using this method, you must enter the entire directory starting from the root of the current drive or a drive letter if the item that you wish to reference resides on a different drive.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516910239.png" alt="" style="">
+<br>
+In the example, the user executed the type command, which is used to print the contents of a file to the screen. The user’s command prompt was in drive D:, but the file that the user was interested in was on the C: drive. The user referenced the file using the fully qualified path to the file.
+</li><br>
+<li>Relative reference: Relative references to file or directory locations take into account the current file system location as the starting point of the reference. If a file or command resides in a directory level that is higher than the current directory, use the double dot (..) notation to move up the directory structure</li><br>
+</ul>
+<br>
+<a name="Windows PowerShell"></a>
+<b>Windows PowerShell</b><br>
+Although the Windows command line has a rich set of features, including the ability to create batch file scripts, it lacks the ability to interact with core Windows OS functions and graphical interface. The Windows PowerShell overcomes these drawbacks by providing a scripting environment that is deeply integrated with the operating system and graphical interface. It also provides a command line interpreter for executing commands and directing their output to the screen, as you would by executing a regular command from the command line. The true power of the PowerShell however, is the ability to use it as a scripting language for automating tasks. It is also interoperable with other operating systems such as Linux and OS X.<br>
+<br>
+As of Windows 7 and Windows Server 2008, PowerShell has been included as an integrated component of the operating system. It can run on versions before Windows 7, but it has to be installed separately. Another recent development regarding PowerShell is that it became an open source project in August of 2016, paving the way for support under other operating systems. Open source code can be obtained from GitHub.<br>
+<br>
+Windows PowerShell can execute several types of commands:<br>
+<br>
+<ul>
+<li>cmdlets: Pronounced “command-lets,” cmdlets are programs that are designed to interact with PowerShell.</li><br>
+<li>PowerShell scripts: These are sequences of PowerShell commands that are contained in a file that can be executed. PowerShell script files have a .ps1 file extension.</li><br>
+<li>PowerShell functions: Functions are code snippets that can be referenced from within a script. Functions can be crafted to accept parameters.</li><br>
+<li>Standard executable files</li>
+</ul>
+<br>
+PowerShell was also designed with security in mind. First, to execute PowerShell commands locally with escalated privileges, you must use the “Run as Administrator” option. Second, the PowerShell Remoting function is disabled by default, and once enabled, administrator rights are required to connect to a remote computer via PowerShell. Lastly, PowerShell includes an execution policy to determine whether the system can run PowerShell scripts at all, or, if it can, the execution policy can enforce whether the script has to be digitally signed.<br>
+<br>
+There are four PowerShell execution policy elements as follows:<br>
+<br>
+<ul>
+<li>Restricted: Default execution policy that completely restricts the use of PowerShell scripts on the system</li><br>
+<li>AllSigned: Indicates that any PowerShell script that you attempt to execute must be digitally signed</li><br>
+<li>RemoteSigned: The recommended execution policy mode that indicates that externally downloaded scripts must be digitally signed, but scripts that are created locally do not need to be signed. Windows considers a PowerShell script to be an externally downloaded script when the file contains an ADS to indicate that the file came from the Internet zone.</li><br>
+<li>Unrestricted: This places no restrictions on running PowerShell scripts.</li>
+</ul>
+<br>
+From within the PowerShell environment, you can determine the current execution policy by using the get-executionpolicy command. You can also set the execution policy by using the set-executionpolicy command from within the PowerShell environment.<br>
+<br>
+Another aspect of the security that is built in to PowerShell is that it does not run commands from the current directory. It searches the directories that are stored in the PATH environment variable. If the PowerShell script that you are trying to call up is not in one of the directories that are specified in the variable, the system will return a “file not found” error, even if the script is in the same directory where you attempted to execute it. To execute a PowerShell script, it must be in the PATH variable, or you can provide the fully qualified path. For scripts in the same directory, put a period+backslash (.\) or period+forward slash (./) in front of the script name to instruct the system to search for the file in the current directory.<br>
+<br>
+<b>Entering PowerShell</b><br>
+The Windows PowerShell environment can be initiated in several ways. First, you can go through the start menu and find the icon to start a PowerShell session. If you simply click the icon, you will be restricted in what you can do. However, if you right-click the icon and choose the “Run as Administrator” option from the context menu, you will have full control of the PowerShell session.<br>
+<br>
+Another option is to start a PowerShell session from the standard command line window. Again, for full control, you should be utilizing the command line as an administrator. The command to start the PowerShell is start powershell. The new window opens with the PowerShell command interpreter (it may look similar to the standard command line window, or have a different color scheme). What you see depends on the PowerShell version that is running on your system.<br>
+<br>
+In all cases, the PowerShell command prompt starts PS, immediately followed by the directory path from which you started the PowerShell session. Note that the banner indicates that you are in the PowerShell command interpreter environment, as does the title bar of the Window running the PowerShell.<br>
+<br>
+Test the PowerShell session by running a simple command as shown below:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516912391.png" alt="" style="">
+<br>
+In the example, the user executed the command to check the PowerShell execution policy. The value that it returned was “restricted” which means this host is not configured to run PowerShell scripts. To enable PowerShell script execution, enter the following command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516912443.png" alt="" style="">
+<br>
+Note that the system returns a warning and gives the option to continue or exit. The default is to continue. Press the Enter key, or enter the letter y followed by the Enter key, to accept the default.<br>
+<br>
+Another alternative for executing PowerShell commands or executing scripts is to use the -command option with the PowerShell command line start command, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516912496.png" alt="" style="">
+<br>
+This starts the PowerShell and executes the command that you enter as the argument to the -command option. This method closes the PowerShell window after the command executes, so it might be better suited for launching scripts. You, can, however, use the -NoExit option to leave the window open when the command finishes.<br>
+<br>
+<b>Using PowerShell</b><br>
+When you first start using PowerShell, you should explore the help system, which provides a quick means of giving you information and usage examples. Invoke the help system with the get-help command. Include the more command to prevent information from scrolling off the page before you have a chance to read it.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516912977.png" alt="" style="">
+<br>
+This is a partial representation of the help page, but it shows syntax examples, and examples of how to get help on specific commands.<br>
+<br>
+To get the most out of the PowerShell, explore the four levels of help information further:<br>
+<br>
+<ul>
+<li>get-help <PS command>: With no further parameters, returns the least amount of help information</li><br>
+<li>get-help <PS command> -examples: Provides basic help information with examples.</li><br>
+<li>get-help <PS command> -detailed: Provides a more detailed amount of help information with examples.</li><br>
+<li>get-help <PS command> -full: Provides the most information with examples and greater technical depth.</li>
+</ul>
+<br>
+The previous example, where the get-help command output was piped to the more command, is another powerful capability of PowerShell. Piping the output of one command to the input of another greatly increases your productivity with PowerShell by getting directly to information that you may find useful, rather than wading through long lists of command output feedback. In the example that follows, you may be interested in finding out about services that are installed on the host that you are evaluating. Use the get-service command to do so, but it yields a great deal of information including stopped services and running services. You may only be interested in the running services, so pipe the output of get-service to the where-object command to specify the output criteria.<br>
+<br>
+The following is an example of how to execute these commands to filter the output to just running services. This output is also piped to the more command due to the size of the PowerShell window. This way, the output does not scroll off the screen before you have a chance to read it.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516913153.png" alt="" style="">
+<br>
+Now the command output is more precise and usable. The parts of the command that make this work are the parameters of the where-object command. The first parameter specifies the field of information that you are interested in. The second parameter uses an equality operator to let you specify the string in the field that you wish to search for.<br>
+<br>
+Another interesting feature of PowerShell is the ability to send output from a command to an interactive table in the graphical environment that you can sort and filter. The example that follows places the output of the get-process command to the interactive table.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516913235.png" alt="" style="">
+<br>
+This command produces an interactive table as shown in the figure:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516913286.png" alt="" style="">
+<br>
+The window is the output of the command in a graphical table that you can interact with. Click column headings to sort on a column, filter items based on a fstring that you enter in the Filter field near the top, and add criteria to further filter the output. For example, if you click the Add Criteria button and select handles, you can enter logical operators as a filter, such as handles with a number greater than, less than, or equal to a value that you enter.<br>
+<br>
+In this example, the output from the get-process cmdlet includes the following:<br>
+<br>
+<ul>
+<li>Handles: The number of handles that are opened by the process</li><br>
+<li>NPM(K): Nonpaged memory in kilobytes</li><br>
+<li>PM(K): Pagable memory in kilobytes</li><br>
+<li>WS(K): The working set of memory pages that is used by the process in kilobytes</li><br>
+<li>VM(M): Virtual memory, in megabytes, that is consumed by the process</li><br>
+<li>CPU(s): Processor time, in seconds, that is consumed by the process</li><br>
+<li>ID: The process ID</li><br>
+<li>ProcessName: The name of the process</li>
+</ul>
+<br>
+At a glance, this gives you an idea of the processing resources that are consumed by individual processes at the time that the command was executed. Clearly, the Firefox application was consuming most of the processing resources when the get-process cmdlet was executed.<br>
+<br>
+<b>Importing PowerShell Functions</b><br>
+PowerShell users have an active community that features sites, blogs, and various resources for users to support each other and share code. By taking advantage of these resources, you may find that a problem that you need to solve with PowerShell has already been solved by others. If you obtain code from another source or you wrote a function that you wish to use as a script, use the import-module command to do so.<br>
+<br>
+For example, the Microsoft blogging community makes many useful code examples available. One entry, which was written by Shay Levy, includes a PowerShell function to find running processes that are listening for connections with their associated port numbers. You can copy the code example and import it, so that the function is available to run on your system as if it were a standard cmdlet. The process for performing the import is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516913624.png" alt="" style="">
+<br>
+In the example, the import-module command uses the -name parameter to identify the file with the code sample that you wish to import. It also adds the -verbose parameter to provide verbose output as it processes the file, which could provide useful information if the import were to fail. The extension of the file name is also provided; the convention is to use the .psm1 extension for importing this type of code sample.<br>
+<br>
+With the code sample imported, execute it as if it were a regular cmdlet as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516913706.png" alt="" style="">
+<br>
+The example output is truncated, but you can see that it provides a great deal of information which could be useful if you are investigating suspicious processes that have opened a port to listen on, for example. Note that the data within some of the columns is truncated as well. Adjust the width of the PowerShell window to see the entire message for each field in the output.<br>
+<br>
+<a name="Windows net Command"></a>
+<b>Windows net Command</b><br>
