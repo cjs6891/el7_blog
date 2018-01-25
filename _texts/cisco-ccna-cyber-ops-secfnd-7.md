@@ -338,7 +338,7 @@ Countermeasures to domain shadowing attacks include the following:<br>
 </ul>
 <br>
 <a name="Command Injections"></a>
-<b>Command Injections</b>><br>
+<b>Command Injections</b><br>
 Command injection is an attack whereby an attacker's goal is to execute arbitrary commands on the web server's OS via a vulnerable web application. Command injection vulnerability occurs when the web application supplies vulnerable, unsafe input fields to the malicious users to input malicious data.<br>
 <br>
 During a command injection attack, attacker-supplied OS commands are usually executed with the privileges of the vulnerable web application. Command injection attacks are possible largely due to insufficient input validation. SQL injection and XSS are two specific forms of command injection attacks.<br>
@@ -468,7 +468,7 @@ Reference the OWASP SQL Injection Prevention Cheat Sheet: https://www.owasp.org/
 <br>
 <a name="Cross-Site Scripting and Request Forgery"></a>
 <b>Cross-Site Scripting and Request Forgery</b><br>
-Both XSS and CSRF are prevalent threats to the security of web applications. Security analysts should understand how these attacks work. XSS and CSRF are in the 2013 OWASP top 10 web application vulnerabilities list: https://www.owasp.org/index.php/Top_10_2013-Top_10. Understanding how these web-based attacks work will help the security analyst investigate and prevent these attacks from spreading across the secured network.<br>
+Both XSS and CSRF are prevalent threats to the security of web applications. Security analysts should understand how these attacks work. XSS and CSRF are in the 2013 OWASP top 10 web application vulnerabilities list. Understanding how these web-based attacks work will help the security analyst investigate and prevent these attacks from spreading across the secured network.<br>
 <br>
 XSS is a type of command injection web-based attack which uses malicious scripts that are injected into otherwise benign and trusted web sites. The malicious scripts are then served to other victims who are visiting the infected web sites. For example, the malicious script may steal all the sensitive data from the user's cookies that are stored in the browser.<br>
 <br>
