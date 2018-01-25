@@ -286,7 +286,7 @@ This is not an exhaustive list of the full Windows file system, but it does incl
 <br>
  - <b>SysWOW64:</b> 64-bit Windows is backward compatible with 32-bit applications. This directory stores 32-bit system DLL files.<br>
 <br>
- - <b>WinSxS: This directory stores copies of system DLL files. Often, these files represent older versions of the DLL files that may be required by older applications. The folder name stands for Windows side-by-side because it allows older applications to co-exist with newer ones that require the most current DLL files.
+ - <b>WinSxS:</b> This directory stores copies of system DLL files. Often, these files represent older versions of the DLL files that may be required by older applications. The folder name stands for Windows side-by-side because it allows older applications to co-exist with newer ones that require the most current DLL files.
 </li>
 </ul>
 <br>
