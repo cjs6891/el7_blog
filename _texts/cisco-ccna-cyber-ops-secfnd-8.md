@@ -17,8 +17,8 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Windows PowerShell">8.13 Windows PowerShell</a><br>
 <a href="#Windows net Command">8.14 Windows net Command</a><br>
 <a href="#Controlling Startup Services and Executing System Shutdown">8.15 Controlling Startup Services and Executing System Shutdown</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
+<a href="#Controlling Services and Processes">8.16 Controlling Services and Processes</a><br>
+<a href="#Monitoring System Resources">8.17 Monitoring System Resources</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
@@ -30,9 +30,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 
-
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -697,4 +694,108 @@ There are three options for shutting down/restarting a Windows host:<br>
 <li>Restart: The OS completely shuts down and the system automatically re-boots.</li><br>
 <li>Sleep/hibernation: Captures system state and writes it to a file. The system then enters a low-power state but it is not completely turned off, allowing users to resume operation quickly without having to boot the host. The feature is primarily designed to accommodate laptop and mobile devices.</li>
 </ul>
+<br>
+<a name="Controlling Services and Processes"></a>
+<b>Controlling Services and Processes</b><br>
+When Windows is up and running, administrators need to know about the services and processes that are operating on a given host. This can be the result of simple system maintenance or it can be part of an investigation to see if there are suspicious processes that are running on a compromised host. This topic presents several tools that are available to get information about processes and manage them.<br>
+<br>
+The task manager is a primary tool that every Windows administrator should be familiar with. The figure shows an example of the Task Manager window from a Windows 7 installation.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516995381.png" alt="" style="">
+<br>
+The task manager provides a great deal of information regarding what is running on the system including system performance metrics. Because it pertains to services and processes, the first three tabs provide the most useful information.<br>
+<br>
+<ul>
+<li>Applications: Lists the applications currently running on the system and gives you the ability to end the task or switch to it. This area can be useful for killing hung applications.<br>
+<br>
+ - Right-clicking an application in this list gives you several options in a context menu. One of the interesting options you may find useful is to jump to the process that runs the application.
+</li><br>
+<li>Processes: This tab lists processes running on the system and it also gives you the ability to sort applications several ways: by name, by the user that owns the process, by CPU resource consumption, by memory resource consumption and description. This view can help you identify processes consuming resources or acting strangely. You can also terminate misbehaving processes.<br>
+<br>
+ - Right-clicking a listed process opens a context menu for various things, such as opening the location of the file that starts the process or opening the processes properties.
+</li><br>
+<li>Services: This tab provides a list of the services that are loaded on the system. It also shows you the service status: Running or Stopped. It also provides a button that opens the Services management console applet. From there, you have greater control over loaded services and configuring their properties.<br>
+<br>
+ - Right-clicking an item in the services list allows you to open a context menu with several options. For example, you can stop or start the service depending on its current state, and you can jump to the process that runs the service in the process list.
+</li>
+</ul>
+<br>
+The msconfig utility also has the ability to show the status of the services. The figure below shows the Services tab of the msconfig utility.<br>
+<br>
+The amount of management that you can perform from msconfig is somewhat limited: you can only enable or disable the services at the next reboot. But it allows you to view the services and potentially identify any that appear suspicious. You may also find useful tools to give you greater control through the Tools tab.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516995795.png" alt="" style="">
+<br>
+In the Tools tab, you can select a tool and launch it from this application window. In this example above, the user has selected the Computer Management tool which gives access to control a wide range of system settings, including services.<br>
+<br>
+<b>Evolution of Windows Task Manager</b><br>
+The task manager was updated in recent versions of Windows (version 8 or greater), and added some key enhancements and tabs that provide more useful information. This section provides an overview of the updated task manager.<br>
+<br>
+First, the task manager opens as a simple window that lists applications that are currently running on the host.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516995882.png" alt="" style="">
+<br>
+To get to all the task manager features, click the More Details button. This expands the window to reveal the full set of task manager features as seen in the figure below.<br>
+<br>
+Note that the application tabs have changed and that the information is presented in a more graphically organized manner to improve what is presented at-a-glance.<br>
+<br>
+<ul>
+<li>Processes: This presentation includes both applications and processes in a single list. Applications and processes consuming large amounts of resources relative to others get shaded in various ways. Generally, the darker the shade of yellow and then orange, the higher the resource consumption. If resource utilization has reached a critical level, the value will be shaded in red. Processes are organized in terms of Background processes and Windows processes. Each section of the list is labeled accordingly.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516996119.png" alt="" style="">
+<br>
+ - Another enhancement is that processes running sub-processes are identified with a button in the shape of a greater-than symbol. Clicking this button expands the selection to show the sub-processes. In the case of applications that are running multiple windows, such as a browser with multiple tabs open, clicking the button lists all the windows or tabs belonging to that instance of the application.<br>
+ <br>
+ - One enhancement that could be particularly useful is embedded in the context menu. Right-click an application or process in the list to see a context menu that is associated with that item which contains an option that is called “Search Online.” This initiates a search for the item using the system’s default search engine. A key use case for this feature is to do a quick lookup on a process that is suspicious. However, be advised that many classes of malware either misrepresent what is displayed in the task manager or disable it all together.
+</li><br>
+<li>Performance: This tab aggregates all the major performance metrics (CPU, memory, disk, and network) into a single section. You can click a resource in the left portion of the tab and the main panel populates with the performance details of that resource including a general performance graph over time and values of key metrics that are dynamically updated as resource consumption changes.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516996310.png" alt="" style="">
+</li><br>
+<li>App history: By default, this tab shows historical resource utilization of applications over time, giving you an idea of which applications may be consuming high amounts of resources. Edit the properties of this page to display historical resource consumption for all applications by clicking the Options menu at the top of the window.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516996408.png" alt="" style="">
+</li><br>
+<li>Startup tab: This tab presents a list of applications and services that start up at boot time. You can select an item from this list and click the Disable button in the lower-right portion of the window to prevent the application from initializing at boot time.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516996473.png" alt="" style="">
+</li><br>
+<li>Users tab: This tab displays users who are currently in the system. It also displays the resources that are consumed by the applications and processes that belong to each user. You can see a list of these processes by clicking the arrow button in front of the listed user to expose the list of processes belonging to the user. You can also select a user and disconnect him or her from the system if you have administrator privilege.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516996538.png" alt="" style="">
+</li><br>
+<li>Details tab: This tab displays a list of all the applications and processes running on the system. It expands on the capabilities of the Processes tab in that it displays status information for each item and it makes more advanced options for managing processes available through the context menu when you right-click an item. For example, it allows you to set a processing priority for an item. The context menu also allows you to set CPU affinity. Affinity is a feature that is used primarily on multi-core or multi-CPU systems, allowing a process to run on a specific core or CPU. Another option on the context menu is called, Analyze wait chain. This option will display the status of a process that might appear to be hung up. You can easily determine from this option whether a non-responsive application is waiting on another process.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516996637.png" alt="" style="">
+</li><br>
+<li>Services tab: This tab, as the name implies, lists the services that are loaded on the system and the service status (Running or Stopped). It is not much different than its predecessor from previous versions of Windows but it does include the ability to do an online search for a service that may not be familiar to you. It also allows you to open the Services applet from the management console application to give you greater control over the properties and configuration of services.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516996637.png" alt="" style="">
+</li>
+</ul>
+<br>
+<a name="Monitoring System Resources"></a>
+<b>Monitoring System Resources</b><br>
+In addition to information that is related to services and applications that can be gathered from the Task Manager, you can also gather information that is related to system performance. Three Task Manager tabs provide information about various aspects of system performance:<br>
+<br>
+<ul>
+<li>Performance: This tab as shown below shows the general system resource utilization. It contains a graph of CPU utilization and a second graph of memory consumption. It also contains more detailed memory utilization counters.</li><br>
+<li>Networking: This tab shows a graphical representation of network utilization for each network adapter on the system. It also shows a table of the processes consuming network resources as a percentage of the total. This can be helpful in tracking down applications or processes consuming large amounts of network bandwidth.</li><br>
+<li>Users: This tab shows the users who are currently logged in to the host. It gives you the option to disconnect users that are remotely logged in or log them off entirely.</li>
+</ul>
+<br>
+The Task Manager provides a lot of information about the system at-a-glance.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516997465.png" alt="" style="">
+<br>
+<b>Resource Monitor</b><br>
+If you need to dig deeper to get more detailed information, Windows ships with a tool that is called Resource Monitor that provides just that. The figure shows an example of Resource Monitor from a Windows 7 installation. This application is available on all the most current versions of Windows, however, its functionality is unchanged from prior versions. You can access this application several ways: open it from the Start menu->All Programs->Accessories->System Tools->Resource Monitor, or type resmon.exe into the Start Menu search box, or you can call it up from the Performance tab of the task manager.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516997700.png" alt="" style="">
+<br>
+This tool gives you a detailed view of resource utilization on your system. The application is focused on the major resources on your system: CPU, memory, disk, and network resources. The first section of the application is represented by the contents of the Overview tab. This tab provides general utilization statistics for each of the resources. You can also select a process from the process list at the top of the page by clicking the checkbox in front of the item. This has the effect of filtering utilization data on the selected item or items and lets you see, on a per process basis, how an item is utilizing available resources.<br>
+<br>
+When you select an item, expand each of the remaining sections to show utilization statistics for each of the resource categories. In the figure that follows, the user has selected the Firefox process in the top portion of the window and has expanded the network section by clicking the arrow button in the right side of the section title bar.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516997780.png" alt="" style="">
 <br>
