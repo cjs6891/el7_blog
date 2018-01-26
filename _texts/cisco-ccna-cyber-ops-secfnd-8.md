@@ -16,7 +16,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Windows Command Line Interface">8.12 Windows Command Line Interface</a><br>
 <a href="#Windows PowerShell">8.13 Windows PowerShell</a><br>
 <a href="#Windows net Command">8.14 Windows net Command</a><br>
-<a href="#">8.</a><br>
+<a href="#Controlling Startup Services and Executing System Shutdown">8.15 Controlling Startup Services and Executing System Shutdown</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
@@ -31,7 +31,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">8.</a><br>
 
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -634,3 +633,68 @@ The example output is truncated, but you can see that it provides a great deal o
 <br>
 <a name="Windows net Command"></a>
 <b>Windows net Command</b><br>
+The Windows OS contains a robust suite of commands that are comparable to the command sets that are available in any other operating system. However, Windows OS includes a set of commands that are specific to Windows administration and maintenance. These commands are known as the net commands since the commands start with the term net and are often used to manage network resources, although there are also options that focus on local system resources.<br>
+<br>
+To get information about using these commands, enter net help at the command prompt to display a list of various net command options, and instructions for getting help with specific options.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516922082.png" alt="" style="">
+<br>
+The syntax of this command is:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516922148.png" alt="" style="">
+<br>
+An example of using a net command is to view or edit local user account login policy. You can use the net accounts command as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516922206.png" alt="" style="">
+<br>
+With this usage, you can view the local user login policy, and modify the policy if you wish. Currently, based on the feedback from the net accounts command that was issued previously, the Maximum Password Age is unlimited. You prefer that the user of this host periodically changes their password, but you are not sure how to structure the command. The following syntax to will provide help:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516922307.png" alt="" style="">
+<br>
+There are many more uses for the net commands. For example, if you need to mount a file share to your Windows host, use the net use option of the net command.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516922398.png" alt="" style="">
+<br>
+This command mounts a share to the remote host 192.168.7.88 and it connects to a share that is named “users.” When the share mounts, it will be mapped to the driver letter z:. So, the local users of this host will be able to use the remote share as if it were a locally connected disk drive. Lastly, the command specified a user name to log in with on the remote host. If the user name is a valid user on the remote host, the user is prompted for a password. Upon entering the correct password, the share becomes available to use on the local host.<br>
+<br>
+This last example demonstrates how to use the command to stop and start network services. First, you must know the name of the service that you wish to control. In the example, the system admin will use a service that is called FileInfo. The following represents the sequence of commands to stop and start the service:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516922518.png" alt="" style="">
+<br>
+Mastering net commands is an important skill for Windows administrators. You've seen just a few examples, but there are many more useful features of the net commands.<br>
+<br>
+<a name="Controlling Startup Services and Executing System Shutdown"></a>
+<b>Controlling Startup Services and Executing System Shutdown</b><br>
+It is possible to manually edit the registry keys directly with the registry editor to control auto-start services, but if you edit something incorrectly or delete a key that is required by the system, you can damage a Windows system. Tools are available to view auto-start services and change their start-up properties without directly manipulating the registry. For example, the Msconfig.exe tool ships with the OS and allows you to view and edit system start-up properties. Access the tool by entering the msconfig command at the prompt, or in the search field of the start menu.<br>
+<br>
+The Msconfig.exe tool allows you to control various aspects of the system configuration. Options are grouped as tabs in the following categories:<br>
+<br>
+<ul>
+<li>General: This group of settings allows you to control various options for starting up the system. The default is a normal startup, but you can choose a diagnostic startup or a selective startup where you can control whether to start system services, startup items or whether to use the original boot configuration.</li><br>
+<li>Boot: If multiple versions of Windows are installed, you can choose which one to boot on startup. You also have options for controlling the safe boot mode, which is a boot process that is used for troubleshooting system issues. Safe boot mode is normally turned off to allow the system to perform a normal boot.</li><br>
+<li>Services: This section lists the services that are loaded in the system and their state: Stopped or Running. It also gives you the option to disable or enable the services, which will require a reboot to take effect.</li><br>
+<li>Startup: This section lists the applications and services that are configured to automatically start at boot time. It also gives you the option to disable or enable the applications and services to start at boot time, which will require a reboot to take effect.</li><br>
+<li>Tools: This section lists the tools that ship with the OS. You can launch the tools directly from this window.</li>
+</ul>
+<br>
+<b>System Shutdown</b><br>
+The best practice when halting a Windows system is to perform a proper shutdown, rather than simply turning it off. This gives the system a chance to terminate applications and services with dependencies in the proper order, and allows the system to write any configuration changes or pending edits to their respective files. Shutting down the system incorrectly can corrupt open files or damage applications that were in the process of doing something when the system was turned off.<br>
+<br>
+Part of the shutdown process is to inform applications and services that a user requested a shutdown. The system communicates this request to each process so that the processes can start terminating open threads, and cleaning up open file handles. If a process thread does not respond within a predetermined period (default is 20 seconds), the system displays the hung application warning box, giving you the option to wait or close the application. After user mode applications have closed, the system begins terminating system processes. These processes are also bound by the timeout, however, no warning is displayed. The system may appear to hang at this point while it waits for the offending process to terminate. In this situation, after you have waited a reasonable period, you may have no choice but to manually turn off the system.<br>
+<br>
+There are several ways to shut down a Windows system:<br>
+<br>
+<ul>
+<li>From the Start menu: The Start menu configuration may differ slightly from one version of Windows to another, but you can always find it in the lower left portion of the screen. From there, you will see an option to shut down the system. Selecting that option presents a message box for you to select the type of shutdown to do.</li><br>
+<li>Ctrl+Alt+Delete: Affectionately known as the “three-finger salute” because this method requires the user to press the Ctrl, Alt, and Delete keys at the same time. A screen pops up with a series of options, including system shutdown. Note that the most recent versions of Windows eliminated this option from the list and replaced it with an icon in the lower right that brings up the list of shutdown options.</li><br>
+<li>Command line: Execute the shutdown command from the command line to begin the shutdown process. The command can take various parameters to determine the type of shutdown to perform.</li>
+</ul>
+<br>
+There are three options for shutting down/restarting a Windows host:<br>
+<br>
+<ul>
+<li>Shutdown: The OS completely shuts down.</li><br>
+<li>Restart: The OS completely shuts down and the system automatically re-boots.</li><br>
+<li>Sleep/hibernation: Captures system state and writes it to a file. The system then enters a low-power state but it is not completely turned off, allowing users to resume operation quickly without having to boot the host. The feature is primarily designed to accommodate laptop and mobile devices.</li>
+</ul>
+<br>
