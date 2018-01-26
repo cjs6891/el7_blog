@@ -799,3 +799,9 @@ When you select an item, expand each of the remaining sections to show utilizati
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1516997780.png" alt="" style="">
 <br>
+The network section inserts a message to indicate that the results are filtered on firefox.exe. This gives you a means for understanding the resource utilization of specific applications and processes. The filter persists across all the tabs, so if you want greater detail on CPU utilization for a selected application, click the CPU tab, and the statistics that are rendered by the resource monitor remain filtered by the selected application, as seen below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1516997872.png" alt="" style="">
+<br>
+Remove the filter by de-selecting the item in the top portion of the window. Doing so reverts the resource monitor to showing statistics that are based on all the running applications and processes. Each of the remaining tabs provide greater detail regarding the resource that you selected. If you need to investigate a system that is exhibiting erratic behavior, this tool can help you track down the source of the behavior.<br>
+<br>
