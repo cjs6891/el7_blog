@@ -19,25 +19,17 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Controlling Startup Services and Executing System Shutdown">8.15 Controlling Startup Services and Executing System Shutdown</a><br>
 <a href="#Controlling Services and Processes">8.16 Controlling Services and Processes</a><br>
 <a href="#Monitoring System Resources">8.17 Monitoring System Resources</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
+<a href="#Windows Boot Process">8.18 Windows Boot Process</a><br>
+<a href="#Windows Networking">8.19 Windows Networking</a><br>
+<a href="#Windows netstat Command">8.20 Windows netstat Command</a><br>
+<a href="#Accessing Network Resources with Windows">8.21 Accessing Network Resources with Windows</a><br>
+<a href="#Windows Registry">8.22 Windows Registry</a><br>
+<a href="#Windows Event Logs">8.23 Windows Event Logs</a><br>
+<a href="#Windows Management Instrumentation">8.24 Windows Management Instrumentation</a><br>
+<a href="#Common Windows Server Functions">8.25 Common Windows Server Functions</a><br>
 <a href="#">8.</a><br>
 <a href="#">8.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 
@@ -804,4 +796,279 @@ The network section inserts a message to indicate that the results are filtered 
 <img src="https://cjs6891.github.io/el7_blog/public/img/1516997872.png" alt="" style="">
 <br>
 Remove the filter by de-selecting the item in the top portion of the window. Doing so reverts the resource monitor to showing statistics that are based on all the running applications and processes. Each of the remaining tabs provide greater detail regarding the resource that you selected. If you need to investigate a system that is exhibiting erratic behavior, this tool can help you track down the source of the behavior.<br>
+<br>
+<a name="Windows Boot Process"></a>
+<b>Windows Boot Process</b><br>
+The figure that is shown below shows the three main phases of the Windows boot process:<br>
+<br>
+<ul>
+<li>During the BIOS Initialization phase, the platform firmware identifies and initializes the hardware devices, and then runs a power-on self-test (POST). The POST process ends when the BIOS detects a valid system disk, reads the master boot record (MBR), and starts Bootmgr.exe. Bootmgr.exe finds and starts Winload.exe on the Windows boot partition, which begins the OS Loader phase.</li><br>
+<li>During the OS Loader phase, the Windows loader binary (Winload.exe) loads essential system drivers that are required to read minimal data from the disk, and initializes the system so the Windows kernel can begin execution.</li><br>
+<li>During the OS Initialization phase, most of the operating system work occurs. This phase involves kernel initialization, Plug and Play activity, service start, logon, and Explorer (desktop) initialization.</li>
+</ul>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517062007.png" alt="" style="">
+<br>
+The Windows boot process actually begins at system installation time. The Windows setup builds the structures that are necessary for the system to boot properly. Therefore, these structures must be in place for any subsequent successful system initializations to take place. There are also some differences in the boot sequence that take into account the type of BIOS that is in place. BIOS-based systems are essentially legacy but they are still very common. The newer type of BIOS is known as the EFI (Extensible Firmware Interface). A more recent version of EFI, known as UEFI (Unified Extensible Firmware Interface), is rapidly becoming the new standard.<br>
+<br>
+When an instance of Windows is installed on a host, the setup application does some preliminary preparation of the disk that the system will boot from. It will use the first sector of the disk to create an area that is known as the MBR, which contains some executable instructions and the partition table that is used to map out the structure of the disk. Once MBR is created and present on the system disk, the host can begin the boot process.<br>
+<br>
+When the system boots, it executes code that is stored in the flash memory of the BIOS. The code that it executes is enough to identify the boot disk it will then communicate with and load the partition table information from the MBR into memory. It also transfers control to the executable code in the MBR to continue the boot sequence. With the partition table loaded into memory, the system can locate the Bootmgr file. When the Bootmgr is found, the MBR executable code transfers control to the Bootmgr. Bootmgr starts in “real mode,” which is the original MS-DOS memory model where programs ran in a memory space of 1MB. Bootmgr’s job is to switch the system to “protected mode,” which makes the remaining memory of the system available so the boot sequence can continue. If Bootmgr is not found at this point, the boot process will fail and the system will respond with the message Bootmgr not found.<br>
+<br>
+Next, the Bootmgr reads the BCD to read in any options that are required to start the system. The BCD also contains information about whether the system was put into hibernation the last time that it was used, rather than fully shutdown. If a hibernation state is detected, the BCD redirects the boot process to execute Winresume.exe, which reads the hibernation file (Hiberfil.sys) to rebuild the state of the system to the state it had when it was put into hibernation.<br>
+<br>
+At this point, Bootmgr executes Winload.exe to continue the boot sequence. The Winload.exe program queries the system BIOS to get information about devices connected to the system. The hardware information is held so the system knows what is there as the boot sequence continues and is later written to the registry so the system can have a record of the hardware configuration at boot time. Next, Winload.exe begins loading the files that are needed to start initializing the kernel. It will also begin reading in the device drivers of the hardware devices connected to the host.<br>
+<br>
+An important part of what Winload.exe does at this point is to enforce the KMCS (Kernel Mode Code Signing) infrastructure. The KMCS is there to ensure that all the drivers and components that Winload.exe reads in are digitally signed to maintain the security of the system as it boots.<br>
+<br>
+Systems that use UEFI BIOS do things a bit differently. In UEFI-based systems, the boot code is stored and executed in the UEFI firmware itself. Therefore, the system never goes into the real mode memory management system. Instead, it goes directly to protected mode, which improves the host’s security at boot time.<br>
+<br>
+The last thing Winload.exe does is call up Ntoskrnl to initialize the Windows kernel memory and set up the HAL (Hardware Abstraction Layer) so the system can communicate with the connected hardware. Once the kernel is initialized, control is handed off to the Session Manager Subsystem (SMSS), which is in charge of initializing the user environment. The SMSS reads in values from the registry files to prepare the system to present the environment in the state that it was last left in. The SMSS also invokes Winlogon at this point to wait for a user to log in. When a user successfully logs in, Winlogon reads the registry keys for the user to prepare the user’s desktop environment.<br>
+<br>
+<b>Starting Services at Boot Time</b><br>
+Part of the system initialization process is to start the services that the system needs to run, including system services and services required by user-installed applications. The user space initialization process, handled primarily by SMSS and Winlogon, reads the registry keys that identify which services to load and which to start. Much of this information is stored in the Windows registry.<br>
+<br>
+Registry hives can influence the services and applications that automatically start:<br>
+<br>
+<ul>
+<li><b>HKEY_LOCAL_MACHINE:</b> This hive stores system-wide information. Services that are registered in this hive start with each boot.</li><br>
+<li><b>HKEY_CURRENT_USER:</b> This hive stores information about the user that is currently logged in. Services in this hive start when the user logs in.</li>
+</ul>
+<br>
+In each hive, various registry locations define the services to auto-start. Some may not be present in a default installation because they are created by applications, but the following list includes services that you are likely to encounter:<br>
+<br>
+<ul>
+<li>Run</li><br>
+<li>RunOnce</li><br>
+<li>RunServices</li><br>
+<li>RunServicesOnce</li><br>
+<li>Userinit</li>
+</ul>
+<br>
+You can add these keys to these locations yourself, or applications that you install may populate them automatically if they are required for the application to run. These are also interesting areas to investigate if you suspect some unwanted application is automatically starting at boot time or after you log in. For example, use the registry editor to view applications or services that start when the system boots, in the HKEY_LOCAL_MACHINE hive:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517063083.png" alt="" style="">
+<br>
+Entries for any application or services that auto-start at boot time are in this location. 64-bit Windows installations also reserve a registry location for starting 32-bit applications, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517063151.png" alt="" style="">
+<br>
+The figure below is an example of an entry in these registry locations:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517063185.png" alt="" style="">
+<br>
+<a name="Windows Networking"></a>
+<b>Windows Networking</b><br>
+One of the first tasks to perform when setting up a Windows host is to configure its networking properties. You should also be familiar with the basic tools for testing whether your network configuration is working properly. With the network configuration in place and operational, you will want to begin using network resources to get things done.<br>
+<br>
+<b>Configuring Basic Networking Properties</b><br>
+As with many Windows features, there are several ways to access network properties. One way is to click the network adapter icon in the system tray, which opens a list of options that are related to the type of network adapter that you are using. You will also see an option to open the Network and Sharing Center (the precise verbiage may differ among Windows versions). From the window that opens, select change adapter settings. The first figure below shows a portion of this window from a Windows 7 installation. The second figure shows a portion of this window from a Windows 10 installation.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517064555.png" alt="" style="">
+<br>
+In either Windows 7 or Windows 10, select Change adapter options to open a window that shows each of the network adapters that you have installed on the host. Right-click the icon of the adapter that you wish to configure and select Properties from the context menu to open the properties box for the adapter.<br>
+<br>
+From the properties box, select the IP version that you wish to configure and click the Properties button. The example below uses IPv4.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517064619.png" alt="" style="">
+<br>
+With the IPv4 properties window open, you can enter the values that are appropriate for your network, or choose Obtain IP address automatically to get your IP information dynamically from a local DHCP server. If you choose to statically assign the network values, you must enter the following:<br>
+<br>
+<ul>
+<li>IP address: The IPv4 address that you wish to assign to the network adapter</li><br>
+<li>Subnet mask: The subnet mask that you wish to assign to the network adapter</li><br>
+<li>Default gateway: The IP address of the default gateway that the network adapter will use to access networks beyond the local network</li><br>
+<li>Preferred/alternate DNS server: The IP address of your DNS server. You can enter an alternate server here as well.</li>
+</ul>
+<br>
+The netsh.exe tool can also configure networking parameters from the cmd shell. This scripting utility can display and modify the network configuration of the system.<br>
+<br>
+<b>Testing Network Connectivity</b><br>
+After configuring your network settings, test the host to make sure that it has connectivity to the local network, and if the host requires access to external resources or the Internet, test that as well. Two utilities are available to quickly perform these tests from the command line. First, to test basic connectivity to the network, use the ping command. The ping command sends an ICMP echo request message to the remote host that you are testing with. The example command line session follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517064797.png" alt="" style="">
+<br>
+The ping command in Windows issues four ICMP echo request messages. If the host that is targeted in the command replies, you will see one reply for each request. Then the command will return some general statistics of the ICMP traffic that is generated in the session. This simple test has confirmed that you have connectivity at least to the local network. Test connectivity to networks that are beyond the local network by pinging hosts in other networks.<br>
+<br>
+<b>The nslookup Command</b><br>
+You should also test DNS to make sure it is working properly, because applications that use network resources will likely reference hosts by their names, rather than their IP addresses. In Windows, use the nslookup command to quickly test your DNS settings as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517064899.png" alt="" style="">
+<br>
+This command simply uses the DNS servers that you configured in the network properties to resolve the name of the host that you specified in the command to its IP address. If it returns an address, you know that DNS is working properly on the host.<br>
+<br>
+With both IP connectivity and DNS resolution confirmed, the host is properly configured to use network resources. As the administrator of a Windows host, you can use other tools to check other aspects of networking, such as ports and services that the host is running. The netstat tool that ships with Windows allows you to do this, and lists connections to and from the host.<br>
+<br>
+<a name="Windows netstat Command"></a>
+<b>Windows netstat Command</b><br>
+With the IP connectivity and DNS resolution confirmed, the host is properly configured to use network resources. As the administrator of a Windows host, you can use other tools to check other aspects of networking, such as ports and services that the host is running. The netstat command allows you to do this, and list connections to and from the host.<br>
+<br>
+If malware is present, the netstat command is a useful analytical tool for recognizing abnormal inbound or outbound network connections. Malware will typically open backdoor network communication ports on the host to generate outbound traffic to CnC servers under the attacker’s control. The figure below shows the help screen for the netstat command with all the options.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517065530.png" alt="" style="">
+<br>
+The netstat command displays active TCP connections—ports on which the computer is listening—Ethernet statistics, the IP routing table, IPv4 statistics (for the IP, ICMP, TCP, and UDP protocols), and IPv6 statistics (for the IPv6, ICMPv6, TCP over IPv6, and UDP over IPv6 protocols).<br>
+<br>
+When used without parameters, netstat displays active TCP connections.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517065619.png" alt="" style="">
+<br>
+By examining the active TCP connections, an analyst should be able to determine if there are any suspicious programs that are listening for incoming connections on the host. You can also trace that process to the Windows Task Manager and cancel the process.<br>
+<br>
+To link a connection that is displayed by netstat to a process that is listed in Windows Task Manager, run netstat -abno and find the appropriate process name listed in Windows Task Manager. If there are two or more processes with the same name, use the PID to find an exact match. From the Windows Task Manager Processes tab, click View > Select Columns, then check the PID box to display the PID.<br>
+<br>
+<a name="Accessing Network Resources with Windows"></a>
+<b>Accessing Network Resources with Windows</b><br>
+Networking is integral to the Windows OS. You can use all the typical client applications to access remote resources such as your browser application for web access or email client for email access like any other operating system. However, Microsoft pioneered the SMB protocol for sharing network resources. Though it was originally developed by IBM, Microsoft continued its development and has been a part of the Windows OS throughout its life cycle. SMB also has an open source counterpart, which is known as Samba, that allows other OSs to share resources with Windows-based hosts.<br>
+<br>
+One of the primary uses of SMB is for accessing files or file systems on remote hosts. Windows uses the UNC (Universal Naming Convention) format to identify the remote resource, expressed as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517066564.png" alt="" style="">
+<br>
+The servername component identifies the server hosting the remote resource. The server name can be an IP address, the host’s NetBIOS name (NetBIOS names are used to uniquely identify hosts in Windows networking environments) or the host’s DNS name (ernakh.sfsnort.com for example). The sharename component refers to the root of the file system that is reserved for sharing the resource. The file component is the actual resource the client is seeking. The file can also contain a path of subdirectories if that’s where the file resides.<br>
+<br>
+Another note about the share name is that you must identify the portion of the file system that you wish to share. You can use access control features to restrict what remote users can do in the share, or grant them full permissions to read, write, and execute files from the share. Kshares, which are known as administrative shares, are a special group that allow only those users with administrative privileges to access these shares. Common administrative shares include shares that represent entire disk drives. For example, the share that represents the C: drive is called C$. The ADMIN$ share points to the c:\windows directory. An administrative share that is called IPC$ is used for inter-process communications.<br>
+<br>
+Use the net share command to view the shares that are available on a Windows host.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517066726.png" alt="" style="">
+<br>
+In the example above, the host is showing three administrative shares and a user-created share. The user-created share is called Users, and points to the c:\Users directory. So, users with credentials on the host can access that share from remote locations. One way to access the share is from the file explorer window. Simply enter the UNC name of the share and you will be prompted to enter the credentials on the remote host as shown in the figure.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517066806.png" alt="" style="">
+<br>
+After entering the credentials, you will be able to access the files and folders stored in that directory on the remote host.<br>
+<br>
+You can also mount the remote share as if it were a disk drive. From the perspective of the local host, it will appear as if it is just another disk drive. In reality, it uses the disk resources on the remote host. One way to mount the remote share is from the command line as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517066878.png" alt="" style="">
+<br>
+In this example, the net use command was used to map drive letter z: to the share on the remote host. The user name was also supplied as an argument in the command. If the user had previously mounted a share with valid credentials, the credentials are cached on the local host and the user is not prompted for a password. If the credentials are not cached, the user is prompted for a password before the operation can complete successfully.<br>
+<br>
+Another commonly used network resource is the ability to log in to remote hosts and remotely operate the host’s desktop. Windows ships with a client application that allows you to do this using the RDP. Professional and business-oriented versions of Windows only allow one remote session at a time. However, Windows server products with terminal services allow many concurrent sessions.<br>
+<br>
+As a security analyst investigating security incidents on the remote Windows machines, RDP is often used to access the remote Windows machines.<br>
+<br>
+The client application that you use to access a remote desktop is called Remote Desktop Connection. The following figure provides an example of the application interface.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517066990.png" alt="" style="">
+<br>
+If you previously used the RDP client to connect to another host, you may see the host and user account already listed in the application window. If you want greater control over the connection, click the Options button to expose settings to customize the remote access experience.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517067044.png" alt="" style="">
+<br>
+With the options exposed, you can control various aspects of the session, such as which computer to access, the user name for logging in to the remote host, properties to display, or even if you wish to share any local resources, such as sound, files, or printers, with the remote desktop. Once you have configured the properties of the session, save the properties if you want to simply recall the session profile the next time.<br>
+<br>
+<a name="Windows Registry"></a>
+<b>Windows Registry</b><br>
+Windows registry is a central hierarchical database in which Microsoft Windows stores information that is necessary to configure the system for one or more users, applications, and hardware devices.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517105112.png" alt="" style="">
+<br>
+The registry contains information that Windows continually references during operation, such as profiles for each user, applications that are installed on the computer, types of documents that each can create, property sheet settings for folders and application icons, hardware that exists on the system, and the ports that are being used.<br>
+<br>
+The registry is organized in a hierarchical manner. The highest element of the hierarchy is known as a hive, which maps to a file in the file system that contains a binary database of registry keys and values. Hives are designed to store specific types of information.<br>
+<br>
+Hives and their intended purpose are described below:<br>
+<br>
+<ul>
+<li>HKEY_CURRENT_USER (HKCU): Stores data that is associated with the currently logged in user.</li><br>
+<li>HKEY_USERS (HKU): Stores information about all the user accounts on the host.</li><br>
+<li>HKEY_CLASSES_ROOT (HKCR): Stores information about file associations and object linking and embedding (OLE) registrations.</li><br>
+<li>HKEY_LOCAL_MACHINE (HKLM): Stores system-related information.</li><br>
+<li>HKEY_CURRENT_CONFIG (HKCC): Stores information about the current hardware profile.</li>
+</ul>
+<br>
+The names in the list are written in their actual long form as you would see them in the registry editor, but they also include abbreviations that are commonly used to reference a given hive in documentation or reference material. You cannot create or delete a hive, however, as an administrator, you can delete or modify registry keys and values.<br>
+<br>
+The names of the hives are derived in the following manner: the letter H represents handles to keys; the format HKEY is followed by the specific name of the hive. For example, HKEY_CURRENT_USER contains the root of the configuration information for the user who is currently logged on. The user's folders, screen colors, and control panel settings are stored here. This information is associated with the user's profile.<br>
+<br>
+The Windows registry cannot be modified by a non-administrative user on the system. Windows ships with an administrative tool that is called called regedit.exe, that will allow an administrator to view or edit the registry. An administrator can also use a tool that is called regedt32.exe, that will ultimately launch the regedit.exe tool. To open the registry editor, click the Start button and enter regedit.exe in the search field. An example of the registry editor is shown below:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517105462.png" alt="" style="">
+<br>
+To navigate the registry, use the same technique as the Windows file explorer where the left panel lists the hives and you click the triangular icon to drill into the structures within a hive. The main panel exposes a detailed view of an item that you select on the left. One difference between regedit and the file explorer is that the main panel only shows what is in the currently selected item. If that item has sub-keys, they will not show in the main panel, but they will be listed in the left navigation panel. The example that follows uses regedit to access a specific registry key:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517105708.png" alt="" style="">
+<br>
+The key path is rather lengthy, but you can see the folders that represent keys and their sub-keys in the left panel. Also note that the entire path is displayed in the lower portion of the regedit application window.<br>
+<br>
+In this example, the Run registry key is used to cause programs to run each time a user logs on. This is a good place to look for potentially unwanted applications that start when you reboot your system.<br>
+<br>
+In general, you should not modify registry settings unless you are an experienced Windows user or acting under the guidance of an experienced user. It is easy to induce a problem if you set something incorrectly or delete a critical registry key.<br>
+<br>
+A registry key is a container object. It acts as if it is a folder in the file system. It can contain key/value pairs or sub-keys. Therefore, a registry key reference looks like a path in the file system, and keys and their sub-keys are delimited with the same backslash (\) character that you would use in a Windows file path.<br>
+<br>
+A key can hold a value or another key. Values that are assigned to a key can be in several formats, so you can express values using various data types. Some of the more common types are listed below:<br>
+<br>
+<ul>
+<li>REG_BINARY: Stores numbers or Boolean values (on or off).</li><br>
+<li>REG_DWORD: Stores numbers greater than 32 bits or raw data.</li><br>
+<li>REG_SZ: Stores string values in Unicode format.</li>
+</ul>
+<br>
+In the registry editor, the key/values displayed in the main panel indicate the format that the system is expecting as the value for a given key. For example, in the previous figure the Run registry key is expecting a REG_SZ value. The REG_SZ value in this example is the blank default value.<br>
+<br>
+You can define the REG_SZ value by right-clicking the main panel to bring up the context menu. Then select New followed by the key type that you wish to use, as shown in the following example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517106036.png" alt="" style="">
+<br>
+Select String Value to add a value and you will be prompted to provide a name for the value. In this case, the user created a value that is named Notepad, and the value data is the path and filename to the Notepad executable.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517106094.png" alt="" style="">
+<br>
+<b>Security Concerns Regarding the Windows Registry</b><br>
+The Windows registry is a critical component to the security of a system. The registry controls virtually every aspect of the system’s configuration and operation. For example, malicious or potentially unwanted applications, such as browser tool bars, may add entries to the registry keys that start up applications at system boot time. A security administrator who is remediating an infected host may want to review the system registry keys to see if there are unwanted applications. Registry keys can be removed if the security administrator determines that they are malicious in nature.<br>
+<br>
+Another key aspect of the registry is that it tracks much of the activity that is performed by users and applications on the host. Forensic analysts will find tracked activity to be a very useful place to investigate. For example, you can track the history of USB storage devices by examining the HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR key. Here you will find a list of all the USB devices that have connected to the system at some point. It also includes information such as the vendor, product number, and serial number of the device—all valuable forensic information in advancing a cyber investigation.<br>
+<br>
+<a name="Windows Event Logs"></a>
+<b>Windows Event Logs</b><br>
+Windows Event Viewer is a Microsoft management console snap-in that enables you to browse and manage event logs. It is an indispensable tool for monitoring the health of systems and troubleshooting issues.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517106784.png" alt="" style="">
+<br>
+When you use Event Viewer to troubleshoot a problem, you need to locate events that are related to the problem, regardless of the event log they appear in. Event Viewer enables you to filter for specific events across multiple logs, to display all events that are potentially related to the issue you are investigating.<br>
+<br>
+Windows includes two categories of event logs: Windows Logs, and Application and Services Logs.<br>
+<br>
+To start Event Viewer using the Windows interface:<br>
+<br>
+<ol>
+<li>Click the Start button</li><br>
+<li>Click Control Panel</li><br>
+<li>Click Administrative Tools</li><br>
+<li>Double-click Event Viewer</li>
+</ol>
+<br>
+To start Event Viewer by using a command line, open a Windows command prompt and enter the eventvwr command.<br>
+<br>
+<a name="Windows Management Instrumentation"></a>
+<b>Windows Management Instrumentation</b><br>
+WMI is the infrastructure for management data and operations on Windows-based operating systems. You can write WMI scripts or applications to automate administrative tasks on remote computers. WMI also supplies management data to other parts of the operating system and products.<br>
+<br>
+An example of a network security device using WMI is to retrieve the Windows user log in and log off security events from the Windows domain controller.<br>
+<br>
+To avoid detection and to carry out broad commands on compromised systems, today's attacks often leverage the use of WMI to connect to remote systems, modify the registry, access event logs, and execute commands. Besides the initial logon event, remote WMI commands leave little evidence on the accessed system. Therefore, Windows administrators should follow the proper Windows guidelines to secure the WMI access.<br>
+<br>
+WMI supports a limited form of security that validates each user before the user is allowed to connect to WMI, on a remote or local computer. This security is layered on top of the Windows operating system security. By default, only the local computer Administrator account has full control of the WMI services on the computer that is being managed. Members of the Administrators group have access to remote computers, but may not have access to all the data. Permissions can be changed by adding a user to the Administrators group on the managed computer or by authorizing users or groups in WMI and setting their permission level.<br>
+<br>
+<a name="Common Windows Server Functions"></a>
+<b>Common Windows Server Functions</b><br>
+Although Windows is used most often as a desktop computing platform, its server platforms are used extensively in enterprise data centers. Windows Server is actually a brand name that refers to the Microsoft family of server products, starting with Windows Server 2003. Windows Server products host many popular services, which makes the platform suitable for fulfilling many roles in the enterprise.<br>
+<br>
+Windows Server services include the following:<br>
+<br>
+<ul>
+<li>HTTP, HTTPS, and FTP</li><br>
+<li>DHCP</li><br>
+<li>DNS</li><br>
+<li>File services: NFS, SMB, and DFS</li><br>
+<li>Hyper-V: For hosting and managing virtual machines</li><br>
+<li>Terminal services for hosting remote desktop access</li><br>
+<li>Deployment services</li><br>
+<li>Group policy management</li><br>
+<li>AD domain services control</li>
+</ul>
+<br>
+Microsoft also offers its Exchange Server product for email and calendaring, but among the services that are listed above, one of the most common applications for Windows Server products is the AD. AD is a service that is used to manage Windows domain-based networks.<br>
 <br>
