@@ -27,11 +27,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Windows Event Logs">8.23 Windows Event Logs</a><br>
 <a href="#Windows Management Instrumentation">8.24 Windows Management Instrumentation</a><br>
 <a href="#Common Windows Server Functions">8.25 Common Windows Server Functions</a><br>
-<a href="#">8.</a><br>
-<a href="#">8.</a><br>
-
-<a name=""></a>
-<a name=""></a>
+<a href="#Common Third-Party Tools">8.26 Common Third-Party Tools</a><br>
 
 <a name="Windows Operating System History"></a>
 <b>Windows Operating System History</b><br>
@@ -1072,3 +1068,52 @@ Windows Server services include the following:<br>
 <br>
 Microsoft also offers its Exchange Server product for email and calendaring, but among the services that are listed above, one of the most common applications for Windows Server products is the AD. AD is a service that is used to manage Windows domain-based networks.<br>
 <br>
+<a name="Common Third-Party Tools"></a>
+<b>Common Third-Party Tools</b><br>
+Although Windows ships with many tools to manage and monitor the system, some users find that these tools lack specific features. Therefore, many Windows administrators install their own preferred tools. This section explores several popular tools in use today to manage and monitor systems. Some can be particularly useful in environments with various OSs.<br>
+<br>
+<b>PuTTY Application</b><br>
+PuTTY is a very popular application that is on many Windows administrator desktops. PuTTY is an SSH client application. SSH is a protocol that is used to remotely access a host’s shell or command line. Linux OS and Mac OS X use this protocol because it encrypts the remote session, so that a third party cannot view the contents of the communication. Unfortunately, Windows does not ship with an SSH server or an SSH client. PuTTY is popular because it is free to download and easy to install. To download PuTTY, go to www.putty.org, find the version that matches your version of Windows, and install it.<br>
+<br>
+<b>WinSCP</b><br>
+WinSCP is an application used to securely copy files to and from a remote host. If the host is running Linux or OS X, it is probably running an SSH server that can be used to transfer files. This is another example of how the lack of SSH support on Windows can hamper an administrator’s efforts, especially in mixed OS environments. WinSCP is a simple solution.<br>
+<br>
+To download WinSCP, browse to www.winscp.net, navigate to its download page, and find the installation package that matches the version of Windows that you are running. It installs like any other Windows application and, for most users, the default values at install time will suffice.<br>
+<br>
+<b>Wireshark</b><br>
+The Wireshark application is natively found on Unix-like OSs. Wireshark allows you to capture network traffic for further analysis. This feature is not natively found in Windows. However, the Wireshark application can be installed on the system to capture traffic on a Windows host.<br>
+<br>
+To download Wireshark, go to www.wireshark.org, and navigate to its download page and find the installation package that matches the version of Windows that you are running. It installs like any other Windows application, however; you need to reboot your system when the installation completes.<br>
+<br>
+<b>Sysinternals</b><br>
+Sysinternals is a package of tools that is specifically designed for the Windows OS. The project was created by Mark Russinovich to overcome some of the shortcomings of the tools for monitoring and managing a Windows installation. There are over 70 tools in the entire package, and they have become very popular with Windows administrators over the years because they provide a higher degree of utility than their Windows counterparts. Microsoft acquired Sysinternals in 2006 and has since remained committed to maintaining the package, and making the tools available as a free download to anyone. Download the tools from http://technet.microsoft.com/en-us/sysinternals/default.aspx.<br>
+<br>
+Sysinternal tools fall into three categories: tools to help programmers, tools for system troubleshooting, and tools for system management. With more than 70 in the set, this section focuses on the tools that are of most interest to a security professional.<br>
+<br>
+To run many of these tools, you must have administrator privilege. Also, many of the tools are command line-based tools. To ensure that they run properly, open the command line as administrator so that what you execute in the command line session runs with administrator privilege.<br>
+<br>
+One of the more popular tools in the set is Process Explorer. It has a graphical interface and can best be described as a combination of the Task Manager and the Resource Monitor. An example of its application window is shown in the figure below. Process Explorer shows parent/child process relationships in a tree view.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517109266.png" alt="" style="">
+<br>
+Right-click a process to open a context menu with several options, as shown in the next figure. Similar to Task Manager, you can select a process and kill it if it is misbehaving. You can also suspend or restart a process as well. If the process you are interested in is suspicious, select the Check Virus Total option to see if the file is known to be malicious. You can also select Search Online to initiate a web search that is based on the name of the process. Lastly, the Properties option opens a box detailing various properties that are related to the process.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517109339.png" alt="" style="">
+<br>
+As shown in the figure below, many categories of properties are available, depending on the process that you selected. The Strings category yields potentially interesting information.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517109413.png" alt="" style="">
+<br>
+Strings exposes text strings that were found in the file that initiated the process. A string in this context is any sequence of three or more printable characters. Malware will sometimes embed text strings, such as IP addresses or URLs, in its code. For certain classes of malware, these could point to CnC sites or places to download other malware components.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517109483.png" alt="" style="">
+<br>
+Another feature of the Process Explorer tool is that it more accurately indicates CPU consumption. Processes that show less than 1% utilization do not appear to be idle. Many more features are worth exploring. Review the download site for more Sysinternals tools and documentation on each.<br>
+<br>
+You can configure the tool to replace the Task Manager, which lets you launch this tool anywhere that you would normally launch the Task Manager, such as from the context menu of the task bar or the Task Manager option when you press Ctrl+Alt+Delete.<br>
+<br>
+<b>Process Monitor</b><br>
+Process Monitor is a utility provided by Windows Sysinternals that can monitor system activity and events. ProcMon can report and monitor attempts to access the Windows registry and can be used to identify registry keys and files that are accessed by an application. ProcMon can provide insight into what a process is doing on a system and can also be used to identify a suspicious process that may indicate the presence of malicious software. ProcMon requires administrative right privileges in order to execute on a system.<br>
+<br>
+<b>TCPView</b><br>
+The TCPView tool shows processes that are communicating with other hosts, which may be normal behavior for many processes. But some malware hijacks the memory space of a running process and disguises itself as a legitimate process. For example, if you see the Windows calculator application suddenly making outbound connections, you may want to investigate further by doing a search to see if the sites that it is communicating with are known to host malware or known CnC servers.<br>
