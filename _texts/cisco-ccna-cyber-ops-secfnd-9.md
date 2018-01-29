@@ -9,7 +9,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Basic File System Navigation and Management Commands">9.5 Basic File System Navigation and Management Commands</a><br>
 <a href="#File Properties and Permissions">9.6 File Properties and Permissions</a><br>
 <a href="#Editing File Properties">9.7 Editing File Properties</a><br>
-<a href="#">9.</a><br>
+<a href="#Root and Sudo">9.8 Root and Sudo</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
@@ -34,7 +34,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -315,6 +314,8 @@ Rather than using the numeric or absolute form, you can use the symbolic form. T
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1517250357.png" alt="" style="">
 <br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517258534.png" alt="" style="">
+<br>
 With the symbolic method, you can use a symbol to represent the access class and the access type you want to modify. You specify the operator to set the state of the access type by placing it in front of the access type symbol. When the access type and access class are chosen, the selections are affected by the command. The exception to this rule is when you use the = operator. If you omit an access class, the a or all access class is implied.<br>
 <br>
 The example that follows sets the user access class to the file called MyFile.txt to read only:<br>
@@ -334,4 +335,20 @@ The last example sets all users access type to read only:<br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1517250865.png" alt="" style="">
 <br>
 The difference between the last example and the others is that this syntax resets any access type bits that were set. In the other examples, the command only affects the access types that are called out in the command. If, in the first example, the write bit for the user was already set, it would remain set.<br>
+<br>
+<a name="Root and Sudo"></a>
+<b>Root and Sudo</b><br>
+In a Linux installation, the root user, also known as the super-user, has authority over all. It is a powerful account, and if used improperly, could cause a lot of damage. Or, if compromised, an attacker can do anything on the compromised host. Regular non-root users cannot do quite as much damage because of the permission and ownership structure of the Linux file system.<br>
+<br>
+Because of the great power of the root user, many modern Linux distributions limit the use of the root account. In fact, some distributions make it extremely difficult to even enable the root account, which makes good sense as a security measure, but there are many system functions that only the root user can do, making the system impossible to use if root access is eliminated completely.<br>
+<br>
+Modern Linux distributions provide a mechanism for controlling root-level access that is called sudo. It provides a system for delegating authority on a very granular basis. For example, you can allow users to run commands as root or limit them to certain commands. It also is capable of very granular logging if you enable this capability in its configuration file. This feature of sudo leaves a very detailed audit trail so that you can tell who executed commands as root and when.<br>
+<br>
+Using sudo is really rather simple; you enter the string sudo at the command prompt, followed by the command that you wish to execute. For example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517258981.png" alt="" style="">
+<br>
+vi is a text-editing application. Normally, the file /etc/hosts is only writable by root. If you attempt to write to this file without including the sudo command, you would see a system message that permission to write to the file is denied.<br>
+<br>
+When you execute the sudo command, you will be prompted for your password, which starts a five-minute session during which you are allowed to enter commands with root authority. If the terminal where you issued the sudo command is left unattended for more than five minutes, you will be asked to authenticate again in order to invoke another sudo command.<br>
 <br>
