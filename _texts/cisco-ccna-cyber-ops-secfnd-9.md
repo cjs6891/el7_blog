@@ -6,9 +6,9 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#History and Benefits of Linux">9.2 History and Benefits of Linux</a><br>
 <a href="#Linux Architecture">9.3 Linux Architecture</a><br>
 <a href="#Linux File System Overview">9.4 Linux File System Overview</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
+<a href="#Basic File System Navigation and Management Commands">9.5 Basic File System Navigation and Management Commands</a><br>
+<a href="#File Properties and Permissions">9.6 File Properties and Permissions</a><br>
+<a href="#Editing File Properties">9.7 Editing File Properties</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
@@ -34,9 +34,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -250,4 +247,91 @@ In Linux, disks are often identified by the letters sd, followed by a third lett
 <img src="https://cjs6891.github.io/el7_blog/public/img/1517155263.png" alt="" style="">
 <br>
 Here, you see an entry for a disk drive that is called “sda,” which contains two partitions: sda1 and sda2. There are many types of devices and each has its unique identification code.<br>
+<br>
+<a name="Basic File System Navigation and Management Commands"></a>
+<b>Basic File System Navigation and Management Commands</b><br>
+<a name="File Properties and Permissions"></a>
+<b>File Properties and Permissions</b><br>
+File properties describe the characteristics of a file or directory. The command that you use to list files and display their properties is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517237052.png" alt="" style="">
+<br>
+The –l parameter instructs the command to display the listed files with their properties. The [files] parameter lets you specify which directory or file names to list. If you omit the [files] parameter, the ls command will list all the files in the current directory.<br>
+<br>
+The following information is contained in the ls –l command output:<br>
+<br>
+<ul>
+<li>File type: In the example, each file shows a dash (-) character to indicate regular files. For device files, you may see the letter c for character streaming devices, or b for block devices. For directories, you would see the letter d.</li><br>
+<li>Permissions: This section is represented by the next nine columns of characters. They are organized in three groups where the first group represents the user’s permissions, the next is the group permissions, and the third is the permissions that are granted to all others.</li><br>
+<li>Links: The number of hard links to the file or for directories, it represents the number of directories that it contains, including the current directory (.) and the parent directory (..).</li><br>
+<li>Owner: the username of the file or directory owner</li><br>
+<li>Group: the group that the file or directory owner belongs to</li><br>
+<li>File size: the file size in bytes, unless it is followed by a letter (k for kilobyte, m for megabyte, or g for gigabyte)</li><br>
+<li>Time stamp: By default, the three columns that follow the file size represent the last time that the file was modified. The first value is the month, the next is the date, and the last is the time in hours and minutes. If the file is very old, the time is replaced with the year.</li><br>
+<li>File name: the file or directory name</li>
+</ul>
+<br>
+Many of the problems that users may face, relative to files and file management, can be traced to issues with file permissions and file ownership. Therefore, it is important to understand these concepts and be familiar with some of the tools that you can use to manage file permissions and ownership.<br>
+<br>
+<b>Permissions</b><br>
+File permissions refer to the actions that a user or members of a user group are allowed to perform on a file or directory. There are three actions that can be configured for a file:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517237450.png" alt="" style="">
+<br>
+In the ls –l command output, file permissions are listed in the nine columns of characters that follow the first column. This area is divided into three sections:<br>
+<br>
+<ul>
+<li>The first section describes the actions that the owner of the file is allowed to perform. In the example, you see the letters r and w, indicating that the user is allowed to read and write to the file.</li><br>
+<li>The second section identifies the actions that the users in the group assigned to the file can perform. Once again, you see the letters r and w, indicating that the users in the group who are assigned to the file can read and write to the file.</li><br>
+<li>The third section indicates the actions that all other users are allowed to perform on the file. In the example, only the letter r is displayed, indicating that everyone else can only read the file.</li><br>
+<li>Note that Linux treats file permissions as a hierarchy. For example, without permissions to read the directory, you would not be able to see a list of the files that are inside, and without execute permissions on the directory, you would not be able to open the files that are inside.</li>
+</ul>
+<br>
+The file owner and user root can modify the permission properties of the file.<br>
+<br>
+<b>Ownership</b><br>
+<br>
+The concept of file ownership in Linux is a key security measure that is built into the operating system, which gives administrators very granular control over what people can access on the system. For example, the user root has access to virtually everything in the operating system. You don’t want users with lesser privileges to have that degree of access. File ownership can also be used as a mechanism for preventing one user from accessing sensitive items that belong to another user.<br>
+<br>
+The output from the ls –l command displays the file ownership properties as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517237670.png" alt="" style="">
+<br>
+The user that is identified in the user field is considered the owner of the file. And the group that is indicated in the group field identifies the user group that is assigned to the file. Access to the file can be granted to members of the assigned group. The file owner and the root user can modify the ownership properties of the file.<br>
+<br>
+<a name="Editing File Properties"></a>
+<b>Editing File Properties</b><br>
+Linux provides several commands that you can use to manage file permissions and ownership. The chmod command has many options to modify file permissions. One method is to use an octal numbering scheme that works because the permission settings use three values for each of the access classes: user, group, and others. Therefore, the three values can be represented as bits in an octal number. An example of how this method works is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517246171.png" alt="" style="">
+<br>
+The first number sets the permission bits for the user, the next sets the bits for the group, and the last sets the bits for others. In this example, the permissions would be set as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517250260.png" alt="" style="">
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517258219.png" alt="" style="">
+<br>
+Rather than using the numeric or absolute form, you can use the symbolic form. The table outlines the various symbols that can be used and their meanings:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517250357.png" alt="" style="">
+<br>
+With the symbolic method, you can use a symbol to represent the access class and the access type you want to modify. You specify the operator to set the state of the access type by placing it in front of the access type symbol. When the access type and access class are chosen, the selections are affected by the command. The exception to this rule is when you use the = operator. If you omit an access class, the a or all access class is implied.<br>
+<br>
+The example that follows sets the user access class to the file called MyFile.txt to read only:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517250711.png" alt="" style="">
+<br>
+This example sets the access type to read and write for both the user and the group:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517250782.png" alt="" style="">
+<br>
+The next example sets the access type to read and removes write access to the group and others:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517250828.png" alt="" style="">
+<br>
+The last example sets all users access type to read only:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517250865.png" alt="" style="">
+<br>
+The difference between the last example and the others is that this syntax resets any access type bits that were set. In the other examples, the command only affects the access types that are called out in the command. If, in the first example, the write bit for the user was already set, it would remain set.<br>
 <br>
