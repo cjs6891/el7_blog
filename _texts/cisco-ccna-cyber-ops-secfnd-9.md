@@ -15,8 +15,8 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Emergency/Alternate Startup Options">9.11 Emergency/Alternate Startup Options</a><br>
 <a href="#Shutting Down the System">9.12 Shutting Down the System</a><br>
 <a href="#System Processes">9.13 System Processes</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
+<a href="#Interacting with Linux">9.14 Interacting with Linux</a><br>
+<a href="#Linux Command Shell Concepts">9.15 Linux Command Shell Concepts</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
@@ -35,8 +35,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">9.</a><br>
 
 
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -784,3 +782,29 @@ Another aspect of the system that you may wish to monitor is general I/O. A good
 <br>
 The upper portion of the output shows general CPU utilization statistics. The lower portion of the output lists the devices that are producing I/O and statistics that are related to the amount of I/O the device is producing. The tps column represents transfers per second. The remaining information simply displays reads and writes per second, and the amount of data that are read and written to the device.<br>
 <br>
+<a name="Interacting with Linux"></a>
+<b>Interacting with Linux</b><br>
+<a name="Linux Command Shell Concepts"></a>
+<b>Linux Command Shell Concepts</b><br>
+The command shell in Linux provides a powerful environment for interacting with the operating system.<br>
+<br>
+<b>Environment Variables and Shell Variables</b><br>
+Linux provides mechanisms for creating variables that represent text strings you can access with the variable name rather than the string itself. A common use case for this functionality is to store file system locations that you can reference with the variable. In fact, one of the more important variables that you will encounter frequently as you interact with the shell is a variable that is called $PATH. This variable stores a list of the directories that the system searches when you execute a command.<br>
+<br>
+To see the value that is associated with the $PATH variable, issue the following command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517347261.png" alt="" style="">
+<br>
+The echo command prints some value to the screen. In this example, the value is the $PATH variable. The output that it produces is a colon (:) separated list of directories that are the locations searched for commands you wish to execute. If a command that you intend to execute is not in one of these directories, you must provide the path to the command when you execute it.<br>
+<br>
+$PATH is an environment variable. Environment variables are available system wide. You can view all of the environment variables using the env command. Shell variables are only available in the current shell. You can create shell variables at any time as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517347402.png" alt="" style="">
+<br>
+In the example, a shell variable named MYVAR is created and assigned the value abc123. Then, the echo command displays the value of the variable. You can see that it produced the text abc123, which corresponds to the value assigned to the variable. Note that when the variable is created, the name is specified to assign to the variable. When the variable is used, prepend the dollar sign symbol ($) to it as follows: $MYVAR.<br>
+<br>
+$MYVAR is not available to other shells running on the same Linux system. It is only available to the shell under which it was defined. Shell variables can be made available to other shells, as environment variables, using the export command.<br>
+<br>
+Creating variables is most often used in creating shell scripts, which are essentially sequences of commands that you can package into a text file and execute as if it were a command. As it pertains to normal interaction with the shell, it is important to know of the existence of variables. In particular, the $PATH variable is important to know because that will often determine how the shell goes about finding a command that you wish to execute.<br>
+<br>
+<b>General Command Structure</b><br>
