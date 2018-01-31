@@ -21,8 +21,8 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Other Useful Command Line Tools">9.17 Other Useful Command Line Tools</a><br>
 <a href="#Overview of Secure Shell Protocol">9.18 Overview of Secure Shell Protocol</a><br>
 <a href="#Networking ">9.19 Networking </a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
+<a href="#Managing Services in SysV Environments">9.20 Managing Services in SysV Environments</a><br>
+<a href="#Viewing Running Network Services">9.21 Viewing Running Network Services</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
@@ -35,8 +35,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">9.</a><br>
 
 
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -1220,4 +1218,122 @@ After issuing the command, the netstat command was used to list the routes and c
 <img src="https://cjs6891.github.io/el7_blog/public/img/1517430408.png" alt="" style="">
 <br>
 In the example, the route created previously was deleted. It is essentially the same syntax as adding a route, the keyword del was used instead of add. After issuing the command, the netstat command was used to confirm that the route no longer exists.<br>
+<br>
+<a name="Managing Services in SysV Environments"></a>
+<b>Managing Services in SysV Environments</b><br>
+Often, when you make a change to service configurations, you will need to stop and start the service so the updated configurations can be read and implemented by the operating system. This process is known as “bouncing” the service.<br>
+<br>
+Most modern implementations of Linux use systemd to manage services. Bouncing a service in systemd-based installations only requires you to know the name of the service. Use the service command, followed by the name of the service that you want to manage and the command that you wish to perform on the service. For example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430736.png" alt="" style="">
+<br>
+In the example, use the ps command to confirm that the FTP service is running. It also shows that the name of the service is vsftpd. Next, use the service command to stop the service. Stopping and starting services requires super user privileges, use the sudo command to perform this action. Then, use ps again to confirm that the service is no longer running. Lastly, start the vsftpd service and follow that up with another ps command to confirm that it is running again.<br>
+<br>
+The syntax for the service command is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430858.png" alt="" style="">
+<br>
+Basically, after you provide the service name, you can choose to start, stop, or restart the service.<br>
+<br>
+Linux installations that do not use systemd will use traditional startup scripts. The exact location of these scripts may vary from one Linux distribution to another, but they will always be found somewhere under the /etc directory. For example, in debian-based Linux installations, startup scripts are in /etc/init.d. Listing the files in this directory shows you the startup scripts for the services that are installed on your system.<br>
+<br>
+Note that systems that use systemd to manage services still include this directory for backward compatibility. To bounce a service the traditional way, you can either point to the service startup script with its fully qualified path or use the ./ notation from within the directory as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430939.png" alt="" style="">
+<br>
+This method also requires super user permissions. Thus the inclusion of sudo in the restart command.<br>
+<b>Systemd Service Manager</b><br>
+Systemd is rapidly becoming the standard for system initialization and system management. You can use systemd commands to perform various system administration actions that are traditionally managed by specific Linux commands and tools. The systemctl command allows you to manage many systems functions including stopping and starting services.<br>
+<br>
+Systemd manages elements that are known as “units.” There are various unit types that are recognized by systemd. Services are a type of unit that systemd can manage. Units are defined by files that contain the properties that are required by systemd to manage the unit. The file name contains the name of the unit, followed by an extension that represents the unit type. For example, the vsftpd service would appear as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517431055.png" alt="" style="">
+<br>
+Unit file locations can vary from one Linux distribution to another, but a common location for systemd unit files is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517431099.png" alt="" style="">
+<br>
+You can use the systemctl command to manage units. The location of the unit files is defined in the systemd configuration, so that referencing its path when managing a unit is not required. When you use the systemctl command to manage a service unit, the .service extension is not required either. So, the basic syntax for managing a service is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517431172.png" alt="" style="">
+<br>
+The following examples are some systemctl commands that you can use to manage services. Note that service management requires root-level privilege, so each example begins with the sudo command:<br>
+<br>
+<ul>
+<li>sudo systemctl start vsftpd: Starts the VS FTP daemon</li><br>
+<li>sudo systemctl stop vsftpd: Stops the VS FTP daemon</li><br>
+<li>sudo systemctl restart vsftpd: Restarts the VS FTP daemon</li>
+</ul>
+<br>
+Another benefit of systemd for system management is the ability to use the systemctl command to reload service configurations without having to stop the service. See the examples that follow:<br>
+<br>
+<ul>
+<li>sudo systemctl reload vsftpd: Reloads the VS FTP daemon configuration files without stopping the service</li><br>
+<li>sudo systemctl daemon-reload: Reloads the systemd configuration and dependencies without stopping the services that systemd is managing</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517431302.png" alt="" style="">
+<br>
+<a name="Viewing Running Network Services"></a>
+<b>Viewing Running Network Services</b><br>
+To track the services running in your Linux installation, you should familiarize yourself with several tools. The primary command for listing running network services is the netstat command, which prints information about connections that are made to network services. A network service is a daemon or background process that listens on a port for network connections from other hosts. The basic syntax of the netstat command is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517432465.png" alt="" style="">
+<br>
+There are many parameters that you can use with the netstat command. The following list shows some of the most common options. Also note that to get the maximum amount of information back from the netstat command, you should run it with root privileges, so these examples will include the sudo command.<br>
+<br>
+<ul>
+<li>netstat –a46: Shows information about connections to services in any (-a) connection state over IPv4 (-4) and IPv6 (-6).</li><br>
+<li>netstat –lt: Shows information about TCP (-t) connections in the listen (-l) state. In other words, no connection; the port is simply listening for connections. If a service is listening for a TCP connection, this command will show it.</li><br>
+<li>netstat –lun: Shows information about UDP (-u) connections in the listen (-l) state. In other words, no connection; the port is simply listening for connections. The –n parameter is used to display host and port information in a numeric format rather than symbolic format in which hosts are shown as host names and ports with protocol names for known ports.</li><br>
+<li>sudo netstat –atnp: Shows information about TCP (-t) connections in any (-a) state. The –n parameter is used to display host and port information in a numeric format rather than symbolic format in which hosts are shown as host names and ports with protocol names for known ports. Lastly, the –p parameter shows the program name and PID of the process listening on the port.</li>
+</ul>
+<br>
+The following is an example of the output that is produced by the netstat command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517432622.png" alt="" style="">
+<br>
+The command output displays the following columns of information:<br>
+<br>
+<ul>
+<li>Proto: Displays the protocol. In the example, note that they all show TCP as the protocol since the –t parameter was used in the command.</li><br>
+<li>Recv-Q / Send-Q: Number of bytes sent or received not yet processed. These columns normally read 0. Bytes held in the queue mean that one side of the connection has not processed all the data that are sent which could indicate a problem if it persists.</li><br>
+<li>Local address: The IP address and port of a service running on the local host. On a host with multiple IP addresses and interfaces, various addresses will be listed. Some connections will be listed as "127.0.0.1," meaning that they only accept connections from local processes—a remote machine cannot connect to these ports. A list containing "0.0.0.0" is accepting connections on all IP addresses and interfaces.</li><br>
+<li>Foreign address: The IP address and port of a remote host communicating with a service on the local host. If this column reads "0.0.0.0:," it is because the port is listening for connections.</li><br>
+<li>State: Lists the connection state. In the example, you see both LISTEN and ESTABLISHED due to the use of the –a (all states) parameter in the command.</li><br>
+<li>PID program name: Lists the PID and the name of the process running on the port. This information is displayed in the example due to the use of the –p (program) parameter in the command.</li>
+</ul>
+<br>
+<b>Viewing Connection Status</b><br>
+Connection states can indicate if services are listening, in which case the status will say LISTEN; or have an active connection, in which case the status will say ESTABLISHED. There are other states that you may see depending on whether a connection was in the process of being established when you ran the command. In this case, you may see SYN_SENT reported as the connection state. Or, if the connection was in the process of being closed, you may see a state of CLOSED, or CLOSE_WAIT to indicate that one side of the connection is waiting for the other to finish tearing down the session.<br>
+<br>
+<b>The lsof Command</b><br>
+LSOF stands for "list open files." The lsof command can produce much of the same information as the netstat command with some added flexibility. The lsof command is primarily concerned with open files and the processes that are using them. However, it also makes provisions for files that are used by network services. Some usage examples are shown in the following list. To get the maximum level of output, you should run lsof with root privileges so these examples include the sudo command.<br>
+<br>
+<ul>
+<li>sudo lsof –i: List files that are associated with an internet address.</li><br>
+<li>sudo lsof –i tcp: List files that are associated with an internet address using the TCP protocol.</li><br>
+<li>sudo lsof –i tcp:80: List files that are associated with an internet address using the TCP protocol under port 80.</li><br>
+<li>sudo lsof –i udp:53 -P: List files that are associated with an internet address using the UDP protocol under port 53. The –P (upper case) lists the ports with their numeric values rather than symbolically.</li><br>
+<li>sudo lsof –i @192.168.222.1: List files that are associated with the specified internet address. The address could be either the source or destination address.</li><br>
+<li>sudo lsof –i @192.168.222.1:21 -P: List files that are associated with the specified internet address and port. The address could be either the source or destination address. The –P (upper case) lists the ports with their numeric values rather than symbolically (for example,. "443" instead of "https").</li>
+</ul>
+<br>
+An example of lsof usage follows. The command includes the IP address, port, and numeric port display parameters.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517433229.png" alt="" style="">
+<br>
+The output from this command includes the following information:<br>
+<br>
+<ul>
+<li>Command: Displays the file that is associated with the process using the network connection</li><br>
+<li>PID: Displays the PID of the process using the network connection</li><br>
+<li>User: Displays the username of the user that initiated the process</li><br>
+<li>FD: File descriptor: a reference number that is used by the kernel to identify an open file. File descriptors may be followed by a code letter to further describe the state of the file.</li><br>
+<li>Type: Displays the type of file. For network connections, it displays the protocol that is used by the process.</li><br>
+<li>Device: Device number that represents the device being called to perform the I/O</li><br>
+<li>Size/off: The file size or memory offset. The lsof command will display whichever one is appropriate for the file being listed.</li><br>
+<li>Node: The file’s INODE number which is used to uniquely identify the file. For network connections, the protocol that is used by the process is listed.</li><br>
+<li>Name: Displays the file name. For network connections, it lists the two network nodes that have connected. It also includes the port number each host is using and the connection state.</li><br>
+</ul>
 <br>
