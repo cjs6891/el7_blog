@@ -17,10 +17,10 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#System Processes">9.13 System Processes</a><br>
 <a href="#Interacting with Linux">9.14 Interacting with Linux</a><br>
 <a href="#Linux Command Shell Concepts">9.15 Linux Command Shell Concepts</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
+<a href="#Piping Command Output">9.16 Piping Command Output</a><br>
+<a href="#Other Useful Command Line Tools">9.17 Other Useful Command Line Tools</a><br>
+<a href="#Overview of Secure Shell Protocol">9.18 Overview of Secure Shell Protocol</a><br>
+<a href="#Networking ">9.19 Networking </a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
@@ -35,10 +35,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">9.</a><br>
 
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -808,3 +804,420 @@ $MYVAR is not available to other shells running on the same Linux system. It is 
 Creating variables is most often used in creating shell scripts, which are essentially sequences of commands that you can package into a text file and execute as if it were a command. As it pertains to normal interaction with the shell, it is important to know of the existence of variables. In particular, the $PATH variable is important to know because that will often determine how the shell goes about finding a command that you wish to execute.<br>
 <br>
 <b>General Command Structure</b><br>
+In general, when you execute system commands, you simply provide the name of the command at the shell prompt followed by any options that you wish to include with the command. System commands will normally reside in one of the directories that are specified in $PATH, so the shell should have no problems finding the command, unless you misspelled it.<br>
+<br>
+Sometimes, you may want to build applications from its source code, or you may have downloaded an application that is already compiled. Then, when you attempt to execute the application from the command line, you may find that the system does not recognize the command, which can be particularly puzzling if you are in the directory the application resides in.<br>
+<br>
+The reason may relate to the $PATH variable. If the command to start the application is not in $PATH, the system won’t find it, even if you are in the same directory as the command. To execute a command that is not in $PATH, you must provide the fully qualified path to the command when you execute it.<br>
+<br>
+In situations where the location is the same directory as the command to execute, provide the self-referential directory path instead. The Linux file system contains two special directory references:<br>
+<br>
+<ul>
+<li>. (single dot): Represents the current directory which is also known as a self-referential directory.</li><br>
+<li>.. (double dot): Represents the parent directory or the directory that is one level up from the current directory.</li>
+</ul>
+<br>
+Therefore, if you downloaded the source code for an application into your home directory, and, after compiling it, you wish to execute it, you must include the self-referential directory in the command or the system will not find it, even though you are in the same directory, which is true because home directories are not in $PATH.<br>
+<br>
+Consider the following example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517416218.png" alt="" style="">
+<br>
+In the first attempt to run the command, the system reported that it could not find the command. In the second attempt, the self-referential directory followed by the slash to specify a path of the current directory. In this instance, the command executed successfully.<br>
+<br>
+<b>STDIN, STDOUT, and STDERR</b><br>
+An important concept behind the Linux shell is that Linux treats input to commands and output from commands as streams of data which also holds true for output that is produced by errors. The following structures define these streams:<br>
+<br>
+<ul>
+<li>STDIN (0): Standard input which normally comes from your keyboard but can also come from a file</li><br>
+<li>STDOUT (1): Standard output which is normally directed to the display, but it can be directed to files, processes or directly to other devices</li><br>
+<li>STDERR (2): Standard error is usually reserved for output that is produced by error messages. Like STDOUT, it normally goes to the display but can be directed to other destinations such as files or devices. STDERR is typically used for debugging or troubleshooting.</li>
+</ul>
+<br>
+To test STDIN, you can use the cat command. The cat command is used to display the contents of the file you specify as a parameter to the command. It dumps the contents of the file to STDOUT, which is the screen if you don’t direct the output elsewhere. If you don’t specify a file as the input source, the cat command takes its input from the default input device which is the keyboard. In this example, STDIN represents what you type at the keyboard:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517420833.png" alt="" style="">
+<br>
+In the example, the cat command is executed with no options. Then, the string test, and when the Enter key was pressed, the cat command sent the string that was entered into STDIN, to STDOUT. The process was repeated with the string 123.<br>
+<br>
+Most commands like cat take a file as input. For example, to display the contents of a file that is called testfile.txt, issue the following command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517420909.png" alt="" style="">
+<br>
+However, direct the contents of the file to the “cat” command using the STDIN directional operator, the less-than symbol, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517420972.png" alt="" style="">
+<br>
+Note that the command produces the same output. The only difference is that, instead of specifying the file as an option, the directional operator to direct the contents of the file to the command as its input source to demonstrate how to direct input to a command.<br>
+<br>
+A command’s output can be directed. Use the echo command to demonstrate this functionality. The echo command normally echoes, or copies, the value specified as the command option to the screen. For example, echo the value of the $PATH environment variable to the screen, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421098.png" alt="" style="">
+<br>
+However, rather than directing this output to the screen the way the echo command would normally work, you can direct the STDOUT to a file instead, using the greater-than symbol as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421144.png" alt="" style="">
+<br>
+Note that the command does not produce output to the screen. However, it did create a file that is called path.txt, in which the output that would normally be directed to the screen is placed, which is an example of changing or directing STDOUT to a file. To test, use the cat command to view the contents of the path.txt file, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421208.png" alt="" style="">
+<br>
+The path.txt file contains the output from the echo $PATH command. One thing to note is that it is easy to overwrite this file. For example, issue the following command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421263.png" alt="" style="">
+<br>
+It writes over the path.txt file with the data that you specified in the echo command, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421326.png" alt="" style="">
+<br>
+The previous data in path.txt was completely written over with no warning. This process is known as clobbering the file. However, you can use a variation of directing data through STDOUT to append, rather than overwrite, using the following syntax:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421375.png" alt="" style="">
+<br>
+The example shows two consecutive greater-than symbols to append data to a file rather than overwriting the file which used the echo command to send another string of text to the file, and the operator appends the data. Then the result was tested with the cat command. The path.txt file now contains two lines: the original line of text (Test data) and the appended line (More test data).<br>
+<br>
+The last example demonstrates how to work with STDERR. STDERR also streams output by default to the display, but it does so over a different channel than STDOUT. It is possible to direct output to SDTOUT, but still get a message in the display from STDERR. For example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421466.png" alt="" style="">
+<br>
+In the example, use the ls command to display the details of the abc123.txt file and direct the output of the command to the output.txt file. The problem is that the abc123.txt file does not exist in the directory in which the command was executed, so it creates an empty output.txt file.<br>
+<br>
+Even though the output of the command was directed to the output.txt file, a message was sent to the display. This message did not come from STDOUT—it actually came from STDERR because it was not specified where to send the STDERR message, it went to its default destination, which is the display.<br>
+<br>
+There are a couple of ways that you can manage this problem. One way is to simply discard the message if it is not important to you, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421535.png" alt="" style="">
+<br>
+In this example, a second directional operator was added with the number 2 in front of it. The number 2 references the STDERR stream. After the directional operator, the output was discarded to a device called /dev/null which is an empty device that is not capable of holding any data, and effectively discards anything that is put into it. As you can see from the example, the error message is no longer output to the display, because it was discarded it to /dev/null.<br>
+<br>
+However, messages that are produced by STDERR could be used to troubleshoot a problem. So, rather than discarding the data, you could direct STDERR messages to some other file that you can reference later to see if something did not work properly. The following is an example of how you can configure such an outcome:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421604.png" alt="" style="">
+<br>
+In this example, the STDERR was output to a file called errors.txt. Then, the result was tested with the cat command and the STDERR output was successfully directed to the file. The only problem with doing it this way is that the next time, the STDERR message will overwrite the file with the latest output. To prevent that, you can use the double greater-than symbol to append error messages to the file, rather than overwriting it every time, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421680.png" alt="" style="">
+<br>
+In the example, note the use of the double greater-than symbol (>>). Also, when the cat command was used to display the contents of the errors.txt file, it contains two lines of STDERR data to show that data was appended to the file, rather than overwriting the file.<br>
+<br>
+<a name="Piping Command Output"></a>
+<b>Piping Command Output</b><br>
+In addition to directing output, input, and error streams to and from commands, you can send the output of one command to another command which is a process that is known as piping. An example follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421809.png" alt="" style="">
+<br>
+In the example, the output was piped out of the ps command to the grep command, which is a technique that is frequently used to filter lengthy output from a command through a grep filter. The vertical bar (|) between the ps command and the grep command is known as the “pipe” character. The pipe character instructs the ps command to send its output to the grep command, rather than showing the output in STDOUT. Then, the grep command processes each line of output from the ps command, and sends any line of output that matches the grep filter to STDOUT. In this example, the grep filter is the ssh string, so that any line that contains that string gets sent to STDOUT.<br>
+<br>
+You can pipe any number of commands together in this manner. In the example below, a second pipe is added to the sort command which will sort the output alphabetically.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421892.png" alt="" style="">
+<br>
+<b>Running Multiple Commands</b><br>
+Another feature of the Linux shell is the ability to run multiple commands in a single command line. This feature differs from piping in that piping moves the output of the first command to be processed by the next and so on.<br>
+<br>
+An example of how you might use this capability would be when you compile applications in Linux. Applications in Linux are often delivered as source code, which means that before you can use them, they must be compiled. There are three commands that are frequently used in this process. You can execute each one individually or, you can use the following format to execute them sequentially from a single command line:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517421999.png" alt="" style="">
+<br>
+The double ampersand symbols (&&) between each command signals the shell to execute the next command when the previous one finishes processing. As long as you don’t encounter an error, the shell will simply process each command in the sequence that is listed in the command line.<br>
+<br>
+<a name="Other Useful Command Line Tools"></a>
+<b>Other Useful Command Line Tools</b><br>
+Beyond the set of regular system commands, Linux makes many tools available for you to manipulate data making the Linux shell a powerful environment to operate in.<br>
+<br>
+<b>The history command</b><br>
+When you use the shell in Linux, it keeps track of all the commands that you issue during your session with the shell, which is known as the history, and can be particularly useful in that you cannot only view a list of previously executed commands, you can also execute them again by referencing their position in the list rather than re-entering the entire command. Note that if you open multiple command line shells, each one tracks history separately. So, you will not be able to reference the commands that are executed from a different session unless you re-enter the session.<br>
+<br>
+To view the command history, enter the history command at the command prompt, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517423451.png" alt="" style="">
+<br>
+As you can see from the numbered lines in the output, the history is rather lengthy. If you wish to work with all the entries in the list, you can pipe the output to a text-viewing application such as less. The less command opens a file and allows you to scroll through it or run searches for content from within the application. But it does not allow you to alter the file—you can only view it.<br>
+<br>
+When you execute the command in this example, the full text of the history gets piped to less, which allows you to scroll up or down through the output by using the arrow keys, move forward one page by pressing the f key, or move backwards one page by pressing the b key. You can also search for text by pressing the forward slash (/) key and entering the search term. To exit, press the letter q, which is the command to quit the less application.<br>
+<br>
+With the history capability of the shell, you can easily execute a command that you executed previously by entering an exclamation point (!) at the command prompt, followed by the number of the command in the history list.<br>
+<br>
+Consider the following output from the history command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517423868.png" alt="" style="">
+<br>
+If you wish to run the tcpdump command that is found in line 735, without re-entering the entire command, enter the following at the command prompt and it will execute as if you had entered the entire command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517423921.png" alt="" style="">
+<br>
+The output indicates that the shell correctly copied the command at position 735 in the history, and printed it in the line that follows the command. Since the command starts with sudo, you are prompted for a password. After entering the password, the command executes as if you had typed it in its entirety. The entry at the end that contains ^C (Ctrl + c) is used to break out of the tcpdump command, which could save time, especially if you are working with lengthy commands.<br>
+<br>
+You may need to repeat a command as you operate the command shell. Another capability of history is the ability to repeat the previous command by entering two exclamation points (!!). For example, if you want to repeat the tcpdump command from the previous example, rather than referencing it by the number it occupies in the history list (!735), simply enter the double exclamation points since it was the last command that you ran, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517424012.png" alt="" style="">
+<br>
+After entering the double exclamation points, the correct command is repeated in the line that follows. ^C is entered by the user to break out of the tcpdump command.<br>
+<br>
+You can further extend the functionality of the double exclamation point to add text in front of a command, which can be particularly useful in situation where you forgot to precede a command with sudo. Simply enter the string followed by the double exclamation points, which has the effect of auto-filling the rest of the command after the string.<br>
+<br>
+To illustrate, attempt to read a file where only root has write access as a regular user as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517424096.png" alt="" style="">
+<br>
+In the example, the user tried to display the contents of the host’s SSH RSA key file. However, the user did not have permission to view the file and was denied access. To overcome, do the following:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517424140.png" alt="" style="">
+<br>
+Insert the sudo command at the command prompt, followed by the double exclamation points, which has the effect of adding the previous command after the sudo command without having to manually type the whole thing. When the command is executed, a prompt for the user’s password is seen, the same way that is seen when using sudo. Then, the command was allowed to execute with the elevated privileges.<br>
+<br>
+The history command provides many other features that may be found useful to make the shell environment easier to use. Review other features of the history command to fully benefit from its other options.<br>
+<br>
+<b>The awk command</b><br>
+awk is a powerful text processing tool that ships with the Linux operating system. It is actually a text processing language unto itself. It can be utilized in several ways, such as awk can take its input from files, STDIN, or even devices. The basic workflow is as follows:<br>
+<br>
+<ol>
+<li>Read a line of input. Lines are typically terminated with newline characters. When awk encounters a newline character, that signals the end of the line.</li><br>
+<li>Execute commands on the line.</li><br>
+<li>Move on to the next line if it has not reached the end of the file.</li>
+</ol>
+<br>
+awk is mostly used as a data extraction tool or a reporting tool. Ideally, the data that is fed into awk should be consistently formatted, such as a tabular data file or a comma- separated file, where each column represents a standard field. When awk reads a line of data, it will attempt to parse the line into fields. By default, spaces are used as field separators, but, you can specify other characters to act as separators, such as commas.<br>
+<br>
+<b>The sed command</b><br>
+The sed command, like awk, is a very powerful tool that is implemented in Linux. It is a language unto itself, but can also be used from the command line.<br>
+<br>
+The sed command is a stream editing tool that performs the action you configure on lines of text that are read in from files or STDIN. Lines are determined when sed encounters a newline character. One of the most common uses of sed is to perform string substitutions. The general syntax of the sed command is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517424745.png" alt="" style="">
+<br>
+This example represents a very basic syntax structure for performing substitutions. It starts with the sed command followed by the –e option, which instructs sed to execute the command string that follows. The command string is enclosed in single quotes and begins with the letter s, which is the command to perform a substitution. Next, specify the string that you want to look for (it could be expressed as a text string or regular expression), followed by what you want to change it to. The last section represents options that you can apply to the command. An example of an option would be to include the letter g, which means replace all instances of the input pattern that occur in the line of input. If you do not specify an option, only the first instance of the input pattern is replaced.<br>
+<br>
+The following example illustrates how to implement sed for simple text substitution:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517424831.png" alt="" style="">
+<br>
+The echo command produced the word left. But rather than sending the output of echo to STDOUT, it was piped to the sed command, which is configured to look for the string left and replace it with the string right. In the line that follows the command, the resulting string is right.<br>
+<br>
+In this next example, use sed to normalize a file. The file names.txt contains the following:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517424907.png" alt="" style="">
+<br>
+The goal list is to normalize the instances of mr., so that they all appear with an upper case M. Use sed in the following manner:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517424967.png" alt="" style="">
+<br>
+In this example, use sed to read in the names.txt file. The input pattern uses a regular expression to look for the letter m, in either upper or lower case, followed by the letter r. Once found, it replaces the string with Mr. When the command executes, each line now begins with Mr., rather than in mixed case as it was before running the file through sed, which will only output the changes to STDOUT. To actually modify the original file, you could redirect the output to a file, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517425033.png" alt="" style="">
+<br>
+Another way to use sed is to delete lines from an input source that match criteria that you specify. For example, you can explicitly state which lines to remove, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517425121.png" alt="" style="">
+<br>
+Or, you can delete a range of lines as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517425171.png" alt="" style="">
+<br>
+Another alternative is to use a search pattern to delete lines as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517425220.png" alt="" style="">
+<br>
+This example looks for lines that contain the string mr in lower case and deletes them. You can see from the output, the only line that remains is the one that starts with “Mr.”<br>
+<br>
+The caret (^) is a meta character that represents the beginning of the line, and the dollar sign symbol ($) is a meta character that represents the end of the line. Since there is nothing between the two, it is effectively looking for a blank line.<br>
+<br>
+sed is a very powerful tool with many more features. It would be worthwhile to do further research into sed to fully benefit from the capabilities of this tool.<br>
+<br>
+<b>The vi command</b><br>
+One task that you may find yourself doing frequently in the command shell is editing text files. Linux ships with several options for text editing applications, but options differ from one Linux distribution to another. Also, many distributions that are built to be used as server platforms may not even ship with a graphical user interface. Therefore, everything you do to manage these installations must be done from the command line. One is common to virtually every Linux and Unix installation, and it is known as vi.<br>
+<br>
+The vi application was devised as a full screen visual interface to line-oriented text editors that were commonly used in the early days of Unix. A primary reason for its early adoption was that it shipped for free, where other text-editing applications of the day were commercial.<br>
+<br>
+Despite its long history and wide adoption, vi has a reputation for being somewhat cumbersome to use. However, every Linux administrator should be familiar with how it works, because there may be instances when you need to perform remote administration tasks from a shell without benefit of modern graphical text editing tools. The ubiquitous vi is present in virtually every Unix and Linux-based system.<br>
+<br>
+The screen layout is very simple, consisting of the main panel for text entry and viewing text, and a status area along the bottom. vi can operate in two modes. The first mode is the command mode, and it is the mode that you are in when you first enter the application. In command mode, keystrokes represent commands to do various things within the application. The other mode of operation is the insert mode, where you can enter and edit text. To access insert mode, you must first be in command mode. From command mode, simply press the letter i to enter insert mode. While you are in insert mode, you will see the term Insert displayed in the status area at the bottom of the screen.<br>
+<br>
+When you are in insert mode, you can begin entering text. When you finish making edits, press Esc to exit insert mode and return to command mode. From command mode, you can save or write your edits to the file, or you can quit.<br>
+<br>
+To write your edits, press the colon (:) key which will display a colon in the far left portion of the status area. Then, you can enter the letter w, which is the write command, followed by the Enter key.<br>
+<br>
+To quit the application, you must be in command mode and press the colon (:) key. At the colon character that is displayed along the left-most portion of the status bar, enter the letter q which represents the quit command. If you made changes to the file and attempt to quit, vi will warn you and give you an opportunity to save your edits. However, if you want to discard any changes that you made to the file and exit out of the application, press the colon (:) key, followed by the letter q to quit, and an exclamation point (!) to override the warning message.<br>
+<br>
+To save your edits, issue the write and quit commands in the same sequence by entering : + w + q. The list below outlines the commands that are described. Keep in mind that these commands must all be issued from command mode:<br>
+<br>
+<ul>
+<li>i: Enter Insert mode. Press Esc to exit Insert mode and return to command mode.</li><br>
+<li>:w: Write your changes to the file.</li><br>
+<li>:q: Quit vi. If edits are pending, you will get a warning to let you know.</li><br>
+<li>:q!: Quit without saving which exits the application immediately and any pending edits are lost.</li><br>
+<li>:wq: Write edits to the file and quit the application.</li>
+</ul>
+<br>
+Some common text editing tasks that you may need to perform in vi include the following:<br>
+<br>
+<ul>
+<li>Deleting characters: In command mode, you can move the cursor on the character that you wish to delete and press the x key. Note that your keyboard settings may allow you to delete text in insert mode with the Delete key as well. Other variations of the delete command are as follows:<br>
+ - dd: Delete the entire line<br>
+ - dw: Delete everything starting from the location of the cursor to the end of the word<br>
+ - <i>n</i>dw: Delete the number of words that are specified by <i>n</i>
+</li><br>
+<li>Copy/paste: In vi, these commands are known as Yank (copy) and Put (paste). Deleting text is the same as Cut. The text is retained in a buffer so that you can use the paste command to place it somewhere else in the file.<br>
+ - yw: Yank a word.<br>
+ - <i>n</i>yw: Yank <i>n</i> number of words.<br>
+ - yy: Yank a line.<br>
+ - p: Put yanked or deleted text starting from the current location of the cursor. Yanked lines are placed in the line after the current location of the cursor.
+</li><br>
+<li>Navigation: There are various commands that you can issue in command mode to get around a document. Depending on your keyboard settings, you may be able to use the arrow keys and other keys in insert mode that are typically supported in many applications. However, the commands described here work universally.<br>
+ - h: One character to the left.<br>
+ - j: Down one line.<br>
+ - k: Up one line.<br>
+ - l: One character to the right.<br>
+ - w: Forward one word.<br>
+ - b: Backward one word.<br>
+ - $: Move to the end of the line.<br>
+ - ^: Move to the beginning of the line.<br>
+ - gg: Move to the beginning of the file.<br>
+ - G: Move to the end of the file.<br>
+ - <i>n</i>G: Move to the line number specified by <i>n</i>.
+</li><br>
+<li>Entering insert mode: In insert mode, you can enter or edit text in vi. You can exit insert mode to return to command mode by pressing Esc. The following list outlines several methods for entering insert mode.<br>
+ - i: Insert text where the cursor is currently located.<br>
+ - a: Insert text immediately after the cursor location. This option is useful in situations where you want to append text to the end of a line.<br>
+ - o: Insert line after the current line.<br>
+ - O: insert line before the current line.
+</li><br>
+<li>/<i>search pattern</i>: In command mode, enter the forward slash character followed by the search pattern. When vi finds the string, it stops at that location and highlights the string.<br>
+ - n or N: Lower case n moves to the next occurrence of the search string. Upper case N moves to the previous occurrence of the search string.<br>
+ - :s/<i>search pattern</i>/<i>replacement text</i>/g: This command performs a search and replace operation. It begins with :s followed by the forward slash and the search pattern. The next portion of the command begins with another forward slash followed by the replacement string. The last part of the command is optional. In the example, you see forward slash and the letter g which instructs the command to replace every instance of the search pattern in the file.
+</li>
+</ul>
+<br>
+There are many more features of the vi tool, but the set that is described here is the most commonly used set to edit files.<br>
+<br>
+<a name="Overview of Secure Shell Protocol"></a>
+<b>Overview of Secure Shell Protocol</b><br>
+One skill that beginning Linux administrators must master is the ability to remotely access other hosts over the network, so that you can remotely investigate, troubleshoot, or administer hosts that are not physically in your presence. In the past, the tool that is most frequently used was known as Telnet. However, in most modern implementations of Linux, telnet services are either not installed or not enabled, largely because telnet is natively a clear-text protocol that poses some significant security risks. Today, the preferred tool is SSH, which allows you to access a shell on a remote host over an encrypted channel, mitigating the risk of third-parties eavesdropping on communications to remote hosts.<br>
+<br>
+SSH is a tool that allows access a shell on a remote host, using current credentials to the remote host. SSH communications take place over securely encrypted channels so that a third party that is monitoring an SSH session cannot see the data that is transacted over the life of the session.<br>
+<br>
+To use SSH, you must use an SSH client to communicate with an SSH server. The remote host, the server, authenticates itself to the client with public key cryptography. Once authenticated, the user on the client side can log in to the remote host with login credentials recognized by the remote host. Alternatively, users can generate their own public/private key pairs and distribute their public keys to the hosts that they wish to access which serves as a user authenticating mechanism. Thus the user can access the host without having to log in.<br>
+<br>
+SSH can be used for other purposes as well. For example, it can be used to tunnel non-encrypted protocols over SSH. Protocols that normally operate in clear-text can be protected by the SSH-encrypted tunnel, protecting the clear-text protocol.<br>
+<br>
+This topic describes the most basic use case for SSH, which is to remotely access hosts over a network. The basic syntax for using the SSH client is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517428251.png" alt="" style="">
+<br>
+Some SSH clients assume that you are logging in with the same user account as the one you are running the client from. If so, you can omit the username portion and enter the remote host name or IP address. However, if you are using a different set of login credentials on the remote host, you must specify the username.<br>
+<br>
+Upon issuing the SSH command, you are prompted for the password of the user account on the remote system. If the credentials are valid, you are presented with any system messages, followed by the command shell prompt of the remote host. From here, execute commands as if operating the remote host from a local console.<br>
+<br>
+To exit the session, you can issue the exit command, which closes the SSH session and returns you to the command shell on the local host.<br>
+<br>
+Note that the first login to a host will present a message that is essentially asking to accept the public key of the remote host.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517428370.png" alt="" style="">
+<br>
+If you trust the remote host, enter yes (must be the full word) at the Are you sure... prompt. After you enter yes, you will see a warning informing you that the host was permanently added to the list of known hosts. From this point forward, no other host can masquerade as the remote host because the public key will not match. Therefore, you are protected from a rogue host that is trying to impersonate a trusted host.<br>
+<br>
+This protection against an attacker intercepting your connection comes at a cost. On the first connection to a new host, you must independently verify that the host key fingerprint in the prompt above is valid. Ideally, you would have physical access to the remote system, or contact with an administrator who does, to verify this key. Alternatively, you could connect to the host using an already-trusted connection. If you skip this crucial step, an attacker who is able to intercept your first connection could continue to do so indefinitely.<br>
+<br>
+For example, you or a trusted remote administrator, could run the following command on the remote system to view the SSH host key fingerprint:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517428935.png" alt="" style="">
+<br>
+Once you confirm the host key in the prompt above, it is saved in your home folder at ~.ssh/known_hosts. This file is read by SSH before asking for your user name or password.<br>
+<br>
+Assume that you had previously used SSH to connect the host at the IP address 192.168.7.141, but the host has since been replaced by a different host under the same IP address. The keys of the new host would be different than the original host. So when you attempt to communicate with the new host, you will get a warning because the keys don’t match and it could indicate that someone is trying to impersonate the original host:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517429032.png" alt="" style="">
+<br>
+The message clearly indicates the potential for a malicious situation. However, if you are aware of the change and trust the new host, the message also provides an example of how to remove the entry in your ~/.ssh/known_hosts file using the ssh-keygen command. The next time that you make the connection, SSH will ask you to verify the new host key fingerprint, as if it had never connected.<br>
+<br>
+<b>Securely Copying Files Between Hosts</b><br>
+There are many options for copying files between hosts, but many available options use clear-text protocols, which could potentially expose your activity to eavesdropping. The best option is to leverage the SCP to securely copy files between systems.<br>
+<br>
+SCP uses the SSH protocol to encrypt the session, protecting the transfer of user credentials and file data. SCP is a good, secure option for copying files between hosts. SCP can be used to copy files both to and from remote hosts. To copy a file from the local system to a remote system:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517429142.png" alt="" style="">
+<br>
+Similarly, to copy a file from a remote system to the local system, we swap the parameters:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517429186.png" alt="" style="">
+<br>
+Use relative path references and wild card characters if you wish. You can change the file's name by providing a different one in the destination path. If you don’t specify a destination file name, the file retains the original name. Lastly, you must know the login credentials on the remote host because you will be prompted for the password before you are allowed to copy files to the remote host.<br>
+<br>
+Like SSH, the first-time communication with the remote host prompts for acceptance of its public key. To proceed, respond yes at the prompt, and if you provide the correct login credentials, the system will proceed with the copy. When the copy is complete, it will report 100% in the progress column along with other statistics of the copy performance, such as the size of the file and the bytes/second. Note the format of the destination. When the user is authenticated, it uses the user’s home directory as the starting point for where to place the file. In the example, the dot is used, which is the self-referential directory. In other words, place the file in the current directory, which is the home directory for the user. You can use relative directory references knowing that the starting point is the remote user’s home directory, or you can use fully qualified directory references, provided the user has permission to write to the directory.<br>
+<br>
+<a name="Networking "></a>
+<b>Networking</b><br>
+Linux provides a very robust networking environment. It was built from the ground up with connectivity and networking in mind. It provides a rich set of tools and features for managing virtually every aspect of networking and connectivity configuration.<br>
+<br>
+<b>Viewing Basic Network Properties</b><br>
+One of the most important commands relative to checking your network properties is the ifconfig command. This tool gives you a lot of information about the state of your network interfaces and their configurations. The ifconfig command accepts many options, but with the syntax shown in the following example, a lot of information is retrieved about the interfaces in the installation:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517429709.png" alt="" style="">
+<br>
+The –a option instructs the system to output information on all the interfaces even if they are down. Each entry begins with the name of the interface. In the example, the first interface is called ens160, and the second interface is called lo, also known as the loopback interface. The first line in the details portion of the entry shows the hardware address (for example, the MAC address) of the interface. The next lines show the IP address information that is associated with the interface which includes the following:<br>
+<br>
+<ul>
+<li>IPv4 IP address</li><br>
+<li>Broadcast address</li><br>
+<li>Subnet mask</li><br>
+<li>IPv6 IP address</li>
+</ul>
+<br>
+After the IP address information, it displays information regarding the state of the interface. If you see the word UP at the beginning of this section, the interface is able to send and receive IP traffic. The remainder of the feedback gives you statistics about packets that are received and transmitted.<br>
+<br>
+The ifconfig command tells you a lot about the state of your network interfaces and their configurations. You can get information on a specific interface by specifying the interface name in the command.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517429848.png" alt="" style="">
+<br>
+<b>Configuring Network Properties</b><br>
+Some server-based installations may not have a GUI installed, so you will have to perform network configuration from the command line, or you may be remotely connected to a host to perform administrative tasks on the host. In these scenarios, it is important to read the documentation that is associated with that Linux distribution to learn about specific commands, processes, and files that are used for network configuration.<br>
+<br>
+<b>Configuring Basic Properties (IP, Subnet Mask, Gateway)</b><br>
+One task that may need to be performed is to set the IP address of a network interface. Use the ifconfig command, as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517429939.png" alt="" style="">
+<br>
+In the example, the ifconfig command was used to set the IP address for the ens160 interface. The configuration was tested with ifconfig to report on its settings. As the feedback from the command illustrates, the interface now has the IP address that was assigned.<br>
+<br>
+You could also include options to set the netmask and broadcast address as well. The example below shows the command with all the options to set IP address properties to the interface:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430017.png" alt="" style="">
+<br>
+<b>Viewing and Configuring Routes</b><br>
+Another important networking property to consider is the routing configuration, which includes setting the default route, also known as the default gateway, and static routes if they are needed. Use the netstat command. To view the routing table with netstat, you would configure it as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430086.png" alt="" style="">
+<br>
+The netstat command with the –rn options as shown displays the routing table with numeric IP addresses. If you prefer to see host names, you can remove the n option.<br>
+<br>
+Of the routes that are listed, the first one represents the default route. The IP address 0.0.0.0 with a netmask of 0.0.0.0 represents any IP address. The gateway value represents where to send traffic with destinations that are not known to the device.<br>
+<br>
+The second route represents a static route for the local network. So, any traffic with a destination of 192.168.7.0/24 is not sent to a gateway. Rather, it is transmitted to hosts in the local network segment.<br>
+<br>
+In a new installation, you may need to set the default gateway. The syntax for doing so is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430194.png" alt="" style="">
+<br>
+The term "default" in the example represents the 0.0.0.0 IP address, and the gw option followed by an IP address is the gateway.<br>
+<br>
+If you need to statically set a route to a network, you can set up the route command as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430258.png" alt="" style="">
+<br>
+The structure of the route command for entering the static route is as follows:<br>
+<br>
+<ul>
+<li>route: The route command</li><br>
+<li>add: The option to indicate that you wish to add a route</li><br>
+<li>-net: The option to indicate that the destination of the route is a network</li><br>
+<li>192.168.133.0: The IP address of the destination network</li><br>
+<li>netmask 255.255.255.0: The netmask value for the destination network</li><br>
+<li>gw 192.168.7.200: The gateway IP address of where to send traffic that is destined for the 192.168.133.0 network</li>
+</ul>
+<br>
+After issuing the command, the netstat command was used to list the routes and confirm that the new route was added. As the command feedback indicates, the addition of the new route was successful.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517430408.png" alt="" style="">
+<br>
+In the example, the route created previously was deleted. It is essentially the same syntax as adding a route, the keyword del was used instead of add. After issuing the command, the netstat command was used to confirm that the route no longer exists.<br>
+<br>
