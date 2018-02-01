@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Operating System Basics"
+title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 9: Understanding Linux Operating System Basics"
 ---
 
 <a href="#History and Benefits of Linux">9.2 History and Benefits of Linux</a><br>
@@ -23,10 +23,10 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#Networking ">9.19 Networking </a><br>
 <a href="#Managing Services in SysV Environments">9.20 Managing Services in SysV Environments</a><br>
 <a href="#Viewing Running Network Services">9.21 Viewing Running Network Services</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
+<a href="#Name Resolution: DNS">9.22 Name Resolution: DNS</a><br>
+<a href="#Testing Name Resolution">9.23 Testing Name Resolution</a><br>
+<a href="#Viewing Network Traffic">9.24 Viewing Network Traffic</a><br>
+<a href="#System Logs">9.25 System Logs</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
 <a href="#">9.</a><br>
@@ -35,10 +35,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 8: Understanding Windows Op
 <a href="#">9.</a><br>
 
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -1337,3 +1333,176 @@ The output from this command includes the following information:<br>
 <li>Name: Displays the file name. For network connections, it lists the two network nodes that have connected. It also includes the port number each host is using and the connection state.</li><br>
 </ul>
 <br>
+<a name="Name Resolution: DNS"></a>
+<b>Name Resolution: DNS</b><br>
+Linux relies on the DNS to resolve host names and IP addresses. DNS is a critical aspect of networking and if it is misconfigured or its operation is not well understood, it could impact the security or availability of a system.<br>
+<br>
+<b>Name Resolution Configuration Files</b><br>
+The resolv.conf file is the primary configuration file for DNS name resolution. You will often find this file in the /etc directory. The resolv.conf is a simple text file that contains a series of directives for configuring name resolution. There are two types of directives:<br>
+<br>
+<ul>
+<li>Search domain: This directive lists domains to append when resolving a host name with no domain.</li><br>
+<li>Name server: This directive identifies the IP addresses of the DNS servers to use for resolving host names.</li>
+</ul>
+<br>
+The following is an example of the contents of the resolv.conf file in a typical Linux system:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517440242.png" alt="" style="">
+<br>
+The search directive can specify multiple domains that are separated by spaces. Next is the list of name servers. The directive begins with the term nameserver followed by a space or tab and the IP address of a DNS server. You can have multiple nameserver directives to identify fallback servers if the first one does not respond to a lookup request.<br>
+<br>
+From a security perspective, some interesting things in this file include the following:<br>
+<br>
+<ul>
+<li>Nameservers or domains that are not valid for your organization. Be advised however that certain devices such as laptops that tend to roam may have other domains or DNS servers that are listed here if you view the file before connecting the device to local network resources.</li><br>
+<li>Public DNS server entries. In particular, the Google public DNS servers with IP addresses such as 8.8.8.8, 8.8.4.4, or 4.2.2.1. There are other public DNS servers too, so it may be wise to have a list of common servers that you can reference. Often times, public servers are used to get around enterprise DNS servers that may be enforcing usage policies through DNS sink holes or IP blacklists.</li>
+</ul>
+<br>
+The next file to discuss relative to name resolution is the “hosts” file which is also stored in the /etc directory. The “hosts” file was one of the first name resolution mechanisms. It is a simple, plain text list of IP addresses followed by the host names they map to. Of course, this solution did not scale well and was quickly replaced by DNS. However, the file still exists and can be used to manually map IP addresses to host names.<br>
+<br>
+A default hosts file typically only contains the local loopback addresses for both IPv4 and IPv6. You may also find the host’s name that is associated with the local loopback address. The following is an example of a default hosts file:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517440469.png" alt="" style="">
+<br>
+In the example, you can see the localhost addresses in both IPv4 and IPv6.<br>
+<br>
+The last file to discuss relative to name resolution is the nsswitch.conf file which is also located in the /etc directory. This file is used to configure where various elements of the operating system go to fetch the information they need such as user information, password data, and name resolution. The structure of the file is such that the values in the first column represent the repositories that need to be populated with data and the remaining columns list where the data should come from.<br>
+<br>
+The following is an excerpt from the nsswitch.conf file:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517440576.png" alt="" style="">
+<br>
+There are several data sources that you can identify, and each entry can have multiple sources in a space-separated list. The sequence of the source list is the sequence that the system uses to access the data that are required by the element. The list that follows describes the sources that are used in the sample nsswitch.conf file:<br>
+<br>
+<ul>
+<li>files: Represents local files on the host</li><br>
+<li>compat: Similar to files, but extends its capabilities by allowing entries in the files to grant users or user groups access to the system</li><br>
+<li>dns: Reference DNS servers</li><br>
+<li>db: Do lookups in database files on the local system</li>
+</ul>
+<br>
+For the purposes of name resolution, the entry of interest is the one that is labeled hosts. In the example, two sources are identified: files and dns. The sequence in which they appear means that the system will first reference a file on the local host (for host name resolution, that file is /etc/hosts), and if that fails to return a result, it will then use DNS to perform the name resolution.<br>
+<br>
+From a security perspective, there are some things to watch out for concerning these files and their relationship to one another. Consider the following scenario:<br>
+<br>
+<ol>
+<li>A user on the system executes malware.</li><br>
+<li>The malware creates an entry in the /etc/hosts file with the IP address of malicious web server.<br>
+ - The malicious web server is configured to look like a banking web site that is frequented by the operator of the system.<br>
+ - The IP address of the entry in the /etc/hosts file maps to the host name of the user’s banking web site.
+</li><br>
+<li>The malware also configures the nsswitch.conf file to do a file lookup first followed by a DNS lookup.</li><br>
+<li>The next time that the user goes to visit the banking site, the host looks at the /etc/hosts file first and finds the name of the banking site in the file.<br>
+ - The IP address that is mapped to the banking site is that of the malicious server that is disguised as the real banking site.<br>
+ - Since the name was resolved with the /etc/hosts file, there is no need to reach out to DNS to resolve the name.
+ </li>
+ <li>The user is presented with a web page that looks exactly like his or her regular banking site’s page.</li><br>
+ <li>The user enters his or her banking credentials which the malicious server records.</li><br>
+ <li>Instead of granting the user access to his or her bank account, the malicious server pops up a message indicating that the banking site is down for maintenance and to try again later.</li>
+</ol>
+<br>
+<a name="Testing Name Resolution"></a>
+<b>Testing Name Resolution</b><br>
+With DNS properly configured, the Linux operating system provides several tools that you can use to make sure that names are resolving correctly. One of the most common tools is the nslookup command, which allows you to enter a host name to look up. When the lookup completes, it returns the IP address, or addresses, of the host name that you specified.<br>
+<br>
+The following is an example of the nslookup command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517441711.png" alt="" style="">
+<br>
+In this example, the local host is running a DNS service. Note that the entry in the Server field and the IP address in the Address field show the local loopback address. The non-authoritative answer message means that the DNS server that gave you the response is not the server for the domain you looked up. Then, it returned the name of the host you looked up followed by its IP address.<br>
+<br>
+Another useful option that you can exercise with the nslookup command is that you can specify a server to do the lookup rather than use the servers that are configured in your local system. For example, if you add the IP address of a different DNS server at the end of your nslookup command, you are forwarding your request to that server as seen in the following example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517441824.png" alt="" style="">
+<br>
+The nslookup command also allows you to perform reverse DNS lookups. A reverse lookup is one in which you provide the IP address of a host in order to learn its host name. Normally, you supply the host name to learn its IP address. The following example demonstrates this process using the nslookup command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517441886.png" alt="" style="">
+<br>
+Being able to find host to IP mappings with a tool such as nslookup enables some investigative opportunities for analyzing suspicious activity on a host. For example, if you detect an IP address connecting to a host that is suspect for some reason, you can use tools such as whois to help determine who owns the IP address. whois is protocol for querying the databases of registered users of Internet resources such as IP addresses or domain names. Many Linux distributions ship with a whois command line tool, or use a browser to go to the ARIN or its European and Asian counterparts.<br>
+<br>
+The following is an example of the command line usage:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517441984.png" alt="" style="">
+<br>
+As you can see in the example, the output that it produces is rather lengthy, and not all is included. However, it is a good starting point for identifying who the responsible party is for addresses or host names you believe may be involved in suspicious activity against assets in your environment.<br>
+<br>
+<a name="Viewing Network Traffic"></a>
+<b>Viewing Network Traffic</b><br>
+One of the features that makes Linux such an attractive platform for security and development is the powerful set of tools, both command line and desktop, that natively ship with most distributions. From a security perspective, one of the more compelling capabilities present in most distributions is the ability to promiscuously sniff network traffic with tools such as tcpdump. With tcpdump, you can quickly view or capture network traffic and apply filters to observe or capture the traffic that you are specifically interested in. You can also configure tcpdump to include specific portions of packets, such as the header, or entire packets including their Ethernet frame data and payload data.<br>
+<br>
+<b>tcpdump Basics</b><br>
+tcpdump is a powerful tool with many features and options. This topic describes the basics of tcpdump with some examples you may find useful to get you started right away.<br>
+<br>
+First, tcpdump’s basic syntax is as follows. Note that it requires root level privilege so the examples will use the sudo command.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517442337.png" alt="" style="">
+<br>
+The options come in the form of command line switches to control tcpdump’s packet collection parameters. The filters section defines the traffic to view or capture. The absence of a filter instructs the command to act on all the network traffic it sees.<br>
+<br>
+The following is an example of how it can be used:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517442403.png" alt="" style="">
+<br>
+The syntax that used in the example represents the following:<br>
+<br>
+<ul>
+<li>-i: Lets you specify the interface on which to listen. If you omit the –i, tcpdump select the first interface of your available interfaces. If there is an inline device with bridged interfaces, list them as follows: -i ens32:ens33.</li><br>
+<li>-X (upper case): Outputs the payload in both hex and ascii.</li><br>
+<li>-nn: Outputs host addresses and ports in numeric format.</li><br>
+<li>-s: Snap length. Refers to the number of bytes to include in the capture or output. If you don’t specify a snap length, it reverts to a default which varies based on the local environment – sometimes to as small as 64 bytes. If you enter a value of 0 for the snap length, it includes all the bytes of the payload.</li><br>
+<li>host 192.168.222.1: The filter portion of the command. It instructs tcpdump to only evaluate packets to or from the specified host.</li>
+</ul>
+<br>
+The output that this example would produce is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517442644.png" alt="" style="">
+<br>
+To stop the capture, press <Ctrl+C>. Each of the packets that are displayed begins with the timestamp of when the packet was seen. It also includes the source and destination IP addresses expressed in a five tuple formation in which the fifth byte represents the port number, which is followed by the remaining header information. The payload is the portion that appears indented to the header. Note that the output is in both hexadecimal and ASCII per the command line configuration.<br>
+<br>
+Further refine your filter by adding a port constraint as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517442733.png" alt="" style="">
+<br>
+The effect is limiting the capture to just the specified host and the specified port number, which is useful in situations where you may only be interested in a certain type of traffic.<br>
+<br>
+You can also use negation in the filter as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517442808.png" alt="" style="">
+<br>
+In cases where you have an SSH session to the monitored host and you may want to exclude the SSH traffic.<br>
+<br>
+There are times where you may want to save the data output from the tcpdump command. Consider intended usage of data before selecting an output method. For example, if you are only interested in producing a text file of the data that can be read and searched by any text editing tool, you can do the following:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517442879.png" alt="" style="">
+<br>
+This syntax directs the output of the tcpdump command to a text file called dump.txt in the current directory. The benefit of a text file is the ability to read it in any text editing tool and potentially use its search features to look for interesting things in the output file.<br>
+<br>
+If your intent is to save the capture in native PCAP format, you can do the following:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517442943.png" alt="" style="">
+<br>
+This command instructs tcpdump to capture on the ens33 interface with a snap length of 0 to capture the complete payload. The traffic must also be coming from or going to host 192.168.222.1 over port 21. The last part of the command includes the –w option, which instructs tcpdump to write the raw capture data to a file. In this example, the file is called capture.pcap. The file will be placed in the directory from which you ran the command.<br>
+<br>
+The benefit of capturing traffic this way is that you can open the PCAP file in any application that reads PCAP formatted files, such as Wireshark and Snort, or can even read it back in with tcpdump as shown in the following example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517443030.png" alt="" style="">
+<br>
+The –r followed by the file name instructs tcpdump to read in that PCAP file and produce output that is formatted per the command parameters—in this case, –X to output in both hex and ascii, -nn for numeric IP addresses and port numbers, and –s 0 for displaying the entire payload.<br>
+<br>
+In this example, it was not necessary to apply any filters since the PCAP file was created with filters already applied. However, to further refine the output by adding more filters is possible. The capture can also be created with less filtering to include a broader set of network traffic in the capture file and apply the filtering that is needed when the PCAP file is read back in.<br>
+<br>
+If you are performing captures with tcpdump on a production system, you should use the following guidelines:<br>
+<br>
+<ul>
+<li>The less restrictive the filter, the more traffic you are capturing, which could impact the performance of the host. However, it does give you the benefit of having more data on hand if you need to reference it later.</li><br>
+<li>Capturing traffic to the screen (STDOUT) is more resource intensive. You can capture the raw packet data to a PCAP and read it back in later. This way, the host is not burdened with both capturing network data and formatting the data for output to the screen.</li>
+</ul>
+<br>
+<a name="System Logs"></a>
+<b>System Logs</b><br>
+Linux systems provide rich logging functionality. Operating system events of all kinds are logged in a central location. Also, most applications will log events to these same locations or dedicated log files. Usually, when you are investigating an issue on a Linux-based system, the log files are one of the first places you should visit for information on what transpired.<br>
+<br>
+Logging is handled by a dedicated logging process called syslogd. The more recent versions of Linux use a variant of syslogd that is called rsyslogd, which provides all the same functionality of syslogd, in addition to several extensions that add functionality to traditional syslog capabilities.<br>
+<br>
+<b>Log File Locations and Log Files</b><br>
