@@ -27,20 +27,12 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 9: Understanding Linux Oper
 <a href="#Testing Name Resolution">9.23 Testing Name Resolution</a><br>
 <a href="#Viewing Network Traffic">9.24 Viewing Network Traffic</a><br>
 <a href="#System Logs">9.25 System Logs</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-<a href="#">9.</a><br>
-
-
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
+<a href="#Configuring Remote syslog">9.26 Configuring Remote syslog</a><br>
+<a href="#Running Software on Linux">9.27 Running Software on Linux</a><br>
+<a href="#Executables vs. Interpreters">9.28 Executables vs. Interpreters</a><br>
+<a href="#Using Package Managers to Install Software in Linux">9.29 Using Package Managers to Install Software in Linux</a><br>
+<a href="#System Applications">9.30 System Applications</a><br>
+<a href="#Lightweight Directory Access Protocol">9.31 Lightweight Directory Access Protocol</a><br>
 
 <a name="History and Benefits of Linux"></a>
 <b>History and Benefits of Linux</b><br>
@@ -1506,3 +1498,301 @@ Linux systems provide rich logging functionality. Operating system events of all
 Logging is handled by a dedicated logging process called syslogd. The more recent versions of Linux use a variant of syslogd that is called rsyslogd, which provides all the same functionality of syslogd, in addition to several extensions that add functionality to traditional syslog capabilities.<br>
 <br>
 <b>Log File Locations and Log Files</b><br>
+The file system location for system events is the /var/log directory. Find a series of files that contain log data for various event types. Not all the files in the /var/log directory are used by rsyslogd. Some may come from applications with dedicated logging facilities. The rsyslogd configuration file lists all the files that it uses for logging.<br>
+<br>
+The primary log file on most Linux systems is /var/log/messages or /var/log/syslog, which is because a default rsyslogd configuration file has been configured in such a way that it will match with many of the events that are produced by the system. However, the configuration file ultimately determines which files get used for what purpose. Another logging option is to send logs to the console, which is often used when an event that requires system user’s attention is generated.<br>
+<br>
+You can also configure your local syslog events to forward to a remote syslog server or SIEM (Security Information and Event Management) tool. Organizations will often aggregate logs from important hosts around the enterprise in one central place, which makes it easier to correlate events from different sources to try and surface patterns of activity that may indicate a compromise or security policy violation.<br>
+<br>
+<b>Configuring syslog</b><br>
+Syslog configuration takes place by way of the /etc/syslog.conf file or /etc/rsyslog.conf in more recent Linux installations. Sometimes, systems running rsyslogd may split the configuration over multiple files. The primary configuration file, /etc/rsyslog.conf, specifies additional files to include by way of a directive.<br>
+<br>
+The configuration file consists of comments with sample configurations and notes. It also contains a series of rules that define event types and where their logs should go. A rule consists of a selector to indicate the source of the event and an action to indicate where to send the event.<br>
+<br>
+The following excerpt shows some sample rules from a rsyslogd configuration file:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517491322.png" alt="" style="">
+<br>
+<b>Selector Syntax</b><br>
+The selector is the first column, which consists of two components that are separated by a dot (.): the facility and the severity.<br>
+<br>
+<ul>
+<li>The facility indicates the component reporting the event.</li><br>
+<li>The severity establishes a priority for the event. The following severity labels are listed from least severe to most severe:<br>
+ - Debug: Debug information from running processes.<br>
+ - Info: Simple informational messages.<br>
+ - Notice: A condition that may require some attention.<br>
+ - Warn: A warning.<br>
+ - Err: An error condition<br>
+ - Crit: A critical condition<br>
+ - Alert: A condition that requires immediate attention<br>
+ - Emerg: An emergency condition.<br>
+ - Some examples follow:<br>
+ <ul>
+ 	<li>mail.info: Translates to the mail facility with a severity of info. This format will include severity of info or greater (notice, warn, err …).</li><br>
+ 	<li>=mail.info: Translates to the mail facility with a severity of info. This format means only include the info severity.</li><br>
+ </ul>
+</li><br>
+<li>You can list multiple facilities in front of the dot. Each facility is separated with a comma.<br>
+ - auth,authpriv.*: This example translates to facility auth and authpriv with a priority of any.
+</li><br>
+<li>You can list multiple facility.severity pairs that are separated by semi-colons.<br>
+ - *.*;auth,authpriv.none: This translates to any facility with any severity, except auth and authpriv facilities with no severity. Basically, everything except auth and authpriv.
+</li>
+</ul>
+<br>
+<b>Action Syntax</b><br>
+The action portion of the syslog rule indicates which file should receive the event that is based on the facility and severity that is specified in the selector.<br>
+<br>
+mail.info /var/log/maillog: Translates to: Send events with a facility of mail and a severity of info or greater to the /var/log/maillog file.<br>
+<br>
+Some action entries begin with a dash character, which is a remnant from older versions of syslogd that performed a sync after writing an event to a log file. In more recent syslog implementations, this functionality is disabled for performance reasons so the dash is essentially meaningless. See the example that follows:<br>
+<br>
+-/var/log/messages: The dash has no impact.<br>
+<br>
+Alerts can also be directed to the console instead of a file, which is a good way of getting user’s attention if the situation warrants it.<br>
+<br>
+kern.* /dev/console: This configuration sends alerts from the kernel facility with any priority to the console.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517492218.png" alt="" style="">
+<br>
+<a name="Configuring Remote syslog"></a>
+<b>Configuring Remote syslog</b><br>
+Many organizations use SIEM tools to aggregate log data in a central location, which allows them to monitor events from important systems in a single place. Many of these tools have the ability to correlate data from various sources to surface patterns that could represent malicious or suspicious activity. syslog sends alerts to remote hosts by way of some simple settings in the configuration file.<br>
+<br>
+To send all events to the remote server over UDP, you can add the following rule:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517492783.png" alt="" style="">
+<br>
+For TCP, use two at symbols (@@) rather than one.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517492832.png" alt="" style="">
+<br>
+Another option is to selectively send alerts by specifying a facility and severity. In the example, any facility with a severity of emerg will be forwarded to the host 192.168.222.1 over UDP port 10514.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517492889.png" alt="" style="">
+<br>
+<b>Testing Your Logging Configuration</b><br>
+If you have altered your logging configuration in some way, test it to make sure it is working as expected. The logger command lets you manually make entries into log files. Specify a facility and severity to make sure that the entry is going to the correct file based on your rule configuration.<br>
+<br>
+For example, your configuration file contains the following rule:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517492966.png" alt="" style="">
+<br>
+This rule sends alerts from the auth or authpriv facilities with any severity to the /var/log/auth.log file. To test, use the following command:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517493018.png" alt="" style="">
+<br>
+After you execute the command, you open the /var/log/auth.log file and navigate to the end of the file to see the following entry if the rule worked correctly:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517493061.png" alt="" style="">
+<br>
+You can also use the logger command to send messages to remote syslog servers. The following example adds the –n parameter, which lets you specify a remote host, the –P (upper case) parameter to specify the port number and you can add --UDP to send as a UDP connection or --TCP to send it over TCP. If you do not specify a protocol, it will first try UDP and if that fails it will try TCP. Also, if you do not specify a port, it will use the default port 514.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517493135.png" alt="" style="">
+<br>
+<a name="Running Software on Linux"></a>
+<b>Running Software on Linux</b><br>
+Running software in a Linux installation requires two things. First the file must be structured in a format that either allows it to run on its own or run through an interpreter. The file must also have the execute bit set in its permission properties for the user that wants to execute the file.<br>
+<br>
+Binary executable files are created from source code that is then compiled with a compiler application. The source code can be produced in various programming languages. One of the most common language platforms that are used on Linux is the C programming language. This section will assume that C was used to create the source code in the examples that follow. As such, the compiler that used in these examples is gcc, which is a popular, open source compiler for C source code.<br>
+<br>
+<b>Overview of the Process for Compiling Code</b><br>
+The general process for compiling code is to first obtain the source code of the program you wish to compile into a binary executable. You can produce the source code yourself if you are skilled in programming. Or you can obtain the code from other sources.<br>
+<br>
+In Linux environments, applications are often distributed as source code and it is incumbent upon the user of the system to compile the code to produce working binaries. This is done to overcome potential differences between Linux distributions that may allow the application to run on one platform but not others. Compiling locally ensures that the binary code that is produced takes platform-specific differences into account at compile time.<br>
+<br>
+If you obtain software from another source, the code is often compressed into an archive that contains the source code and other supporting files that may be required to produce a working application. These archives will also often contain reference files with instructions on software prerequisites and any special instructions for compiling the application. You will often find files that are called README or INSTALL with this information. There may be other files with instructions or installation information as well so before compiling an application it is a good practice to review the files that are contained in the archive first.<br>
+<br>
+One of the most commonly used compiler applications is the GNU C Compiler, gcc compiler. It is open source software that is freely available for anyone to use. Some Linux distributions may ship with this compiler already installed. However, the software usually needs to be obtained and installed independently. This software package contains the tools that you will need to create executable binaries from source code.<br>
+<br>
+The GNU C Compiler works on C-based languages, including C, C++, and Objective-C.<br>
+<br>
+<b>Types of Files Used in Compiling Software</b><br>
+Compiling source code to produce an executable can be as simple as specifying the source code file name and the output, executable file name. Or, it can involve referencing various file types to produce the final executable in the case of more complex programs.<br>
+<br>
+File types that may be encountered when compiling software include the following:<br>
+<br>
+<ul>
+<li>Source: Source files represent the source code or the actual program that is written out in a programming language such as “C.” Source code files typically use the .c extension to identify them, for example, myprog.c.</li><br>
+<li>Object files: Object files are essentially libraries of compiled (binary) code that can be read in when you compile an application. The code from the object file is included as a part of the executable file you produce at compile time. Object file names typically end with a .o extension, for example, myobjectfile.o. There is another type of object file that is called an archive file that acts as a container for multiple object files. These files can be called up at compile time and your source code will determine which object code to use from the archive. These files typically end with a .a extension, for example, myarchivefile.a.</li><br>
+<li>Shared object files: Files that contain code the application being compiled can reference when it runs. This code exists as a separate file in the file system and must be present when you compile your application and when the application runs. The benefit of using shared objects is that the code itself is not inserted into the final binary. Rather, it is read into memory when the application runs, so it must be present on the system as long as you are using the application. Another benefit is that you can update the functionality of an application without having to recompile it by updating the shared object file. Shared object files typically end with a .so extension, for example, mysharedobjectfile.so.</li><br>
+<li>Header files: A header file is a file that contains function declarations, macro definitions, constants, and system variables. If the program or application you are compiling consists of multiple source code files, rather than declaring all these items in each source file, you can read them in at compile time with a header file. A header file can be written by the author of the application or it can exist as part of the host’s operating system. Header files typically end with a .h extension, for example, myheader.h.</li>
+</ul>
+<br>
+<b>Compiling Code</b><br>
+The general process for compiling a program with gcc is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517494507.png" alt="" style="">
+<br>
+The –o lets you specify the file to output. It is the binary file that is produced as a result of compiling the source code. The source file is the file that contains the source code, which is what gets read in to produce the binary output file.<br>
+<br>
+The most basic implementation of gcc is to produce a binary file from source code. Most applications that you obtain for your Linux installation will be much more complex, and will require more tools to help in building the application.<br>
+<br>
+One of the most popular tools available today is a suite of tools that are collectively known as autotools. This suite of tools allows the author of the application to create a series of scripts to automate the compilation and installation process. It also provides features to package the application in an archive so it can be easily distributed to users that want to compile and install the application.<br>
+<br>
+The three scripts you use to compile and install the application are as follows:<br>
+<br>
+<ul>
+<li>configure: This script probes your system to make sure everything that is needed to compile the application is there. It also grabs information about the host on which you will be compiling the application to produce binary files compatible with your system, which will ensure that the application runs properly. The configure script can also accept parameters to customize the application in some way. This technique is often used to enable or include specific features of the application you are compiling.</li><br>
+<li>make: Once the prerequisites have been accounted for and the local environment has been detailed by the configure script, run the make script, which actually invokes the compiler (gcc) to produce the binary files for the application.</li><br>
+<li>make install: When the application has been compiled, run the make install script to copy the application files and any supporting files to standard file system locations, which ensures that the application can be executed and supporting files can be accessed from any location in the file system.</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517494750.png" alt="" style="">
+<br>
+With autotools, the process of installing an application in Linux follows this general sequence:<br>
+<br>
+<ol>
+<li>You obtain the archive package that contains the application source code and any supporting files.<br>
+ - Often, the supporting files include README files with instructions on how to install the application and information on any prerequisites that must be present on the system to compile the application.
+</li><br>
+<li>You unpack or uncompress the archive so the files you need to install the application are all available.</li><br>
+<li>You run the configure script.</li><br>
+<li>You run the make script.</li><br>
+<li>Then, you run the make install script.</li>
+</ol>
+<br>
+At this point, the application is installed and ready for you to use. The example that follows illustrates how to install Snort using autotools:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517494897.png" alt="" style="">
+<br>
+This command unpacks the archive file in which the software is distributed. Upon doing so, a subdirectory is created that contains all the source code and supporting files.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517494944.png" alt="" style="">
+<br>
+With this command, the user enters the directory that was created when the archive was unpacked.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517494995.png" alt="" style="">
+<br>
+This command executes the configure script. Note that it includes command line parameters to add functionality to the binary executable file that is produced as a result of this process.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517495041.png" alt="" style="">
+<br>
+This command executes the make script that actually compiles the code to produce the application binaries.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517495098.png" alt="" style="">
+<br>
+Lastly, you use the make install command to copy the files to their destination directories including info and man page files.<br>
+<br>
+<a name="Executables vs. Interpreters"></a>
+<b>Executables vs. Interpreters</b><br>
+Executable files are binary files able to run CPU code and perform tasks independently. However, there are other types of files that can execute code by way of an interpreter. The interpreter is an application that reads commands from a source file and performs the tasks on behalf of the source file. The source files are referred to as scripts, which are based on some scripting language that is installed on the Linux host.<br>
+<br>
+Linux offers a wide variety of scripting options. The examples that follow describe some of the most widely used options.<br>
+<br>
+<ul>
+<li>bash: bash is the command line shell that is used in most Linux installations. It provides a very feature rich set of commands you can execute from the command line or as a script.<br>
+<br>
+The first line is often referred to as a “shebang” and it’s purpose is to point the system to the interpreter that will run the file. In this case, /bin/sh -or- /bin/bash is the command to run the bash shell. The remainder of the file will contain the shell commands to execute as part of the script. Lines that begin with the # character are not executed. They are used to enter comments so script authors can document information about the operation of the script for other users.<br>
+<br>
+Bash file names typically end with the extension .sh, for example, MyBashScript.sh
+</li><br>
+<li>Perl: Perl is a powerful, interpreted programming language. It is used extensively throughout the Internet for virtually every application imaginable. Once installed locally, you can write Perl scripts, and have Perl interpret and execute them.<br>
+<br>
+A Perl script file begins with a line (shebang) to identify the application that should run it. It appears as follows:<br>
+<br>
+<code>#!/usr/bin/perl</code><br>
+<br>
+The path may differ depending on where Perl is installed on the local host, but the purpose remains the same: to point to the Perl application when the script is executed. The remainder of the file consists of comments and the Perl code to execute.
+</li><br>
+<li>Python: Python is another very popular interpreted programming environment. It is not as widely used as Perl but it is gaining popularity because it is considered an easier programming environment to use than Perl.<br>
+<br>
+Python script files begin with a shebang to point to the location of the interpreter. The following is an example of a Python shebang:<br>
+<br>
+<code>#!/usr/bin/python3</code>
+<br>
+The path may differ depending on where Python is installed on the local system, but the purpose remains the same: to point to the Python application when the script is executed. The remainder of the file consists of code and comments.<br>
+<br>
+Python files typically end in a .py file extension, for example, MyPythonScript.py.
+</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517495878.png" alt="" style="">
+<br>
+<a name="Using Package Managers to Install Software in Linux"></a>
+<b>Using Package Managers to Install Software in Linux</b><br>
+As Linux has become more pervasive in enterprise, options for using Linux-based systems to host applications have expanded greatly. Many enterprise-scale applications are now supported on Linux platforms. Linux has also enjoyed expanded popularity as a desktop platform as well. Many desktop applications are also available to run on Linux platforms.<br>
+<br>
+In order for Linux to make this move into the mainstream, mechanisms for packaging and distributing software had to be improved. While compiling code at the local level works, it is not scalable, and it assumes that the enterprise has skilled people to compile code and resolve the code dependencies that inevitably crop up when you install software. Code dependencies refer to software prerequisites that must be resolved for code to install properly. For simple applications, this is often easily resolved by following the guidance in README files or searching Internet forums. However, for larger, more complex applications, resolving code dependencies was often a time consuming and burdensome process that could easily frustrate even experienced Linux users.<br>
+<br>
+Over the years, the Linux community developed package management systems to mitigate the problems that are associated with locally compiling code to install an application. Package management systems were designed to distribute software as pre-compiled binaries. They also provide mechanisms for resolving dependencies, and ship with tools to verify the integrity of the software installation and facilities for updating and removing software as well.<br>
+<br>
+Because package managers distribute pre-compiled software, you must make sure that the package you obtain is suited for the operating system you intend to run it on. So, you will often find packages for specific Linux distributions and even specific versions of a given distribution.<br>
+<br>
+Package management systems that are used in current Linux distributions are based on architectures that generally consist of remote repositories where the software is stored, a standardized package format and tools to access the repositories and manage the locally installed software.<br>
+<br>
+There are many package management systems in use with various package formats. However, two package formats that are the most universally used as follows.<br>
+<br>
+<ul>
+<li>Red Hat Package Management: The Red Hat Package Management (RPM) format is used in Red Hat-based installations or Red Hat derivative distributions, such as Red Hat Enterprise Linux, Fedora Core, or CentOS.</li><br>
+<li>.deb: The .deb package format is primarily used in Debian-based installations, including Ubuntu and any of its derivatives, for example Linux Mint or Knoppix.</li>
+</ul>
+<br>
+<b>Package Managers</b><br>
+Package managers refer to the tool sets you use to manage software packages. The package management platform is what greatly enhances the software installation experience as the tool sets contain features that allow you to resolve or identify package dependencies, update or upgrade software, uninstall software, and select the remote repositories for fetching software that are very robust tools with rich feature sets. The two package management applications that are listed here are the most commonly used ones today.<br>
+<br>
+<ul>
+<li>yum: yum is a package management system that is used to manage RPM-based packages. As such, it is used primarily on Redhat-based installations. An example of a yum command to install an application is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517497182.png" alt="" style="">
+</li><br>
+<li>apt: apt is the package management system that is used in Debian-based Linux installations. An example of using apt to install software is as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517497231.png" alt="" style="">
+</li>
+</ul>
+These commands fetch the package that you specify from the repositories that are listed in its default configuration. You can modify the configuration to add or remove repositories.<br>
+<br>
+<a name="System Applications"></a>
+<b>System Applications</b><br>
+Linux provides a stable, scalable platform for delivering services to the enterprise. You can run open source applications or commercially available applications as well. Linux installations are primarily used as platforms for serving applications to clients.<br>
+<br>
+<b>web</b><br>
+One of the most common services that are deployed on a typical Linux server is the web service. Apache is one of the most commonly used open source web servers and provides variants for virtually every Linux distribution.<br>
+<br>
+Apache provides various features including data compression, SSL connection encryption, and server-side language interfaces to support server-side scripting in popular languages such as Perl, Python, and PHP. These are just a few of the features it provides, which is one of the primary reasons it became the most commonly used web server on the Internet.<br>
+<br>
+From a security perspective, one of the most useful resources for gathering information about Apache activity is the log data it produces. The specific location of the log files depends on the Linux distribution that you are running it on, and whether you modified the log file directives in the server configuration file. However, usually the log files will be in a subdirectory of the /var/log directory. A typical installation will store log data in /var/log/apache2/access.log. The Apache log file records web server access events, including the hosts requesting server resources and files that were uploaded or downloaded to and from the server.<br>
+<br>
+<b>Database</b><br>
+Other commonly used applications on Linux-based platforms are database services. There are many open source or commercial options to choose from. And there are different types of databases, such as relational or NoSQL databases.<br>
+<br>
+Relational databases use linked structures or tables for storing information. The structured nature of such systems gave rise to SQLs that were used to interact with the database and extract information from it as needed.<br>
+<br>
+Non-structured databases, sometimes known as NoSQL, are data storage systems that do not rely on strict data structures and can store data in more of a free-form manner. They often require large storage capabilities but are faster at data retrieval than their structured counterparts.<br>
+<br>
+One of the more commonly used database platforms is MySQL, which is a structured, relational database system. It has a wide installed base and uses SQL for interacting with it.<br>
+<br>
+Like many of the applications on a Linux system, much of the information of value from a security perspective can be obtained from the database log files. The logging for a specific database product can differ between products, but usually the database logs are in the /var/log directory or a subdirectory of /var/log. Also, logging may not be enabled by default, so you would have to consult with your database documentation to enable it. In cases where logging may not have been enabled, the database application itself may generate some log data in the syslog file.<br>
+<br>
+In MySQL installations with logging enabled, you will find several files that can provide forensic information:<br>
+<br>
+<ul>
+<li>Error log: Stores information about system errors including database starts and stops. This log file is commonly found in the following location: /var/log/mysql/mysql_error.log.</li><br>
+<li>General query log: Stores general information about database access for storage or retrieval. This log file is commonly found in the following location: /var/log/mysql/mysql.log.</li><br>
+<li>Slow queries: Lists slow queries or incomplete queries that could indicate problems with the system or tools being used to access the system. This file is most commonly found in the following location: /var/log/mysql/mysql-slow.log.</li>
+</ul>
+<br>
+<a name="Lightweight Directory Access Protocol"></a>
+<b>Lightweight Directory Access Protocol</b><br>
+LDAP is a protocol designed to store information about an organization, which could include information about users, user groups, organizations, or other resources such as files or devices on the enterprise network. It uses open standards for storing and locating objects. Other applications and services can query an LDAP server, which makes it a versatile tool commonly used in most organizations.<br>
+<br>
+LDAP uses syntax that is derived from the x.500 standard for identifying objects in the LDAP structure by way of a series of attributes. Attributes consist of an attribute name followed by the attribute value. For example:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517497916.png" alt="" style="">
+<br>
+An entity in the LDAP structure is uniquely identified by its DN (Distinguished Name). For example, the user Ed Smith that works for MyOrg may have the following DN:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517497981.png" alt="" style="">
+<br>
+The component that is called cn is known is the canonical name. The dc components are known as domain components. In the example, the first dc entry is the organization’s primary domain name: MyOrg. The second is the top-level domain that the organization is registered as: com.<br>
+<br>
+An LDAP record for this user may appear as follows:<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517498057.png" alt="" style="">
+<br>
+In the example, you can see the user’s DN, which is used to uniquely identify the user, followed by a series of attributes to further describe the user. There are many more attributes that you can associate with a user. For example, you could include the user’s manager, the organization within the enterprise that the user works for, his or her telephone number, and many others.<br>
+<br>
+The most common LDAP implementation in Linux is OpenLDAP. You’ll see its configuration and log files referred to as slapd, which stands for “stand-alone LDAP daemon.” The log files it produces are generally found in the /var/log/slapd directory assuming a typical OpenLDAP installation and no changes to its default configuration.<br>
+<br>
