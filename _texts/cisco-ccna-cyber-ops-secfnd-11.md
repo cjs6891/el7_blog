@@ -8,9 +8,9 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 11: Understanding Network S
 <a href="#Authentication, Authorization, and Accounting">11.4 Authentication, Authorization, and Accounting</a><br>
 <a href="#Identity and Access Management">11.5 Identity and Access Management</a><br>
 <a href="#Stateful Firewall">11.6 Stateful Firewall</a><br>
-<a href="#">11.</a><br>
-<a href="#">11.</a><br>
-<a href="#">11.</a><br>
+<a href="#Network Taps">11.7 Network Taps</a><br>
+<a href="#Switched Port Analyzer">11.8 Switched Port Analyzer</a><br>
+<a href="#Remote Switched Port Analyzer">11.9 Remote Switched Port Analyzer</a><br>
 <a href="#">11.</a><br>
 <a href="#">11.</a><br>
 <a href="#">11.</a><br>
@@ -26,9 +26,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 11: Understanding Network S
 <a href="#">11.</a><br>
 <a href="#">11.</a><br>
 
-<a name=""></a>
-<a name=""></a>
-<a name=""></a>
+
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -221,4 +219,89 @@ A firewall in routed mode, connects to different networks on its inside and outs
 A firewall in transparent mode, on the other hand, connects to the same network on its inside and outside interfaces. Because the transparent firewall is not a routed hop, it can be integrated into an existing network more easily (for example, no need to make any IP addressing changes on the inside or outside hosts). A transparent firewall is considered a layer 2 "bump in the wire" firewall with no routing ability. As shown in the figure below, the transparent firewall inside and outside interfaces are on the same 10.30.10.0/24 subnet.<br>
 <br>
 <img src="https://cjs6891.github.io/el7_blog/public/img/1517843237.png" alt="" style="">
+<br>
+<a name="Network Taps"></a>
+<b>Network Taps</b><br>
+Security analysts monitor system logs and data from security appliances to monitor the network and look for any suspicious activity. Sometimes, the security analyst uses packet captures on certain links in the network to perform a detailed analysis or troubleshoot issues that are related to heavy bandwidth usage or suspicious activity. Network taps are simple devices that play an important role in that they allow security analysts to capture traffic on an already overloaded or congested link between two network devices.<br>
+<br>
+The network tap is installed between two network devices (for example, a switch and a workstation) where it provides one or more ports that output the traffic that is going between the devices. The security analyst should have a basic understanding of network tap benefits, limitations, and operation. A typical fiber-based network tap is depicted in the diagram below.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517874747.png" alt="" style="">
+<br>
+Network taps are passive hardware devices that must physically be inserted between two communicating network devices to operate. Installation of the network tap requires a brief interruption of the link onto which it is installed, likely resulting in downtime. Taps are often rack-mounted, which can lead to space considerations in some networking environments. As the requirement to monitor more connections increases, multiple taps (or more expensive multiconnection taps) may become necessary. The costs of network taps can vary from relatively inexpensive versions for ethernet costing around $100, to more expensive options designed to monitor optical connections costing $1000 or more. Finally, keep in mind if the capture device is expected to monitor both sides of a connection, two network interfaces are necessary per tap. With large monitoring requirements, the cost of network taps can quickly become prohibitive.<br>
+<br>
+Remember that network taps operate at the physical layer and must be physically inserted in the link between two network devices. As such, taps are physical-layer devices not capable of processing or altering traffic between hosts, nor is the tap able to filter traffic being sent to the capture device. Instead, network taps provide a means to monitor conversations between two sides of a connection, passively enabling packet capture and real-time analysis. Because modern-day physical layer transmission technologies are full-duplex, network taps monitor the transmit (Tx) pins of each device. This setup offers two distinct advantages in that it allows the capture device to differentiate the two sides of the connection and it ensures that the tap itself does not introduce congestion or degrade performance across the link. Lastly, since receive and transmit pins are separated, collisions caused by insertion of the tap onto the link are not possible.<br>
+<br>
+The following figure provides an example of a typical network tap installation between a gateway router and Internet perimeter firewall.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517874981.png" alt="" style="">
+<br>
+In this example, a network tap is inserted between a perimeter firewall and the primary router of the network. Installing a tap at this network location enables administrators to monitor all traffic as it enters or exits the network. The capture device that is attached to the tap could serve one or more functions. For example, the device could capture traffic from specific addresses or ports, rotate captures of all traffic, or incorporate real-time analysis as part of an IDS. There is no possibility of the capture device altering the traffic across the connection between the firewall and gateway router. It would also not be possible for the capture device to generate traffic that is to be sent across the backbone.<br>
+<br>
+Because network taps work at the speed of the link, network performance is not impacted or degraded by monitoring the connection. Remember that network taps are passive devices, often built to fail-safe. Fail-safe means that if hardware fails or power is lost, the connection between the two devices is not affected. The tap separates the Tx pins of each device, so the capture device can easily determine which side of the conversation transmitted the captured traffic.<br>
+<br>
+<a name="Switched Port Analyzer"></a>
+<b>Switched Port Analyzer</b>
+Implementing taps to monitor network communications has limitations including scalability, cost, and flexibility of deployment. Security administrators working on modern networks require a more flexible approach to capturing communications for monitoring purposes. The SPAN (Switched Port Analyzer) feature is a tool that security administrators can use to overcome many of the limitations inherent with network taps.<br>
+<br>
+The SPAN feature was introduced on switches because of a fundamental difference that switches have with network hubs. When a hub receives a packet on one port, the hub sends out a copy of that packet on all ports except on the one where the hub received the packet making it relatively easy to capture communications across all devices that are attached to that network hub. Layer 2 switches operate differently than hubs. After a Layer 2 switch boots, it builds a Layer 2 forwarding table based on the source MAC addresses of the different packets the switch receives. After this forwarding table is built, the switch forwards traffic that is destined for a specific MAC address directly to the corresponding port. As a result a packet capture device connected to another port on the Layer 2 switch would be filtered from any traffic that is not specifically destined for its MAC address (except broadcast traffic, multicast traffic where Cisco Group Management Protocol or IGMP snooping is disabled, and unknown unicast traffic).<br>
+<br>
+The SPAN feature reduces the expense and wiring issues that are associated with network taps. Rather than purchase and install dedicated hardware to monitor a connection between two hosts, the switch that is already forwarding traffic can be configured to mirror that traffic to another port on the same switch. This option allows the switch to take the place of a network tap, lowering cost, eliminating space requirements and the downtime that is required to install a network tap. In addition, multiple ports on a single switch can be monitored, meaning that a single switch can serve in place of multiple taps.<br>
+<br>
+In the figure below, a Layer 2 switch has been configured with a local span port that mirrors all traffic from two of its ports to the port attached to a network analyzer.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517875739.png" alt="" style="">
+<br>
+Although SPAN functionality is supported by multiple hardware vendors, each vendor may refer to SPAN and its components using slightly different terminology. While the feature is most commonly called SPAN, the terms port monitoring and port mirroring are also common.<br>
+<br>
+On Cisco IOS devices, SPAN must be enabled from configuration mode. This means that the security analyst must have appropriate administrator privileges to enable the SPAN feature. Configuring SPAN involves two steps. First, the source is specified as one or more interfaces or VLANs. Second, the destination interface is specified.<br>
+<br>
+It is also important to note that multiple SPAN monitoring sessions can be configured on the same switch. In the figure below, two simultaneous SPAN sessions have been enabled, mirroring traffic to two different network analyzers. In this case, the SPAN sessions have been configured to capture all traffic within a specific VLAN to the destination SPAN port.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517875875.png" alt="" style="">
+<br>
+Different Cisco devices may have different SPAN capabilities and configuration details specific to that individual device and the types of ports that can be used when implementing SPAN. It is important that network administrators and security analysts understand the proper use and configuration of the SPAN feature for the devices on which SPAN is deployed. For example, different switches or even the same type of switches running different versions of Cisco IOS may have different limitations on the number of simultaneous SPAN sessions that can be configured.<br>
+<br>
+The use of SPAN provides many benefits to the security analyst. Because existing hardware is used to enable the SPAN feature, SPAN is both cost-effective and easy to deploy. Enabling the SPAN feature, unlike network taps, requires no downtime. Further, multiple sources can be configured as SPAN source ports to a single destination SPAN port allowing the security analyst to capture traffic from multiple devices at one time. Minimal filtering is available when configuring SPAN by specifying sources on a per-interface, per-VLAN, or directional (ingress, egress, or both) criteria.<br>
+<br>
+The SPAN feature is an excellent tool for troubleshooting and for specific packet capture activities. It is critical to note that except for carefully planned topologies, SPAN consumes too many switch and network resources to enable permanently. Security analysts should exercise all possible care when enabling and configuring SPAN. The traffic that SPAN copies can impose a significant load on the switch and the network. To minimize the load, configure SPAN to copy only the specific traffic that you want to analyze. Select SPAN sources that carry as little unwanted traffic as possible. For example, a port as a SPAN source might carry less unwanted traffic than a VLAN.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517876101.png" alt="" style="">
+<br>
+Before enabling SPAN, carefully evaluate the SPAN source traffic rates, and consider the performance implications and possible oversubscription points including SPAN destination, Fabric channel, and the forwarding engine (PFC/DFC). To avoid disrupting traffic, do not oversubscribe any of these points in your SPAN topology.<br>
+<br>
+Some oversubscription and performance considerations to note are:<br>
+<br>
+<ul>
+<li>SPAN doubles traffic internally.</li><br>
+<li>SPAN adds to the traffic being processed by the switch fabric.</li><br>
+<li>SPAN doubles forwarding engine load.</li><br>
+<li>The supervisor engine handles the entire load that is imposed by egress SPAN (also called transmit SPAN).</li>
+</ul>
+<br>
+The destination for each monitor session command can become a bottleneck when the source has more bandwidth than the destination. Mirrored traffic could then be delayed or dropped. Furthermore, SPAN functionality is reserved for feature-filled, managed switches and routers, with limitations on the number of sessions, depending on vendor, platform, and version. The capture device must be directly connected to a port on the local device, which can become a limiting factor in large organizations. Finally, the number of SPAN ports that are configurable on a given device is limited, based on the hardware design.<br>
+<br>
+<a name="Remote Switched Port Analyzer"></a>
+<b>Remote Switched Port Analyzer</b>
+Situations can arise requiring packet capture from remote locations of the network or potentially across multiple locations within the enterprise LAN at the same time. These situations make it difficult if not impossible to utilize SPAN functionality, as span requires the destination SPAN port to be locally attached. RSPAN, allows the security administrator to monitor source ports that are spread across a switched network. The RSPAN functions the same as SPAN monitoring. The traffic that is monitored by RSPAN is not directly copied to the destination port as with SPAN, but instead flooded into a special RSPAN VLAN. The destination port can then be located anywhere in the network on the RSPAN VLAN. When using RSPAN, several destination ports can be defined.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517876982.png" alt="" style="">
+<br>
+In the figure above, RSPAN is configured to monitor traffic that is sent by host A. When host A generates a frame that is destined for host B, the packet is copied into a predefined RSPAN VLAN. From there, the packet is flooded to all other ports that belong to the RSPAN VLAN. All the interswitch links that are shown in the figure are configured as trunk ports, which is a requirement for RSPAN. The only access ports in the network are the destination ports, where hosts are connected or where the sniffers are connected (switches S4 and S5).<br>
+<br>
+On Cisco IOS devices, remote SPAN must be enabled from configuration mode. This means that the security analyst must have appropriate administrator privileges to enable the RSPAN feature. Configuring remote SPAN is similar to configuring SPAN. The key difference is that the destination SPAN port in the source switch is actually an RSPAN VLAN. On the remote destination switch, the remote switch where the traffic will be directed, the source SPAN port is the RSPAN VLAN, and its destination is the single SPAN port that is attached to the network analyzer.<br>
+<br>
+When configuring RSPAN, keep in mind that Packets only enter the RSPAN VLAN in switches that are configured as the RSPAN source. Currently, a switch can only be the source for one RSPAN session, meaning a source switch can only feed one RSPAN VLAN at a time. Further, all switches must be connected together with interswitch trunk ports connecting them. Trunks (802.1Q or ISL) are required as they transport VLANs across the network and therefore RSPAN cannot cross any layer 3 boundaries. On intermediate switches not on the path to the destination, VLAN pruning can eliminate unwanted RSPAN traffic from transiting these trunk ports.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1517877185.png" alt="" style="">
+<br>
+One other important note is the RSPAN VLAN is carried across the LAN over trunk ports. In order to prevent bridge loops, the STP has been maintained on the RSPAN VLAN. Therefore, RSPAN cannot monitor BPDUs (Bridge Protocol Data Unit).<br>
+<br>
+Different Cisco devices may have different RSPAN capabilities and configuration details specific to that individual device and the types of ports that can be used when implementing RSPAN. It is important that network administrators and security analysts understand the proper use and configuration of the RSPAN feature for the devices on which RSPAN is deployed. For example, different switches or even the same type of switches running different versions of IOS may have different limitations on the number of simultaneous RSPAN destinations that can be configured.<br>
+<br>
+RSPAN combines the functionality of SPAN with the flexibility of VLANs. The functionality of per-interface, per-VLAN, and directional filtering is still supported without the need to bring down a link. Introducing VLAN support allows for enterprise-wide port monitoring with the capture device able to reside at a centralized location.<br>
+<br>
+The use of remote SPAN provides many benefits to the security analyst. Because existing hardware is used to enable the RSPAN feature, RSPAN is both cost-effective and fairly easy to deploy. Enabling the RSPAN feature or changing its configuration, unlike network taps, requires no downtime. Further, multiple sources can be configured as RSPAN source ports to a single destination RSPAN port allowing the security analyst to capture traffic from multiple devices at one time. Minimal filtering is available when configuring RSPAN by specifying sources on a per-interface, per-VLAN, or directional (ingress, egress, or both) criteria.<br>
+<br>
+Unfortunately, RSPAN increases the likelihood of network performance degradation. Recall that SPAN introduced potential performance considerations. RSPAN adds to those by broadcasting SPAN traffic across the entire network on the RSPAN VLAN. Bottlenecks can quickly limit the throughput of multiple monitored connections being pushed across several hops. In addition, RSPAN must be supported on the endpoints, and trunk ports must connect all switches in the RSPAN domain as VLAN headers must be preserved on all hops between the endpoints.<br>
 <br>
