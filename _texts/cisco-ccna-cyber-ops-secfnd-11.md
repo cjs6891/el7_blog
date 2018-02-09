@@ -11,7 +11,7 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 11: Understanding Network S
 <a href="#Network Taps">11.7 Network Taps</a><br>
 <a href="#Switched Port Analyzer">11.8 Switched Port Analyzer</a><br>
 <a href="#Remote Switched Port Analyzer">11.9 Remote Switched Port Analyzer</a><br>
-<a href="#">11.</a><br>
+<a href="#Intrusion Prevention System">11.10 Intrusion Prevention System</a><br>
 <a href="#">11.</a><br>
 <a href="#">11.</a><br>
 <a href="#">11.</a><br>
@@ -26,8 +26,6 @@ title: "Cisco CCNA Cyber Ops SECFND 210-250, Section 11: Understanding Network S
 <a href="#">11.</a><br>
 <a href="#">11.</a><br>
 
-
-<a name=""></a>
 <a name=""></a>
 <a name=""></a>
 <a name=""></a>
@@ -304,4 +302,39 @@ RSPAN combines the functionality of SPAN with the flexibility of VLANs. The func
 The use of remote SPAN provides many benefits to the security analyst. Because existing hardware is used to enable the RSPAN feature, RSPAN is both cost-effective and fairly easy to deploy. Enabling the RSPAN feature or changing its configuration, unlike network taps, requires no downtime. Further, multiple sources can be configured as RSPAN source ports to a single destination RSPAN port allowing the security analyst to capture traffic from multiple devices at one time. Minimal filtering is available when configuring RSPAN by specifying sources on a per-interface, per-VLAN, or directional (ingress, egress, or both) criteria.<br>
 <br>
 Unfortunately, RSPAN increases the likelihood of network performance degradation. Recall that SPAN introduced potential performance considerations. RSPAN adds to those by broadcasting SPAN traffic across the entire network on the RSPAN VLAN. Bottlenecks can quickly limit the throughput of multiple monitored connections being pushed across several hops. In addition, RSPAN must be supported on the endpoints, and trunk ports must connect all switches in the RSPAN domain as VLAN headers must be preserved on all hops between the endpoints.<br>
+<br>
+<a name="Intrusion Prevention System"></a>
+<b>Intrusion Prevention System</b><br>
+Intrusion sensors are systems that detect activity that can compromise the confidentiality, integrity, and availability of information resources, processing, or systems. Intrusions can come in many forms. The security analyst investigates various alerts from intrusion sensors and security appliances to determine if an alert is indicating malicious activity, a false positive, or to recommend where tuning of the intrusion sensor may be required.<br>
+<br>
+To detect intrusions, various technologies have been developed. The first technology that was developed, IDS, had sensing capabilities but little capability to take action upon what it detected. An IPS builds upon previous IDS technology. An IPS has the ability to analyze traffic from the data link layer to the application layer. For example, an IPS can:<br>
+<br>
+<ul>
+<li>Analyze the traffic that controls Layer 2 to Layer 3 mappings, such as ARP and DHCP.</li><br>
+<li>Verify that the rules of networking protocols such as IP, TCP, UDP, and ICMP are followed.</li><br>
+<li>Analyze the payload of application traffic to identify things such as network attacks, the presence of malware, and server misconfigurations.</li><br>
+</ul>
+<br>
+IPS can identify, stop, and block attacks that would normally pass through a traditional firewall device. When traffic comes in through an interface on an IPS, if that traffic matches an IPS signature/rule, then that traffic can be dropped by the IPS. The essential difference between an IDS and an IPS is that an IPS can respond immediately, and prevent possible malicious traffic from passing. An IDS simply produces alerts when suspicious traffic is seen. An IDS is not responsible for mitigating the threat.<br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1518205645.png" alt="" style="">
+<br>
+The figure above shows a common IPS deployment, in which the Cisco adaptive security appliance (Cisco ASA) controls access between the corporate network and the Internet, based on source and destination IP addresses and ports, while the IPS controls access based on packet payload. An IPS also has other valuable capabilities, such as providing deeper insight into what is actually happening on your network.<br>
+<br>
+IPS technology is deployed in a sensor, which is variously described as one of the following:<br>
+<br>
+<ul>
+<li>An appliance that is specifically designed to provide dedicated IPS services</li><br>
+<li>A module that is installed in another network device, such as an adaptive security appliance, a switch, or a router</li>
+</ul>
+<br>
+Intrusion detection technology uses different strategies to detect and mitigate against attacks:<br>
+<br>
+<ul>
+<li>Anomaly detection: This type of technology generally learns patterns of normal network activity and, over time, produces a baseline profile for a given network. Sensors detect suspicious activity by evaluating patterns of activity that deviate from this baseline.</li><br>
+<li>Rule-based detection: Attackers use various techniques to invade and compromise systems. Many techniques are directed at known weaknesses in operating systems, applications, or protocols. Various remote surveillance techniques are also frequently used. Some surveillance and attack methods have known patterns by which the method can be identified. Malicious activity detectors typically analyze live network traffic using a database of IPS rules (or also called IPS signatures) to determine whether suspicious activity is occurring.</li><br>
+<li>Reputation-based: IPS security appliances can also make informed decisions on whether to permit or block the traffic based on reputations. Reputation-based filtering allows the IPS to block all traffic from known bad sources before any significant inspection is done.</li>
+</ul>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/1518211254.png" alt="" style="">
 <br>
