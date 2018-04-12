@@ -40,7 +40,7 @@ To look up external commands, the <code>$PATH</code> variable is used. This vari
 <br>
 <b>External Command</b> - A command that exists as a file on disk.<br>
 <br>
-You should notice that for security reasons that the current directory is not in the <code>$PATH</code> variable and that Linux does not look in the current directory to see whether a specific command is available from that directory. That is why you need to start a command that is in the current directory but nowhere in the $PATH by including <code>./</code> in front of it. The dot stands for the current directory, and by running it as <code>./<code>, you're telling bash to look for the command in the current directory.<br>
+You should notice that for security reasons that the current directory is not in the <code>$PATH</code> variable and that Linux does not look in the current directory to see whether a specific command is available from that directory. That is why you need to start a command that is in the current directory but nowhere in the $PATH by including <code>./</code> in front of it. The dot stands for the current directory, and by running it as <code>./</code>, you're telling bash to look for the command in the current directory.<br>
 <br>
 The <code>$PATH</code> variable can be set for specific users, but in general, most users will be using the same PATH variable. The only exception to this is the user root, who needs access to specific administration commands.<br>
 <br> 
