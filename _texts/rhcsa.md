@@ -5,7 +5,7 @@ title: Red Hat Certified System Administrator
 
 [Download CentOS Linux ISO images](https://wiki.centos.org/Download){:target="_blank"}
 
-<b>Executing Commands</b><br>
+<b>[Executing Commands]</b><br>
 The purpose of the Linux shell is that it provides an environment in which commands can be executed. The shell takes care of interpreting the command that a user has entered correctly. To do this, the shell makes a difference between three kinds of commands:<br>
 <br>
 <ul>
@@ -44,3 +44,11 @@ You should notice that for security reasons that the current directory is not in
 <br>
 The <code>$PATH</code> variable can be set for specific users, but in general, most users will be using the same PATH variable. The only exception to this is the user root, who needs access to specific administration commands.<br>
 <br> 
+<b>[I/O Redirection]</b><br>
+<br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/rhcsa_1523560213.png" alt="" style="">
+<br>
+If you run a command, that command would expect input from the keyboard, and it would normally send its output to the monitor of your computer without making a difference between normal output and errors. Some commands, however, are started at the background and not from a current terminal session, so these commands do not have a monitor or console session to send their output to, and they do not listen to keyboard input to accept their standard input. That is where redirection comes in handy.<br>
+<br>
+Programs started from the command line have no idea what they are reading from or writing to. They just read from <b>File Descriptor 0</b> if they want to read from standard input, and they write to <b>File Descriptor 1</b> to display output and to <b>File Descriptor 2</b> if they have error messages to be output. By default, these are connected to the keyboard and the screen. If you use redirection symbols such as <code><</code>, <code>></code>, and <code>|</code>, the shell connects the file descriptors to files or other commands.<br>
+<br>
