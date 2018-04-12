@@ -14,7 +14,7 @@ The purpose of the Linux shell is that it provides an environment in which comma
 <li>External Commands</li>
 </ul>
 <br>
-An alias is a command that a user can define as needed. Some aliases are provided by default; type <code>alias</code> on the command line to get an overview. To define an alias, use <code>alias newcommand='oldcommand'</code>, as in the default alias <code>ll='ls -l --color=auto'</code>. Aliases are executed before anything else.<br>
+An alias is a command that a user can define as needed. Some aliases are provided by default; type <code>alias</code> on the command line to get an overview. To define an alias, use <code>alias newcommand='oldcommand'</code>, as in the default alias <code>alias ll='ls -l --color=auto'</code>. Aliases are executed before anything else.<br>
 <br>
 <pre>
 <code>
@@ -36,7 +36,9 @@ An internal command is a command that is a part of the shell itself. It is avail
 <br>
 To look up external commands, the <code>$PATH</code> variable is used. This variable defines a list of directories that is searched for a matching filename when a user enters a command. To find out which exact command the shell will be using, you can use the <code>which</code> command. For instance, type <code>which ls</code> to find out where the shell will get the <code>ls</code> command from.<br>
 <br>
-<b>Internal Command<b> - A command that is a part of the shell and does not exist as a file on disk.<br>
+<b>Internal Command</b> - A command that is a part of the shell and does not exist as a file on disk.<br>
 <br>
-<b>External Command<b> - A command that exists as a file on disk.<br>
+<b>External Command</b> - A command that exists as a file on disk.<br>
+<br>
+You should notice that for security reasons that the current directory is not in the <code>$PATH</code> variable and that Linux does not look in the current directory to see whether a specific command is available from that directory. That is why you need to start a command that is in the current directory but nowhere in the $PATH by including <code>./</code> in front of it. The dot stands for the current directory, and by running it as </code>./<code>, you're telling bash to look for the command in the current directory.<br>
 <br>
