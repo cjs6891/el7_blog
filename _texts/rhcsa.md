@@ -52,3 +52,7 @@ If you run a command, that command would expect input from the keyboard, and it 
 <br>
 Programs started from the command line have no idea what they are reading from or writing to. They just read from <b>File Descriptor 0</b> if they want to read from standard input, and they write to <b>File Descriptor 1</b> to display output and to <b>File Descriptor 2</b> if they have error messages to be output. By default, these are connected to the keyboard and the screen. If you use redirection symbols such as <code><</code>, <code>></code>, and <code>|</code>, the shell connects the file descriptors to files or other commands.<br>
 <br>
+<img src="https://cjs6891.github.io/el7_blog/public/img/rhcsa_1523560973.png" alt="" style="">
+<br>
+In I/O redirection, files can be used to replace the default STDIN, STDOUT, and STDERR. You can also redirect to device files. A device file on Linux is a file that is used to access specific hardware. Your hard disk for instance can be referred to as /dev/sda, the console of your server is known as /dev/console or /dev/tty1, and if you want to discard a commands output, you can redirect to /dev/null. Notice that to access most device files you need to be root.<br>
+<br>
