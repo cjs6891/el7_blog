@@ -57,13 +57,4 @@ Programs started from the command line have no idea what they are reading from o
 In I/O redirection, files can be used to replace the default STDIN, STDOUT, and STDERR. You can also redirect to device files. A device file on Linux is a file that is used to access specific hardware. Your hard disk for instance can be referred to as /dev/sda, the console of your server is known as /dev/console or /dev/tty1, and if you want to discard a commands output, you can redirect to /dev/null. Notice that to access most device files you need to be root.<br>
 <br>
 <b>[Using Pipes]</b><br>
-Where an I/O redirector is used to use alternatives for keyboard and computer monitor, a <i>pipe</i><pre><code>|</code></pre> can be used to catch the output of one command and use that as input for a second command. If a user runs the command <pre><code>ls</code></pre>, for instance, the output of the command is shown onscreen. If the user uses <pre><code>ls | less</code></pre>, the commands <pre><code>ls</code></pre> and <pre><code>less</code></pre> are started in parallel. The standard output of the <pre><code>ls</code></pre> command is connected to the standard input of <pre><code>less</code></pre>. Everything that <pre><code>ls</code></pre> writes to the standard output will become available for read from standard input in <pre><code>less</code></pre>. The result is that the output of <pre><code>ls</code></pre> is shown in a pager, where the user can browse up and down through the results easily.
-
-
-<pre><code></code></pre>
-<pre><code></code></pre>
-<pre><code></code></pre>
-<pre><code></code></pre>
-<pre><code></code></pre>
-<pre><code></code></pre>
-<pre><code></code></pre>
+Where an I/O redirector is used to use alternatives for keyboard and computer monitor, a <i>pipe</i><code>|</code> can be used to catch the output of one command and use that as input for a second command. If a user runs the command <code>ls</code>, for instance, the output of the command is shown onscreen. If the user uses <code>ls | less</code>, the commands <code>ls</code> and <code>less</code> are started in parallel. The standard output of the <code>ls</code> command is connected to the standard input of <code>less</code>. Everything that <code>ls</code> writes to the standard output will become available for read from standard input in <code>less</code>. The result is that the output of <code>ls</code> is shown in a pager, where the user can browse up and down through the results easily.
