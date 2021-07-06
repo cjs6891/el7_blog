@@ -1,0 +1,13 @@
+How to convert bootable USB into an ISO file using ImgBurn
+
+Install ImgBurn.
+Plug the bootable USB to the system.
+Start ImgBurn.
+Click on the “Create image file from files / folders” button on the home menu.
+In “Sources”, browse to the USB drive.
+In “Destination” choose where to save the final .iso image.
+Go to the “Advanced” tab on the right and then “Bootable Disk”.
+Check the box “Make Bootable Image” and then, in the “Boot image” box browse to file "boot\etfsboot.com".
+In the field “Developer ID” put “Microsoft Corporation” and enter “07C0” in the “Load Segment” field.
+Enter ‘4’ in the ‘Sectors To Load’ field if your etfsboot.com file is 2K is size, enter ‘8’ if it’s 4K. In other words, x = size of etfsboot.com in bytes / 512.
+Click “Build” and you’re done!
